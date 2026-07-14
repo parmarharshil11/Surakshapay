@@ -63,7 +63,7 @@ export default function EducationLibrary({ t, language }) {
         </div>
       ) : (
         <>
-          <SmsGuide />
+          <SmsGuide language={language} />
           
           <div className="grid grid-cols-1 gap-4">
           {scams.map((scam) => {
