@@ -71,7 +71,7 @@ function App() {
 
   // Fetch history on load
   const fetchHistory = async () => {
-    const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+    const baseUrl = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000').replace(/\/$/, '');
     try {
       const response = await fetch(`${baseUrl}/api/history`);
       if (!response.ok) {
@@ -89,7 +89,7 @@ function App() {
   }, []);
 
   const handleClearHistory = async () => {
-    const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+    const baseUrl = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000').replace(/\/$/, '');
     const confirmMsg = language === 'hi' 
       ? 'क्या आप अपना स्थानीय डेमो इतिहास मिटाना चाहते हैं?' 
       : language === 'gu' 
