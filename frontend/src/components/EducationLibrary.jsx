@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BookOpen, ShieldCheck, ChevronDown, ChevronUp, AlertCircle } from 'lucide-react';
+import SmsGuide from './SmsGuide';
 
 export default function EducationLibrary({ t, language }) {
   const [scams, setScams] = useState([]);
@@ -61,7 +62,10 @@ export default function EducationLibrary({ t, language }) {
           <p className="text-slate-400 dark:text-slate-500 text-sm mt-2">Loading library...</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-4">
+        <>
+          <SmsGuide />
+          
+          <div className="grid grid-cols-1 gap-4">
           {scams.map((scam) => {
             const isExpanded = expandedId === scam.id;
             const title = scam.title[language] || scam.title['en'];
@@ -155,6 +159,7 @@ export default function EducationLibrary({ t, language }) {
             );
           })}
         </div>
+        </>
       )}
     </div>
   );
