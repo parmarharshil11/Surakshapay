@@ -342,7 +342,7 @@ export default function ScamQuiz({ t, language, onActivityPerformed }) {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4 max-w-sm mx-auto pt-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-sm mx-auto pt-2">
           <div className="bg-slate-50 dark:bg-slate-950 p-4 border border-slate-100 dark:border-slate-800 rounded-2xl text-left">
             <span className="text-xs text-slate-400 dark:text-slate-500 font-bold block uppercase tracking-wider">
               {language === 'hi' ? 'कुल सही उत्तर' : language === 'gu' ? 'કુલ સાચા ઉત્તર' : 'Safety Rating'}
