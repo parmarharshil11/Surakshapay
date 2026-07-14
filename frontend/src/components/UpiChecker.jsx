@@ -265,7 +265,7 @@ export default function UpiChecker({ t, language, onScanComplete, onActivityPerf
       return;
     }
 
-    const SpeechSynthesisUtterance = window.speechSynthesisUtterance;
+    const SpeechSynthesisUtterance = window.SpeechSynthesisUtterance;
     if (!window.speechSynthesis || !SpeechSynthesisUtterance) {
       alert("Voice features not supported in this browser.");
       return;
