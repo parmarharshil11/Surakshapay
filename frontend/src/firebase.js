@@ -231,7 +231,10 @@ export async function getTrendingScams() {
   }
 
   try {
-    const qSnap = await getDocs(collection(db, "trendingScams"));
+    const fetchPromise = getDocs(collection(db, "trendingScams"));
+    const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Firebase Timeout")), 5000));
+    const qSnap = await Promise.race([fetchPromise, timeoutPromise]);
+    
     if (qSnap.empty) {
       // Seed Firestore with static data for active alerts if empty
       for (const alert of staticTrending) {
@@ -252,7 +255,10 @@ export async function getUserSafetyScore(uid) {
   }
 
   try {
-    const docSnap = await getDoc(doc(db, "users", uid));
+    const fetchPromise = getDoc(doc(db, "users", uid));
+    const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Firebase Timeout")), 5000));
+    const docSnap = await Promise.race([fetchPromise, timeoutPromise]);
+    
     if (docSnap.exists()) {
       return docSnap.data().safetyScore || 0;
     } else {
@@ -308,7 +314,10 @@ export async function getCommunityReports() {
   }
 
   try {
-    const qSnap = await getDocs(collection(db, "communityReports"));
+    const fetchPromise = getDocs(collection(db, "communityReports"));
+    const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Firebase Timeout")), 5000));
+    const qSnap = await Promise.race([fetchPromise, timeoutPromise]);
+    
     if (qSnap.empty) {
       for (const report of staticReports) {
         await setDoc(doc(db, "communityReports", report.state), report);
