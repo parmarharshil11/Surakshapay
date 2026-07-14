@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Camera, Image as ImageIcon, Loader2, ShieldCheck, AlertTriangle, ShieldX, Volume2, VideoOff, RefreshCw } from 'lucide-react';
 import jsQR from 'jsqr';
 import ShareCard from './ShareCard';
@@ -212,16 +212,16 @@ export default function QrScanner({ t, language, onActivityPerformed }) {
 
     let statusText = "";
     if (checkResult.classification === 'Scam') {
-      statusText = language === 'hi' ? "à¤šà¥‡à¤¤à¤¾à¤µà¤¨à¥€: à¤¯à¤¹ à¤¯à¥‚à¤ªà¥€à¤†à¤ˆ à¤•à¥à¤¯à¥‚à¤†à¤° à¤•à¥‹à¤¡ à¤§à¥‹à¤–à¤¾à¤§à¤¡à¤¼à¥€ à¤¹à¥ˆà¥¤" :
-                   language === 'gu' ? "àªšà«‡àª¤àªµàª£à«€: àª† UPI QR àª•à«‹àª¡ àª›à«‡àª¤àª°àªªàª¿àª‚àª¡à«€ àª›à«‡." :
+      statusText = language === 'hi' ? "चेतावनी: यह यूपीआई क्यूआर कोड धोखाधड़ी है।" :
+                   language === 'gu' ? "ચેતવણી: આ UPI QR કોડ છેતરપિંડી છે." :
                    "Warning: This UPI QR code is classified as a Scam.";
     } else if (checkResult.classification === 'Suspicious') {
-      statusText = language === 'hi' ? "à¤§à¥à¤¯à¤¾à¤¨ à¤¦à¥‡à¤‚: à¤¯à¤¹ à¤¯à¥‚à¤ªà¥€à¤†à¤ˆ à¤†à¤ˆà¤¡à¥€ à¤¸à¤‚à¤¦à¤¿à¤—à¥à¤§ à¤¹à¥ˆà¥¤" :
-                   language === 'gu' ? "àª§à«àª¯àª¾àª¨ àª†àªªà«‹: àª† UPI àª†àªˆàª¡à«€ àª¶àª‚àª•àª¾àª¸à«àªªàª¦ àª›à«‡." :
+      statusText = language === 'hi' ? "ध्यान दें: यह यूपीआई आईडी संदिग्ध है।" :
+                   language === 'gu' ? "ધ્યાન આપો: આ UPI આઈડી શંકાસ્પદ છે." :
                    "Attention: This UPI ID is classified as Suspicious.";
     } else {
-      statusText = language === 'hi' ? "à¤¯à¤¹ à¤¯à¥‚à¤ªà¥€à¤†à¤ˆ à¤†à¤ˆà¤¡à¥€ à¤¸à¥à¤°à¤•à¥à¤·à¤¿à¤¤ à¤¹à¥ˆà¥¤" :
-                   language === 'gu' ? "àª† UPI àª†àªˆàª¡à«€ àª¸à«àª°àª•à«àª·àª¿àª¤ àª²àª¾àª—à«‡ àª›à«‡." :
+      statusText = language === 'hi' ? "यह यूपीआई आईडी सुरक्षित है।" :
+                   language === 'gu' ? "આ UPI આઈડી સુરક્ષિત લાગે છે." :
                    "This UPI ID appears to be Safe.";
     }
 
@@ -319,7 +319,7 @@ export default function QrScanner({ t, language, onActivityPerformed }) {
 
           {errorMsg && (
             <div className="p-3 bg-red-50 dark:bg-red-950/20 text-red-750 dark:text-red-400 text-xs font-bold rounded-xl border border-red-100 dark:border-red-900/20">
-              âš ï¸ {errorMsg}
+              ⚠️ {errorMsg}
             </div>
           )}
 
@@ -481,4 +481,3 @@ export default function QrScanner({ t, language, onActivityPerformed }) {
     </div>
   );
 }
-

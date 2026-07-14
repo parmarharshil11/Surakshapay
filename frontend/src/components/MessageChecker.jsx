@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { AlertTriangle, CheckCircle, ShieldAlert, Sparkles, Trash2, Mic, MicOff, Volume2, Image as ImageIcon, Loader2 } from 'lucide-react';
 import Tesseract from 'tesseract.js';
 import DOMPurify from 'dompurify';
@@ -38,23 +38,23 @@ export default function MessageChecker({ t, language, onScanComplete, onActivity
   const MOCK_TEMPLATES = {
     kyc: {
       en: "Dear customer, your bank account is suspended due to pending KYC verification. Please call bank manager at 98765-43210 immediately to update.",
-      hi: "à¤ªà¥à¤°à¤¿à¤¯ à¤—à¥à¤°à¤¾à¤¹à¤•, à¤†à¤ªà¤•à¤¾ à¤¬à¥ˆà¤‚à¤• à¤–à¤¾à¤¤à¤¾ à¤²à¤‚à¤¬à¤¿à¤¤ à¤•à¥‡à¤µà¤¾à¤ˆà¤¸à¥€ à¤¸à¤¤à¥à¤¯à¤¾à¤ªà¤¨ à¤•à¥‡ à¤•à¤¾à¤°à¤£ à¤¬à¤‚à¤¦ à¤•à¤° à¤¦à¤¿à¤¯à¤¾ à¤—à¤¯à¤¾ à¤¹à¥ˆà¥¤ à¤…à¤ªà¤¡à¥‡à¤Ÿ à¤•à¤°à¤¨à¥‡ à¤•à¥‡ à¤²à¤¿à¤ à¤¤à¥à¤°à¤‚à¤¤ à¤¬à¥ˆà¤‚à¤• à¤®à¥ˆà¤¨à¥‡à¤œà¤° à¤•à¥‹ 98765-43210 à¤ªà¤° à¤•à¥‰à¤² à¤•à¤°à¥‡à¤‚à¥¤",
-      gu: "àªªà«àª°àª¿àª¯ àª—à«àª°àª¾àª¹àª•, àª¤àª®àª¾àª°à«àª‚ àª¬à«‡àª‚àª• àª–àª¾àª¤à«àª‚ àª•à«‡àªµàª¾àª¯àª¸à«€ àªµà«‡àª°àª¿àª«àª¿àª•à«‡àª¶àª¨ àª¬àª¾àª•à«€ àª¹à«‹àªµàª¾àª¥à«€ àª¬àª‚àª§ àª•àª°àªµàª¾àª®àª¾àª‚ àª†àªµà«àª¯à«àª‚ àª›à«‡. àª…àªªàª¡à«‡àªŸ àª•àª°àªµàª¾ àª®àª¾àªŸà«‡ àª¤àª°àª¤ àªœ àª¬à«‡àª‚àª• àª®à«‡àª¨à«‡àªœàª°àª¨à«‡ 98765-43210 àªªàª° àª•à«‹àª² àª•àª°à«‹."
+      hi: "प्रिय ग्राहक, आपका बैंक खाता लंबित केवाईसी सत्यापन के कारण बंद कर दिया गया है। अपडेट करने के लिए तुरंत बैंक मैनेजर को 98765-43210 पर कॉल करें।",
+      gu: "પ્રિય ગ્રાહક, તમારું બેંક ખાતું કેવાયસી વેરિફિકેશન બાકી હોવાથી બંધ કરવામાં આવ્યું છે. અપડેટ કરવા માટે તરત જ બેંક મેનેજરને 98765-43210 પર કોલ કરો."
     },
     electricity: {
       en: "Dear customer, electricity connection will be disconnected at 9:30 PM tonight because your previous month bill was not updated. Call electricity officer 90012-34567 immediately.",
-      hi: "à¤ªà¥à¤°à¤¿à¤¯ à¤—à¥à¤°à¤¾à¤¹à¤•, à¤†à¤œ à¤°à¤¾à¤¤ 9:30 à¤¬à¤œà¥‡ à¤¬à¤¿à¤œà¤²à¥€ à¤•à¤¾à¤Ÿ à¤¦à¥€ à¤œà¤¾à¤à¤—à¥€ à¤•à¥à¤¯à¥‹à¤‚à¤•à¤¿ à¤ªà¤¿à¤›à¤²à¥‡ à¤®à¤¹à¥€à¤¨à¥‡ à¤•à¤¾ à¤¬à¤¿à¤² à¤…à¤ªà¤¡à¥‡à¤Ÿ à¤¨à¤¹à¥€à¤‚ à¤¥à¤¾à¥¤ à¤¤à¥à¤°à¤‚à¤¤ à¤¬à¤¿à¤œà¤²à¥€ à¤…à¤§à¤¿à¤•à¤¾à¤°à¥€ 90012-34567 à¤ªà¤° à¤•à¥‰à¤² à¤•à¤°à¥‡à¤‚à¥¤",
-      gu: "àªªà«àª°àª¿àª¯ àª—à«àª°àª¾àª¹àª•, àª†àªœà«‡ àª°àª¾àª¤à«àª°à«‡ 9:30 àªµàª¾àª—à«àª¯à«‡ àªµà«€àªœàª³à«€ àªœà«‹àª¡àª¾àª£ àª•àª¾àªªà«€ àª¨àª¾àª–àªµàª¾àª®àª¾àª‚ àª†àªµàª¶à«‡ àª•àª¾àª°àª£ àª•à«‡ àª—àª¯àª¾ àª®àª¹àª¿àª¨àª¾àª¨à«àª‚ àª¬àª¿àª² àª…àªªàª¡à«‡àªŸ àª¨àª¹à«‹àª¤à«àª‚. àª¤àª°àª¤ àªœ àªµà«€àªœàª³à«€ àª…àª§àª¿àª•àª¾àª°à«€ 90012-34567 àªªàª° àª•à«‹àª² àª•àª°à«‹."
+      hi: "प्रिय ग्राहक, आज रात 9:30 बजे बिजली काट दी जाएगी क्योंकि पिछले महीने का बिल अपडेट नहीं था। तुरंत बिजली अधिकारी 90012-34567 पर कॉल करें।",
+      gu: "પ્રિય ગ્રાહક, આજે રાત્રે 9:30 વાગ્યે વીજળી જોડાણ કાપી નાખવામાં આવશે કારણ કે ગયા મહિનાનું બિલ અપડેટ નહોતું. તરત જ વીજળી અધિકારી 90012-34567 પર કોલ કરો."
     },
     lottery: {
       en: "Congratulations! You have won Rs. 25 Lakhs from KBC Lucky Draw. Send bank account details and photo to WhatsApp 88776-55443 to claim your prize.",
-      hi: "à¤¬à¤§à¤¾à¤ˆ à¤¹à¥‹! à¤†à¤ªà¤¨à¥‡ à¤•à¥‡à¤¬à¥€à¤¸à¥€ à¤²à¤•à¥€ à¤¡à¥à¤°à¤¾ à¤¸à¥‡ â‚¹25 à¤²à¤¾à¤– à¤œà¥€à¤¤à¥‡ à¤¹à¥ˆà¤‚à¥¤ à¤…à¤ªà¤¨à¤¾ à¤‡à¤¨à¤¾à¤® à¤ªà¤¾à¤¨à¥‡ à¤•à¥‡ à¤²à¤¿à¤ à¤µà¥à¤¹à¤¾à¤Ÿà¥à¤¸à¤à¤ª 88776-55443 à¤ªà¤° à¤¬à¥ˆà¤‚à¤• à¤–à¤¾à¤¤à¤¾ à¤µà¤¿à¤µà¤°à¤£ à¤”à¤° à¤«à¥‹à¤Ÿà¥‹ à¤­à¥‡à¤œà¥‡à¤‚à¥¤",
-      gu: "àª…àª­àª¿àª¨àª‚àª¦àª¨! àª¤àª®à«‡ àª•à«‡àª¬à«€àª¸à«€ àª²àª•à«€ àª¡à«àª°à«‹àª®àª¾àª‚àª¥à«€ â‚¹25 àª²àª¾àª– àªœà«€àª¤à«àª¯àª¾ àª›à«‡. àª¤àª®àª¾àª°àª¾ àª‡àª¨àª¾àª®àª¨à«‹ àª¦àª¾àªµà«‹ àª•àª°àªµàª¾ àª®àª¾àªŸà«‡ àªµà«‰àªŸà«àª¸àªàªª 88776-55443 àªªàª° àª¬à«‡àª‚àª• àª–àª¾àª¤àª¾àª¨à«€ àªµàª¿àª—àª¤à«‹ àª…àª¨à«‡ àª«à«‹àªŸà«‹ àª®à«‹àª•àª²à«‹."
+      hi: "बधाई हो! आपने केबीसी लकी ड्रा से ₹25 लाख जीते हैं। अपना इनाम पाने के लिए व्हाट्सएप 88776-55443 पर बैंक खाता विवरण और फोटो भेजें।",
+      gu: "અભિનંદન! તમે કેબીસી લકી ડ્રોમાંથી ₹25 લાખ જીત્યા છે. તમારા ઇનામનો દાવો કરવા માટે વૉટ્સએપ 88776-55443 પર બેંક ખાતાની વિગતો અને ફોટો મોકલો."
     },
     job: {
       en: "Earn Rs 3000 to Rs 8000 daily from home doing simple YouTube channel likes. Free registration, no fees. Age 18+. Click link to register: http://job18.in/apply",
-      hi: "à¤˜à¤° à¤¬à¥ˆà¤ à¥‡ à¤¯à¥‚à¤Ÿà¥à¤¯à¥‚à¤¬ à¤šà¥ˆà¤¨à¤² à¤²à¤¾à¤‡à¤• à¤•à¤°à¤•à¥‡ à¤°à¥‹à¤œà¤¾à¤¨à¤¾ â‚¹3000 à¤¸à¥‡ â‚¹8000 à¤•à¤®à¤¾à¤à¤‚à¥¤ à¤®à¥à¤«à¥à¤¤ à¤ªà¤‚à¤œà¥€à¤•à¤°à¤£, à¤•à¥‹à¤ˆ à¤¶à¥à¤²à¥à¤• à¤¨à¤¹à¥€à¤‚à¥¤ à¤‰à¤®à¥à¤° 18+à¥¤ à¤°à¤œà¤¿à¤¸à¥à¤Ÿà¤° à¤•à¤°à¤¨à¥‡ à¤•à¥‡ à¤²à¤¿à¤ à¤²à¤¿à¤‚à¤• à¤ªà¤° à¤•à¥à¤²à¤¿à¤• à¤•à¤°à¥‡à¤‚: http://job18.in/apply",
-      gu: "àª˜àª°à«‡ àª¬à«‡àª àª¾ àª¯à«àªŸà«àª¯à«àª¬ àªšà«‡àª¨àª² àª²àª¾àª‡àª• àª•àª°à«€àª¨à«‡ àª¦àª°àª°à«‹àªœ â‚¹3000 àª¥à«€ â‚¹8000 àª•àª®àª¾àª“. àª®àª«àª¤ àª°àªœà«€àª¸à«àªŸà«àª°à«‡àª¶àª¨, àª•à«‹àªˆ àª«à«€ àª¨àª¥à«€. àª‰àª‚àª®àª° 18+. àª°àªœà«€àª¸à«àªŸàª° àª•àª°àªµàª¾ àª®àª¾àªŸà«‡ àª²àª¿àª‚àª• àªªàª° àª•à«àª²àª¿àª• àª•àª°à«‹: http://job18.in/apply"
+      hi: "घर बैठे यूट्यूब चैनल लाइक करके रोजाना ₹3000 से ₹8000 कमाएं। मुफ्त पंजीकरण, कोई शुल्क नहीं। उम्र 18+। रजिस्टर करने के लिए लिंक पर क्लिक करें: http://job18.in/apply",
+      gu: "ઘરે બેઠા યુટ્યુબ ચેનલ લાઇક કરીને દરરોજ ₹3000 થી ₹8000 કમાઓ. મફત રજીસ્ટ્રેશન, કોઈ ફી નથી. ઉંમર 18+. રજીસ્ટર કરવા માટે લિંક પર ક્લિક કરો: http://job18.in/apply"
     }
   };
 
@@ -192,16 +192,16 @@ export default function MessageChecker({ t, language, onScanComplete, onActivity
 
     let resultPrefix = "";
     if (result.classification === 'Scam') {
-      resultPrefix = language === 'hi' ? "à¤šà¥‡à¤¤à¤¾à¤µà¤¨à¥€: à¤¯à¤¹ à¤¸à¤‚à¤¦à¥‡à¤¶ à¤à¤• à¤¸à¥à¤•à¥ˆà¤® à¤¹à¥ˆà¥¤" :
-                     language === 'gu' ? "àªšà«‡àª¤àªµàª£à«€: àª† àª®à«‡àª¸à«‡àªœ àª›à«‡àª¤àª°àªªàª¿àª‚àª¡à«€ àª›à«‡." :
+      resultPrefix = language === 'hi' ? "चेतावनी: यह संदेश एक स्कैम है।" :
+                     language === 'gu' ? "ચેતવણી: આ મેસેજ છેતરપિંડી છે." :
                      "Warning: This message is detected as a Scam.";
     } else if (result.classification === 'Suspicious') {
-      resultPrefix = language === 'hi' ? "à¤§à¥à¤¯à¤¾à¤¨ à¤¦à¥‡à¤‚: à¤¯à¤¹ à¤¸à¤‚à¤¦à¥‡à¤¶ à¤¸à¤‚à¤¦à¤¿à¤—à¥à¤§ à¤¹à¥ˆà¥¤" :
-                     language === 'gu' ? "àª§à«àª¯àª¾àª¨ àª†àªªà«‹: àª† àª®à«‡àª¸à«‡àªœ àª¶àª‚àª•àª¾àª¸à«àªªàª¦ àª›à«‡." :
+      resultPrefix = language === 'hi' ? "ध्यान दें: यह संदेश संदिग्ध है।" :
+                     language === 'gu' ? "ધ્યાન આપો: આ મેસેજ શંકાસ્પદ છે." :
                      "Attention: This message is classified as Suspicious.";
     } else {
-      resultPrefix = language === 'hi' ? "à¤¯à¤¹ à¤¸à¤‚à¤¦à¥‡à¤¶ à¤¸à¥à¤°à¤•à¥à¤·à¤¿à¤¤ à¤¦à¤¿à¤– à¤°à¤¹à¤¾ à¤¹à¥ˆà¥¤" :
-                     language === 'gu' ? "àª† àª®à«‡àª¸à«‡àªœ àª¸à«àª°àª•à«àª·àª¿àª¤ àª²àª¾àª—à«‡ àª›à«‡." :
+      resultPrefix = language === 'hi' ? "यह संदेश सुरक्षित दिख रहा है।" :
+                     language === 'gu' ? "આ મેસેજ સુરક્ષિત લાગે છે." :
                      "This message appears to be Safe.";
     }
 
@@ -243,7 +243,7 @@ export default function MessageChecker({ t, language, onScanComplete, onActivity
         setOcrTextConfirm(textOutput);
         setShowOcrConfirm(true);
       } else {
-        alert(language === 'hi' ? "à¤›à¤µà¤¿ à¤¸à¥‡ à¤•à¥‹à¤ˆ à¤ªà¤¾à¤  à¤¨à¤¹à¥€à¤‚ à¤®à¤¿à¤² à¤¸à¤•à¤¾à¥¤" : language === 'gu' ? "àª›àª¬à«€àª®àª¾àª‚àª¥à«€ àª•à«‹àªˆ àª²àª–àª¾àª£ àª®àª³à«àª¯à«àª‚ àª¨àª¥à«€." : "No text found in the image.");
+        alert(language === 'hi' ? "छवि से कोई पाठ नहीं मिल सका।" : language === 'gu' ? "છબીમાંથી કોઈ લખાણ મળ્યું નથી." : "No text found in the image.");
       }
     } catch (err) {
       console.error("OCR parse error:", err);
@@ -319,8 +319,8 @@ export default function MessageChecker({ t, language, onScanComplete, onActivity
             <div className="p-3 bg-blue-50 dark:bg-blue-950/20 text-blue-800 dark:text-blue-300 rounded-xl flex items-center gap-3 text-xs font-semibold animate-pulse">
               <Loader2 className="w-4 h-4 animate-spin text-blue-600 dark:text-blue-400" />
               <span>
-                {language === 'hi' ? `à¤›à¤µà¤¿ à¤¸à¥à¤•à¥ˆà¤¨ à¤•à¥€ à¤œà¤¾ à¤°à¤¹à¥€ à¤¹à¥ˆ... (${ocrProgress}%)` : 
-                 language === 'gu' ? `àª›àª¬à«€ àª¸à«àª•à«‡àª¨ àª¥àªˆ àª°àª¹à«€ àª›à«‡... (${ocrProgress}%)` : 
+                {language === 'hi' ? `छवि स्कैन की जा रही है... (${ocrProgress}%)` : 
+                 language === 'gu' ? `છબી સ્કેન થઈ રહી છે... (${ocrProgress}%)` : 
                  `Scanning image screenshot... (${ocrProgress}%)`}
               </span>
             </div>
@@ -386,7 +386,7 @@ export default function MessageChecker({ t, language, onScanComplete, onActivity
                 {loading ? (
                   <>
                     <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                    {language === 'en' ? 'Analyzing...' : language === 'hi' ? 'à¤œà¤¾à¤‚à¤š à¤•à¥€ à¤œà¤¾ à¤°à¤¹à¥€ à¤¹à¥ˆ...' : 'àª¤àªªàª¾àª¸...'}
+                    {language === 'en' ? 'Analyzing...' : language === 'hi' ? 'जांच की जा रही है...' : 'તપાસ...'}
                   </>
                 ) : (
                   <>
@@ -409,28 +409,28 @@ export default function MessageChecker({ t, language, onScanComplete, onActivity
                 onClick={() => handleLoadTemplate('kyc')}
                 className="text-xs text-left p-2.5 bg-slate-50 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-950/30 border border-slate-100 dark:border-slate-800 rounded-lg text-slate-700 dark:text-slate-400 font-medium transition-colors hover:border-blue-200 dark:hover:border-blue-800 cursor-pointer"
               >
-                ðŸš¨ {t.templateKyc}
+                🚨 {t.templateKyc}
               </button>
               <button
                 type="button"
                 onClick={() => handleLoadTemplate('electricity')}
                 className="text-xs text-left p-2.5 bg-slate-50 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-950/30 border border-slate-100 dark:border-slate-800 rounded-lg text-slate-700 dark:text-slate-400 font-medium transition-colors hover:border-blue-200 dark:hover:border-blue-800 cursor-pointer"
               >
-                ðŸ’¡ {t.templateElectricity}
+                💡 {t.templateElectricity}
               </button>
               <button
                 type="button"
                 onClick={() => handleLoadTemplate('lottery')}
                 className="text-xs text-left p-2.5 bg-slate-50 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-950/30 border border-slate-100 dark:border-slate-800 rounded-lg text-slate-700 dark:text-slate-400 font-medium transition-colors hover:border-blue-200 dark:hover:border-blue-800 cursor-pointer"
               >
-                ðŸ† {t.templateLottery}
+                🏆 {t.templateLottery}
               </button>
               <button
                 type="button"
                 onClick={() => handleLoadTemplate('job')}
                 className="text-xs text-left p-2.5 bg-slate-50 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-950/30 border border-slate-100 dark:border-slate-800 rounded-lg text-slate-700 dark:text-slate-400 font-medium transition-colors hover:border-blue-200 dark:hover:border-blue-800 cursor-pointer"
               >
-                ðŸ’¼ {t.templateJob}
+                💼 {t.templateJob}
               </button>
             </div>
           </div>
@@ -584,11 +584,11 @@ export default function MessageChecker({ t, language, onScanComplete, onActivity
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 rounded-2xl w-full max-w-lg shadow-xl space-y-4">
             <div className="space-y-1">
               <h3 className="text-lg font-black text-slate-900 dark:text-slate-100">
-                {language === 'hi' ? 'à¤¸à¥à¤•à¥ˆà¤¨ à¤•à¤¿à¤ à¤—à¤ à¤ªà¤¾à¤  à¤•à¥€ à¤ªà¥à¤·à¥à¤Ÿà¤¿ à¤•à¤°à¥‡à¤‚' : language === 'gu' ? 'àª¸à«àª•à«‡àª¨ àª•àª°à«‡àª² àª²àª–àª¾àª£àª¨à«€ àªªà«àª·à«àªŸàª¿ àª•àª°à«‹' : 'Confirm Scanned Text'}
+                {language === 'hi' ? 'स्कैन किए गए पाठ की पुष्टि करें' : language === 'gu' ? 'સ્કેન કરેલ લખાણની પુષ્ટિ કરો' : 'Confirm Scanned Text'}
               </h3>
               <p className="text-slate-500 dark:text-slate-400 text-xs">
-                {language === 'hi' ? 'à¤œà¤¾à¤‚à¤š à¤•à¤°à¤¨à¥‡ à¤¸à¥‡ à¤ªà¤¹à¤²à¥‡ à¤¸à¤‚à¤¦à¥‡à¤¶ à¤•à¥€ à¤œà¤¾à¤‚à¤š à¤•à¤°à¥‡à¤‚ à¤”à¤° à¤¸à¤‚à¤ªà¤¾à¤¦à¤¿à¤¤ à¤•à¤°à¥‡à¤‚:' : 
-                 language === 'gu' ? 'àª¤àªªàª¾àª¸ àª¶àª°à«‚ àª•àª°àª¤àª¾ àªªàª¹à«‡àª²àª¾ àª²àª–àª¾àª£ àªšàª•àª¾àª¸à«‹ àª…àª¨à«‡ àª¸àª‚àªªàª¾àª¦àª¿àª¤ àª•àª°à«‹:' : 
+                {language === 'hi' ? 'जांच करने से पहले संदेश की जांच करें और संपादित करें:' : 
+                 language === 'gu' ? 'તપાસ શરૂ કરતા પહેલા લખાણ ચકાસો અને સંપાદિત કરો:' : 
                  'Review and edit the scanned text before analyzing:'}
               </p>
             </div>
@@ -609,7 +609,7 @@ export default function MessageChecker({ t, language, onScanComplete, onActivity
                 }}
                 className="px-4 py-2 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-400 cursor-pointer transition-colors"
               >
-                {language === 'hi' ? 'à¤°à¤¦à¥à¤¦ à¤•à¤°à¥‡à¤‚' : language === 'gu' ? 'àª°àª¦ àª•àª°à«‹' : 'Cancel'}
+                {language === 'hi' ? 'रद्द करें' : language === 'gu' ? 'રદ કરો' : 'Cancel'}
               </button>
               <button
                 type="button"
@@ -620,7 +620,7 @@ export default function MessageChecker({ t, language, onScanComplete, onActivity
                 }}
                 className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow-sm cursor-pointer transition-colors"
               >
-                {language === 'hi' ? 'à¤œà¤¾à¤‚à¤š à¤¶à¥à¤°à¥‚ à¤•à¤°à¥‡à¤‚' : language === 'gu' ? 'àª¤àªªàª¾àª¸ àª¶àª°à«‚ àª•àª°à«‹' : 'Analyze Text'}
+                {language === 'hi' ? 'जांच शुरू करें' : language === 'gu' ? 'તપાસ શરૂ કરો' : 'Analyze Text'}
               </button>
             </div>
           </div>
@@ -629,4 +629,3 @@ export default function MessageChecker({ t, language, onScanComplete, onActivity
     </div>
   );
 }
-

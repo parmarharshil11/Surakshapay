@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BookOpen, ShieldCheck, ChevronDown, ChevronUp, AlertCircle } from 'lucide-react';
 
 export default function EducationLibrary({ t, language }) {
@@ -159,4 +159,3 @@ export default function EducationLibrary({ t, language }) {
     </div>
   );
 }
-

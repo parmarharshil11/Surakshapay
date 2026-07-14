@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { PhoneCall, Globe, CheckCircle2, ShieldAlert, FileText } from 'lucide-react';
 
 export default function Helpline({ t, language, onScanComplete }) {
@@ -49,9 +49,9 @@ export default function Helpline({ t, language, onScanComplete }) {
       console.error("Error reporting scam:", error);
       setSubmitError(
         language === 'hi' 
-          ? 'à¤°à¤¿à¤ªà¥‹à¤°à¥à¤Ÿ à¤­à¥‡à¤œà¤¨à¥‡ à¤®à¥‡à¤‚ à¤µà¤¿à¤«à¤²à¤¤à¤¾à¥¤ à¤ªà¥à¤¨à¤ƒ à¤ªà¥à¤°à¤¯à¤¾à¤¸ à¤•à¤°à¥‡à¤‚à¥¤' 
+          ? 'रिपोर्ट भेजने में विफलता। पुनः प्रयास करें।' 
           : language === 'gu' 
-          ? 'àª°àª¿àªªà«‹àª°à«àªŸ àª®à«‹àª•àª²àªµàª¾àª®àª¾àª‚ àª¨àª¿àª·à«àª«àª³àª¤àª¾. àª«àª°à«€ àªªà«àª°àª¯àª¾àª¸ àª•àª°à«‹.' 
+          ? 'રિપોર્ટ મોકલવામાં નિષ્ફળતા. ફરી પ્રયાસ કરો.' 
           : 'Failed to submit report. Please try again.'
       );
     } finally {
@@ -150,7 +150,7 @@ export default function Helpline({ t, language, onScanComplete }) {
                 <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0" />
                 <div>
                   <p className="font-bold">
-                    {language === 'hi' ? 'à¤¸à¤«à¤²à¤¤à¤¾à¤ªà¥‚à¤°à¥à¤µà¤• à¤°à¤¿à¤ªà¥‹à¤°à¥à¤Ÿ à¤•à¤¿à¤¯à¤¾ à¤—à¤¯à¤¾ (à¤¡à¥‡à¤®à¥‹)' : language === 'gu' ? 'àª°àª¿àªªà«‹àª°à«àªŸ àª¸àª«àª³àª¤àª¾àªªà«‚àª°à«àªµàª• àª®à«‹àª•àª²à«àª¯à«‹ (àª¡à«‡àª®à«‹)' : 'Reported Successfully (Demo)'}
+                    {language === 'hi' ? 'सफलतापूर्वक रिपोर्ट किया गया (डेमो)' : language === 'gu' ? 'રિપોર્ટ સફળતાપૂર્વક મોકલ્યો (ડેમો)' : 'Reported Successfully (Demo)'}
                   </p>
                   <p className="text-green-700/90 dark:text-green-400/90 mt-0.5">{t.reportSuccess}</p>
                 </div>
@@ -205,7 +205,7 @@ export default function Helpline({ t, language, onScanComplete }) {
                 {loading ? (
                   <>
                     <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                    {language === 'hi' ? 'à¤²à¥‹à¤¡ à¤¹à¥‹ à¤°à¤¹à¤¾ à¤¹à¥ˆ...' : language === 'gu' ? 'àª²à«‹àª¡ àª¥àªˆ àª°àª¹à«àª¯à«àª‚ àª›à«‡...' : 'Loading...'}
+                    {language === 'hi' ? 'लोड हो रहा है...' : language === 'gu' ? 'લોડ થઈ રહ્યું છે...' : 'Loading...'}
                   </>
                 ) : (
                   <>
@@ -222,4 +222,3 @@ export default function Helpline({ t, language, onScanComplete }) {
     </div>
   );
 }
-
