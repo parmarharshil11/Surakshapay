@@ -495,7 +495,7 @@ export default function UpiChecker({ t, language, onScanComplete, onActivityPerf
             <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">
               {t.upiTryTemplates}
             </span>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
               <button
                 type="button"
                 onClick={() => handleLoadTemplate('cashback')}

@@ -403,7 +403,7 @@ export default function MessageChecker({ t, language, onScanComplete, onActivity
             <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">
               {t.tryTemplates}
             </span>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               <button
                 type="button"
                 onClick={() => handleLoadTemplate('kyc')}
