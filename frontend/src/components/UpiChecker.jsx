@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+﻿import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { ShieldCheck, AlertTriangle, ShieldX, Sparkles, CheckSquare, XCircle, Volume2, QrCode, X, VideoOff, Upload } from 'lucide-react';
 import ShareCard from './ShareCard';
 import jsQR from 'jsqr';
@@ -32,7 +32,7 @@ export default function UpiChecker({ t, language, onScanComplete, onActivityPerf
     };
   }, []);
 
-  // ── QR CAMERA HELPERS ──────────────────────────────────────────
+  // â”€â”€ QR CAMERA HELPERS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const stopQrCamera = useCallback(() => {
     setQrScanning(false);
     if (frameRef.current) { cancelAnimationFrame(frameRef.current); frameRef.current = null; }
@@ -113,7 +113,7 @@ export default function UpiChecker({ t, language, onScanComplete, onActivityPerf
     setTimeout(() => startQrCamera(), 200);
   };
 
-  // ── FILE UPLOAD HANDLER ───────────────────────────────────────
+  // â”€â”€ FILE UPLOAD HANDLER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const handleFileUpload = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -169,8 +169,8 @@ export default function UpiChecker({ t, language, onScanComplete, onActivityPerf
       amount: "4999",
       message: {
         en: "GPay Scratch Card Cashback. Click Pay to receive Rs 4999 in your bank account.",
-        hi: "जीपे स्क्रैच कार्ड कैशबैक। अपने बैंक खाते में ₹4999 प्राप्त करने के लिए पे (Pay) पर क्लिक करें।",
-        gu: "જીપે સ્ક્રૅચ કાર્ડ કેશબેક. તમારા બેંક ખાતામાં ₹4999 મેળવવા માટે પે (Pay) પર ક્લિક કરો."
+        hi: "à¤œà¥€à¤ªà¥‡ à¤¸à¥à¤•à¥à¤°à¥ˆà¤š à¤•à¤¾à¤°à¥à¤¡ à¤•à¥ˆà¤¶à¤¬à¥ˆà¤•à¥¤ à¤…à¤ªà¤¨à¥‡ à¤¬à¥ˆà¤‚à¤• à¤–à¤¾à¤¤à¥‡ à¤®à¥‡à¤‚ â‚¹4999 à¤ªà¥à¤°à¤¾à¤ªà¥à¤¤ à¤•à¤°à¤¨à¥‡ à¤•à¥‡ à¤²à¤¿à¤ à¤ªà¥‡ (Pay) à¤ªà¤° à¤•à¥à¤²à¤¿à¤• à¤•à¤°à¥‡à¤‚à¥¤",
+        gu: "àªœà«€àªªà«‡ àª¸à«àª•à«àª°à«…àªš àª•àª¾àª°à«àª¡ àª•à«‡àª¶àª¬à«‡àª•. àª¤àª®àª¾àª°àª¾ àª¬à«‡àª‚àª• àª–àª¾àª¤àª¾àª®àª¾àª‚ â‚¹4999 àª®à«‡àª³àªµàªµàª¾ àª®àª¾àªŸà«‡ àªªà«‡ (Pay) àªªàª° àª•à«àª²àª¿àª• àª•àª°à«‹."
       }
     },
     kbc: {
@@ -178,8 +178,8 @@ export default function UpiChecker({ t, language, onScanComplete, onActivityPerf
       amount: "25000",
       message: {
         en: "Processing fee for KBC Rs 25 Lakh Lottery. Pay tax amount to release winnings.",
-        hi: "केबीसी ₹25 लाख लॉटरी के लिए प्रोसेसिंग शुल्क। इनाम जारी करने के लिए टैक्स का भुगतान करें।",
-        gu: "કેબીસી ₹25 લાખ લોટરી માટે પ્રોસેસિંગ ફી. ઇનામ લેવા માટે ટેક્સની ચુકવણી કરો."
+        hi: "à¤•à¥‡à¤¬à¥€à¤¸à¥€ â‚¹25 à¤²à¤¾à¤– à¤²à¥‰à¤Ÿà¤°à¥€ à¤•à¥‡ à¤²à¤¿à¤ à¤ªà¥à¤°à¥‹à¤¸à¥‡à¤¸à¤¿à¤‚à¤— à¤¶à¥à¤²à¥à¤•à¥¤ à¤‡à¤¨à¤¾à¤® à¤œà¤¾à¤°à¥€ à¤•à¤°à¤¨à¥‡ à¤•à¥‡ à¤²à¤¿à¤ à¤Ÿà¥ˆà¤•à¥à¤¸ à¤•à¤¾ à¤­à¥à¤—à¤¤à¤¾à¤¨ à¤•à¤°à¥‡à¤‚à¥¤",
+        gu: "àª•à«‡àª¬à«€àª¸à«€ â‚¹25 àª²àª¾àª– àª²à«‹àªŸàª°à«€ àª®àª¾àªŸà«‡ àªªà«àª°à«‹àª¸à«‡àª¸àª¿àª‚àª— àª«à«€. àª‡àª¨àª¾àª® àª²à«‡àªµàª¾ àª®àª¾àªŸà«‡ àªŸà«‡àª•à«àª¸àª¨à«€ àªšà«àª•àªµàª£à«€ àª•àª°à«‹."
       }
     },
     safe: {
@@ -187,8 +187,8 @@ export default function UpiChecker({ t, language, onScanComplete, onActivityPerf
       amount: "450",
       message: {
         en: "Lunch share from yesterday",
-        hi: "कल के दोपहर के भोजन का हिस्सा",
-        gu: "ગઈકાલના લંચ શેરની રકમ"
+        hi: "à¤•à¤² à¤•à¥‡ à¤¦à¥‹à¤ªà¤¹à¤° à¤•à¥‡ à¤­à¥‹à¤œà¤¨ à¤•à¤¾ à¤¹à¤¿à¤¸à¥à¤¸à¤¾",
+        gu: "àª—àªˆàª•àª¾àª²àª¨àª¾ àª²àª‚àªš àª¶à«‡àª°àª¨à«€ àª°àª•àª®"
       }
     }
   };
@@ -208,7 +208,7 @@ export default function UpiChecker({ t, language, onScanComplete, onActivityPerf
     setLoading(true);
     setResult(null);
 
-    const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+    const baseUrl = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000').replace(/\/$/, '');
 
     try {
       const response = await fetch(`${baseUrl}/api/check-upi`, {
@@ -273,16 +273,16 @@ export default function UpiChecker({ t, language, onScanComplete, onActivityPerf
 
     let statusText = "";
     if (result.classification === 'Scam') {
-      statusText = language === 'hi' ? "चेतावनी: यह यूपीआई अनुरोध धोखाधड़ी है।" :
-                   language === 'gu' ? "ચેતવણી: આ UPI ચુકવણી છેતરપિંડી છે." :
+      statusText = language === 'hi' ? "à¤šà¥‡à¤¤à¤¾à¤µà¤¨à¥€: à¤¯à¤¹ à¤¯à¥‚à¤ªà¥€à¤†à¤ˆ à¤…à¤¨à¥à¤°à¥‹à¤§ à¤§à¥‹à¤–à¤¾à¤§à¤¡à¤¼à¥€ à¤¹à¥ˆà¥¤" :
+                   language === 'gu' ? "àªšà«‡àª¤àªµàª£à«€: àª† UPI àªšà«àª•àªµàª£à«€ àª›à«‡àª¤àª°àªªàª¿àª‚àª¡à«€ àª›à«‡." :
                    "Warning: This UPI request is classified as a Scam.";
     } else if (result.classification === 'Suspicious') {
-      statusText = language === 'hi' ? "ध्यान दें: यह यूपीआई आईडी संदिग्ध है।" :
-                   language === 'gu' ? "ધ્યાન આપો: આ UPI આઈડી શંકાસ્પદ છે." :
+      statusText = language === 'hi' ? "à¤§à¥à¤¯à¤¾à¤¨ à¤¦à¥‡à¤‚: à¤¯à¤¹ à¤¯à¥‚à¤ªà¥€à¤†à¤ˆ à¤†à¤ˆà¤¡à¥€ à¤¸à¤‚à¤¦à¤¿à¤—à¥à¤§ à¤¹à¥ˆà¥¤" :
+                   language === 'gu' ? "àª§à«àª¯àª¾àª¨ àª†àªªà«‹: àª† UPI àª†àªˆàª¡à«€ àª¶àª‚àª•àª¾àª¸à«àªªàª¦ àª›à«‡." :
                    "Attention: This UPI ID is classified as Suspicious.";
     } else {
-      statusText = language === 'hi' ? "यह यूपीआई आईडी सुरक्षित है।" :
-                   language === 'gu' ? "આ UPI આઈડી સુરક્ષિત લાગે છે." :
+      statusText = language === 'hi' ? "à¤¯à¤¹ à¤¯à¥‚à¤ªà¥€à¤†à¤ˆ à¤†à¤ˆà¤¡à¥€ à¤¸à¥à¤°à¤•à¥à¤·à¤¿à¤¤ à¤¹à¥ˆà¥¤" :
+                   language === 'gu' ? "àª† UPI àª†àªˆàª¡à«€ àª¸à«àª°àª•à«àª·àª¿àª¤ àª²àª¾àª—à«‡ àª›à«‡." :
                    "This UPI ID appears to be Safe.";
     }
 
@@ -310,7 +310,7 @@ export default function UpiChecker({ t, language, onScanComplete, onActivityPerf
               <div className="flex items-center gap-2">
                 <QrCode className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                 <span className="font-bold text-slate-800 dark:text-slate-100 text-sm">
-                  {language === 'hi' ? 'QR कोड स्कैन करें' : language === 'gu' ? 'QR કોડ સ્કૅન કરો' : 'Scan QR Code'}
+                  {language === 'hi' ? 'QR à¤•à¥‹à¤¡ à¤¸à¥à¤•à¥ˆà¤¨ à¤•à¤°à¥‡à¤‚' : language === 'gu' ? 'QR àª•à«‹àª¡ àª¸à«àª•à«…àª¨ àª•àª°à«‹' : 'Scan QR Code'}
                 </span>
               </div>
               <button onClick={closeQrModal} className="p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 cursor-pointer transition-colors">
@@ -343,7 +343,7 @@ export default function UpiChecker({ t, language, onScanComplete, onActivityPerf
                 <p className="text-red-600 dark:text-red-400 text-xs font-medium">{qrError}</p>
               ) : (
                 <p className="text-slate-500 dark:text-slate-400 text-xs">
-                  {language === 'hi' ? 'कैमरे के सामने UPI QR कोड रखें' : language === 'gu' ? 'UPI QR કોડ કૅમેરા સામે રાખો' : 'Point your camera at a UPI QR code'}
+                  {language === 'hi' ? 'à¤•à¥ˆà¤®à¤°à¥‡ à¤•à¥‡ à¤¸à¤¾à¤®à¤¨à¥‡ UPI QR à¤•à¥‹à¤¡ à¤°à¤–à¥‡à¤‚' : language === 'gu' ? 'UPI QR àª•à«‹àª¡ àª•à«…àª®à«‡àª°àª¾ àª¸àª¾àª®à«‡ àª°àª¾àª–à«‹' : 'Point your camera at a UPI QR code'}
                 </p>
               )}
 
@@ -362,13 +362,13 @@ export default function UpiChecker({ t, language, onScanComplete, onActivityPerf
                 className="w-full py-2.5 bg-blue-50 dark:bg-blue-950/30 hover:bg-blue-100 dark:hover:bg-blue-900/40 border border-blue-200 dark:border-blue-800 rounded-xl text-xs font-bold text-blue-600 dark:text-blue-400 transition-colors cursor-pointer flex items-center justify-center gap-1.5"
               >
                 <Upload className="w-3.5 h-3.5" />
-                {language === 'hi' ? 'फ़ोटो अपलोड करें' : language === 'gu' ? 'ફોટો અપલોડ કરો' : 'Upload a File'}
+                {language === 'hi' ? 'à¤«à¤¼à¥‹à¤Ÿà¥‹ à¤…à¤ªà¤²à¥‹à¤¡ à¤•à¤°à¥‡à¤‚' : language === 'gu' ? 'àª«à«‹àªŸà«‹ àª…àªªàª²à«‹àª¡ àª•àª°à«‹' : 'Upload a File'}
               </button>
 
               {/* Stop Camera button */}
               <button onClick={closeQrModal} className="w-full py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer flex items-center justify-center gap-1.5">
                 <VideoOff className="w-3.5 h-3.5" />
-                {language === 'hi' ? 'कैमरा बंद करें' : language === 'gu' ? 'કૅમેરા બંધ કરો' : 'Stop Camera'}
+                {language === 'hi' ? 'à¤•à¥ˆà¤®à¤°à¤¾ à¤¬à¤‚à¤¦ à¤•à¤°à¥‡à¤‚' : language === 'gu' ? 'àª•à«…àª®à«‡àª°àª¾ àª¬àª‚àª§ àª•àª°à«‹' : 'Stop Camera'}
               </button>
             </div>
           </div>
@@ -412,12 +412,12 @@ export default function UpiChecker({ t, language, onScanComplete, onActivityPerf
                   <button
                     type="button"
                     onClick={openQrModal}
-                    title={language === 'hi' ? 'QR स्कैन करें' : language === 'gu' ? 'QR સ્કૅન' : 'Scan QR Code'}
+                    title={language === 'hi' ? 'QR à¤¸à¥à¤•à¥ˆà¤¨ à¤•à¤°à¥‡à¤‚' : language === 'gu' ? 'QR àª¸à«àª•à«…àª¨' : 'Scan QR Code'}
                     className="flex-shrink-0 flex items-center justify-center gap-1.5 px-3.5 py-2.5 bg-blue-50 dark:bg-blue-950/30 hover:bg-blue-100 dark:hover:bg-blue-900/40 border border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400 rounded-xl transition-colors cursor-pointer"
                   >
                     <QrCode className="w-5 h-5" />
                     <span className="text-xs font-bold hidden sm:block">
-                      {language === 'hi' ? 'QR स्कैन' : language === 'gu' ? 'QR સ્કૅન' : 'Scan QR'}
+                      {language === 'hi' ? 'QR à¤¸à¥à¤•à¥ˆà¤¨' : language === 'gu' ? 'QR àª¸à«àª•à«…àª¨' : 'Scan QR'}
                     </span>
                   </button>
                 </div>
@@ -436,7 +436,7 @@ export default function UpiChecker({ t, language, onScanComplete, onActivityPerf
                     {t.upiAmount}
                   </label>
                   <div className="relative">
-                    <span className="absolute left-3 top-3 text-slate-400 dark:text-slate-500 font-bold text-sm">₹</span>
+                    <span className="absolute left-3 top-3 text-slate-400 dark:text-slate-500 font-bold text-sm">â‚¹</span>
                     <input
                       type="number"
                       value={amount}
@@ -478,7 +478,7 @@ export default function UpiChecker({ t, language, onScanComplete, onActivityPerf
                 {loading ? (
                   <>
                     <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                    {language === 'en' ? 'Analyzing...' : language === 'hi' ? 'जांच की जा रही है...' : 'તપાસ...'}
+                    {language === 'en' ? 'Analyzing...' : language === 'hi' ? 'à¤œà¤¾à¤‚à¤š à¤•à¥€ à¤œà¤¾ à¤°à¤¹à¥€ à¤¹à¥ˆ...' : 'àª¤àªªàª¾àª¸...'}
                   </>
                 ) : (
                   <>
@@ -501,21 +501,21 @@ export default function UpiChecker({ t, language, onScanComplete, onActivityPerf
                 onClick={() => handleLoadTemplate('cashback')}
                 className="text-[11px] sm:text-xs text-left p-2 bg-slate-50 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-950/30 border border-slate-100 dark:border-slate-800 rounded-lg text-slate-700 dark:text-slate-400 font-medium transition-colors cursor-pointer"
               >
-                🎁 {t.upiTemplateCashback}
+                ðŸŽ {t.upiTemplateCashback}
               </button>
               <button
                 type="button"
                 onClick={() => handleLoadTemplate('kbc')}
                 className="text-[11px] sm:text-xs text-left p-2 bg-slate-50 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-950/30 border border-slate-100 dark:border-slate-800 rounded-lg text-slate-700 dark:text-slate-400 font-medium transition-colors cursor-pointer"
               >
-                🏆 {t.upiTemplateKbc}
+                ðŸ† {t.upiTemplateKbc}
               </button>
               <button
                 type="button"
                 onClick={() => handleLoadTemplate('safe')}
                 className="text-[11px] sm:text-xs text-left p-2 bg-slate-50 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-950/30 border border-slate-100 dark:border-slate-800 rounded-lg text-slate-700 dark:text-slate-400 font-medium transition-colors cursor-pointer"
               >
-                🤝 {t.upiTemplateSafe}
+                ðŸ¤ {t.upiTemplateSafe}
               </button>
             </div>
           </div>
@@ -637,7 +637,7 @@ export default function UpiChecker({ t, language, onScanComplete, onActivityPerf
                 <ShareCard
                   classification={result.classification}
                   type="UPI Payment Request"
-                  text={`UPI ID: ${upiId}, Amount: ₹${amount}`}
+                  text={`UPI ID: ${upiId}, Amount: â‚¹${amount}`}
                   explanation={result.explanation}
                   language={language}
                   t={t}
@@ -661,3 +661,4 @@ export default function UpiChecker({ t, language, onScanComplete, onActivityPerf
     </div>
   );
 }
+

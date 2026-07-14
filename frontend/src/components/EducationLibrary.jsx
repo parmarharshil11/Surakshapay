@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { BookOpen, ShieldCheck, ChevronDown, ChevronUp, AlertCircle } from 'lucide-react';
 
 export default function EducationLibrary({ t, language }) {
@@ -9,7 +9,7 @@ export default function EducationLibrary({ t, language }) {
 
   useEffect(() => {
     async function fetchScams() {
-      const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+      const baseUrl = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000').replace(/\/$/, '');
       try {
         setError(false);
         const response = await fetch(`${baseUrl}/api/scams`);
@@ -159,3 +159,4 @@ export default function EducationLibrary({ t, language }) {
     </div>
   );
 }
+
