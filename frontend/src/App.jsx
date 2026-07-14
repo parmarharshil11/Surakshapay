@@ -121,7 +121,7 @@ function App() {
 
       {/* Top Navbar */}
       <header className="sticky top-0 z-50 bg-blue-900 text-white shadow-md border-b border-blue-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           {/* Logo & Brand */}
           <button 
             onClick={() => setTab('home')}
@@ -138,25 +138,25 @@ function App() {
           </button>
 
           {/* Controls: Notification Bell + Dark Mode + i18n */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5 sm:gap-3">
             {/* Notification Bell alert toggle */}
             <NotificationBell language={language} t={t} />
 
             {/* Dark Mode Toggle */}
             <button
               onClick={() => setDarkMode(!darkMode)}
-              className="p-2 rounded-xl bg-blue-800 hover:bg-blue-700 text-blue-200 hover:text-white transition-colors cursor-pointer border border-blue-750"
+              className="p-1.5 sm:p-2 rounded-xl bg-blue-800 hover:bg-blue-700 text-blue-200 hover:text-white transition-colors cursor-pointer border border-blue-750"
               aria-label={darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
             >
               {darkMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4" />}
             </button>
 
             {/* Language Switcher */}
-            <div className="flex bg-blue-950 p-1 rounded-xl border border-blue-800">
+            <div className="flex bg-blue-950 p-0.5 sm:p-1 rounded-xl border border-blue-800">
               <button
                 onClick={() => setLanguage('en')}
                 aria-pressed={language === 'en'}
-                className={`px-2.5 py-1 text-xs font-bold rounded-lg transition-all cursor-pointer ${
+                className={`px-1.5 sm:px-2.5 py-1 text-[10px] sm:text-xs font-bold rounded-lg transition-all cursor-pointer ${
                   language === 'en' ? 'bg-blue-600 text-white shadow-sm' : 'text-blue-300 hover:text-white'
                 }`}
               >
@@ -165,7 +165,7 @@ function App() {
               <button
                 onClick={() => setLanguage('hi')}
                 aria-pressed={language === 'hi'}
-                className={`px-2.5 py-1 text-xs font-bold rounded-lg transition-all cursor-pointer ${
+                className={`px-1.5 sm:px-2.5 py-1 text-[10px] sm:text-xs font-bold rounded-lg transition-all cursor-pointer ${
                   language === 'hi' ? 'bg-blue-600 text-white shadow-sm' : 'text-blue-300 hover:text-white'
                 }`}
               >
@@ -174,7 +174,7 @@ function App() {
               <button
                 onClick={() => setLanguage('gu')}
                 aria-pressed={language === 'gu'}
-                className={`px-2.5 py-1 text-xs font-bold rounded-lg transition-all cursor-pointer ${
+                className={`px-1.5 sm:px-2.5 py-1 text-[10px] sm:text-xs font-bold rounded-lg transition-all cursor-pointer ${
                   language === 'gu' ? 'bg-blue-600 text-white shadow-sm' : 'text-blue-300 hover:text-white'
                 }`}
               >
