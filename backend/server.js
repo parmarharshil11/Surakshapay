@@ -7,8 +7,30 @@ const { getHistory, addHistoryEntry, clearHistory } = require('./db');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
-app.use(express.json());
+// CORS — allow Vercel frontend and localhost dev server
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:4173',
+  // Add your Vercel URL here after deploying, e.g.:
+  // 'https://surakshapay.vercel.app',
+  process.env.FRONTEND_URL, // set this in Render env vars
+].filter(Boolean);
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, curl, Render health checks)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin) || origin.endsWith('.vercel.app')) {
+      return callback(null, true);
+    }
+    return callback(new Error('Not allowed by CORS'));
+  },
+  methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type'],
+}));
+
+app.use(express.json({ limit: '2mb' }));
+
 
 // Scam Education Library Data
 const SCAMS_LIBRARY = [

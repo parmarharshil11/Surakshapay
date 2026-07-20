@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: surakshapay-backend
+    runtime: node
+    region: singapore   # Closest to India
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: node server.js
+    healthCheckPath: /api/scams
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: GEMINI_API_KEY
+        sync: false    # Set this manually in Render dashboard
