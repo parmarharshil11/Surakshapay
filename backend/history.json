@@ -1,5 +1,21 @@
 [
   {
+    "id": "check_1784556033968_1vasqcttk",
+    "timestamp": "2026-07-20T14:00:33.968Z",
+    "type": "message",
+    "inputText": "Congratulations! You have won Rs. 25 Lakhs. Send bank account and OTP to WhatsApp 88776-55443 to claim prize. Click http://fake-prize.in now!",
+    "score": 98,
+    "classification": "Scam",
+    "matchedKeywords": [
+      "won Rs. 25 Lakhs",
+      "Send bank account",
+      "OTP",
+      "http://fake-prize.in"
+    ],
+    "explanation": "This message is a dangerous scam designed to steal your money and personal information. No legitimate organization will ever ask you to share your bank account details or OTP via WhatsApp to claim a prize. The promise of winning a large sum of money like Rs. 25 Lakhs is a common trick used by fraudsters to lure you into sharing your financial credentials. Do not click the link, do not reply to the message, and do not share any OTPs with anyone. Please delete this message immediately and block the sender to protect your bank account.",
+    "lang": "en"
+  },
+  {
     "id": "check_1784555134207_weun8yh1i",
     "timestamp": "2026-07-20T13:45:34.207Z",
     "type": "message",

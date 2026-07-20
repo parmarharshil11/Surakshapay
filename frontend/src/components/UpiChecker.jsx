@@ -598,6 +598,31 @@ export default function UpiChecker({ t, language, onScanComplete, onActivityPerf
                 </div>
               </div>
 
+              {/* AI Risk Breakdown - Reasons */}
+              {result.reasons && result.reasons.length > 0 && (
+                <div className="space-y-2">
+                  <h5 className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
+                    {language === 'hi' ? '⚠️ जोखिम कारण' : language === 'gu' ? '⚠️ જોખમ કારણો' : '⚠️ Risk Reasons'}
+                  </h5>
+                  <div className="flex flex-col gap-1.5">
+                    {result.reasons.map((reason, i) => (
+                      <div key={i} className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-semibold border ${
+                        result.classification === 'Scam'
+                          ? 'bg-red-50 dark:bg-red-950/20 border-red-100 dark:border-red-900/40 text-red-700 dark:text-red-300'
+                          : result.classification === 'Suspicious'
+                          ? 'bg-amber-50 dark:bg-amber-950/20 border-amber-100 dark:border-amber-900/40 text-amber-700 dark:text-amber-300'
+                          : 'bg-green-50 dark:bg-green-950/20 border-green-100 dark:border-green-900/40 text-green-700 dark:text-green-300'
+                      }`}>
+                        <span className="text-base leading-none">
+                          {result.classification === 'Safe' ? '✅' : i === 0 ? '🔴' : '🟠'}
+                        </span>
+                        {reason}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {/* Explanation text */}
               <div className="space-y-2">
                 <h5 className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">

@@ -1,4 +1,4 @@
-// Using standard fetch for Google Gemini API to avoid dependency issues
+// Using standard fetch for Google Gemini API
 
 /**
  * Helper to call Gemini REST API
@@ -39,7 +39,7 @@ async function callGeminiAPI(prompt) {
 
 /**
  * Analyzes a message text for scam patterns using Google Gemini AI.
- * Returns { score, classification, matchedKeywords, explanation }
+ * Returns { score, classification, matchedKeywords, reasons, explanation }
  */
 async function analyzeMessage(text, lang = 'en') {
   if (!text || typeof text !== 'string') {
@@ -47,21 +47,25 @@ async function analyzeMessage(text, lang = 'en') {
       score: 0,
       classification: "Safe",
       matchedKeywords: [],
+      reasons: [],
       explanation: "No message text provided."
     };
   }
 
+  const langName = lang === 'hi' ? 'Hindi' : lang === 'gu' ? 'Gujarati' : 'English';
+
   const prompt = `
 You are a highly advanced financial fraud detection AI for a rural Indian safety app called SuRakshaPay.
 Analyze the following SMS message and determine if it is a Scam, Suspicious, or Safe.
-The user's preferred language for the explanation is: ${lang === 'hi' ? 'Hindi' : lang === 'gu' ? 'Gujarati' : 'English'}.
+The user's preferred language for the explanation is: ${langName}.
 
-Respond strictly with a JSON object in this exact format:
+Respond strictly with a JSON object in this exact format — no extra text, no markdown, just JSON:
 {
   "score": <number between 0 and 100 indicating danger level>,
   "classification": <must be exactly "Scam", "Suspicious", or "Safe">,
-  "matchedKeywords": [<array of suspicious words found in the message, in the original language>],
-  "explanation": <detailed, helpful explanation in the user's preferred language explaining why it is safe or dangerous and what they should do>
+  "matchedKeywords": [<array of specific suspicious words or phrases found verbatim in the message>],
+  "reasons": [<array of 2-5 short reason strings in ${langName} explaining WHY it is flagged. Each reason should be a concise phrase like "Urgent language detected", "OTP requested", "Unknown URL found", "Fake bank name used", "Lottery prize claim". For safe messages, provide positive reason phrases like "No suspicious links", "Legitimate sender format".>],
+  "explanation": <one detailed paragraph in ${langName} explaining to a rural Indian user why this message is safe or dangerous, and exactly what they should do>
 }
 
 Message to analyze:
@@ -72,40 +76,43 @@ Message to analyze:
     return await callGeminiAPI(prompt);
   } catch (error) {
     console.error("AI Analysis Error (Message):", error.message);
-    // Fallback if AI fails
     return {
       score: 50,
       classification: "Suspicious",
       matchedKeywords: [],
-      explanation: lang === 'hi' ? "हम अभी इस संदेश की जांच नहीं कर पा रहे हैं। कृपया सतर्क रहें और अनजान लिंक पर क्लिक न करें।" :
-                   lang === 'gu' ? "અમે અત્યારે આ મેસેજની તપાસ કરી શકતા નથી. કૃપા કરીને સાવચેત રહો અને અજાણી લિંક પર ક્લિક કરશો નહીં." :
-                   "We couldn't analyze this message right now. Please be cautious and avoid clicking unknown links."
+      reasons: lang === 'hi' ? ["AI सेवा अनुपलब्ध"] : lang === 'gu' ? ["AI સેવા ઉપલબ્ધ નથી"] : ["AI service unavailable"],
+      explanation: lang === 'hi' ? "AI सेवा अभी उपलब्ध नहीं है। संदेश संदिग्ध लग सकता है। किसी भी अनजान लिंक पर क्लिक करने से बचें और प्रेषक की पहचान सत्यापित करें।" :
+                   lang === 'gu' ? "AI સેવા અત્યારે ઉપલબ્ધ નથી. સંદેશ શંકાસ્પદ હોઈ શકે છે. કોઈ અજાણ્યી લિંક પર ક્લિક ન કરો અને મોકલનારની ઓળખ ચકાસો." :
+                   "AI service is temporarily unavailable. The message may be suspicious. Avoid clicking unknown links and verify the sender's identity directly."
     };
   }
 }
 
 /**
  * Analyzes a UPI request using Google Gemini AI.
+ * Returns { score, classification, matchedKeywords, reasons, explanation }
  */
 async function analyzeUpiRequest(upiId, amount, message = "", lang = 'en') {
   const cleanUpi = upiId.toLowerCase().trim();
+  const langName = lang === 'hi' ? 'Hindi' : lang === 'gu' ? 'Gujarati' : 'English';
   
   const prompt = `
 You are a highly advanced financial fraud detection AI for a rural Indian safety app called SuRakshaPay.
 Analyze the following UPI Payment Request (Collect Request) and determine if it is a Scam, Suspicious, or Safe.
-The user's preferred language for the explanation is: ${lang === 'hi' ? 'Hindi' : lang === 'gu' ? 'Gujarati' : 'English'}.
+The user's preferred language for the explanation is: ${langName}.
 
 UPI Request Details:
 - Sender VPA / UPI ID: ${cleanUpi}
 - Requested Amount: ₹${amount}
 - Attached Message: ${message}
 
-Respond strictly with a JSON object in this exact format:
+Respond strictly with a JSON object in this exact format — no extra text, no markdown, just JSON:
 {
   "score": <number between 0 and 100 indicating danger level>,
   "classification": <must be exactly "Scam", "Suspicious", or "Safe">,
-  "matchedKeywords": [<array of suspicious words found in the UPI details>],
-  "explanation": <detailed, helpful explanation in the user's preferred language explaining why this UPI request is safe or dangerous. If it's a scam, remind them that PIN is only used for SENDING money, never receiving.>
+  "matchedKeywords": [<array of suspicious words or patterns found in the UPI details>],
+  "reasons": [<array of 2-5 short reason strings in ${langName} explaining WHY it is flagged. Each reason should be a concise phrase like "Suspicious UPI handle", "Prize claim attached", "Large amount request", "Unknown sender". For safe requests, use phrases like "Recognizable VPA format", "No suspicious message", "Reasonable amount".>],
+  "explanation": <one detailed paragraph in ${langName} explaining why this UPI request is safe or dangerous. If it's a scam, clearly remind them that UPI PIN is ONLY for SENDING money, you NEVER need to enter PIN to RECEIVE money.>
 }
 `;
 
@@ -113,11 +120,11 @@ Respond strictly with a JSON object in this exact format:
     return await callGeminiAPI(prompt);
   } catch (error) {
     console.error("AI Analysis Error (UPI):", error.message);
-    // Fallback if AI fails
     return {
       score: 50,
       classification: "Suspicious",
       matchedKeywords: [],
+      reasons: lang === 'hi' ? ["AI सेवा अनुपलब्ध"] : lang === 'gu' ? ["AI સેવા ઉપલબ્ધ નથી"] : ["AI service unavailable"],
       explanation: lang === 'hi' ? "हम अभी इस यूपीआई की जांच नहीं कर पा रहे हैं। कृपया पैसे भेजने से पहले प्राप्तकर्ता की पहचान कर लें।" :
                    lang === 'gu' ? "અમે અત્યારે આ UPI ની તપાસ કરી શકતા નથી. કૃપા કરીને પૈસા મોકલતા પહેલા મેળવનારની ઓળખ કરી લો." :
                    "We couldn't analyze this UPI request right now. Please verify the receiver before entering your PIN."
