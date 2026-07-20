@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const { analyzeMessage, analyzeUpiRequest } = require('./ai');
+const { analyzeMessage, analyzeUpiRequest, analyzeReportAuth } = require('./ai');
 const { getHistory, addHistoryEntry, clearHistory } = require('./db');
 
 const app = express();
@@ -257,19 +257,23 @@ app.delete('/api/history', (req, res) => {
 });
 
 // 6. Simulate reporting a scam (we save it in history database as "reported")
-app.post('/api/report', (req, res) => {
+app.post('/api/report', async (req, res) => {
   const { type, scammerDetails, description, lang = 'en' } = req.body;
   
   if (!scammerDetails || !description) {
     return res.status(400).json({ error: "Scammer details and description are required" });
   }
 
+  // 1. Ask AI to verify if it's a real scam and generate summary
+  const analysis = await analyzeReportAuth(scammerDetails, description, lang);
+
+  // 2. Add to history
   const reportLog = addHistoryEntry({
     type: "reported_scam",
     scammerDetails,
     description,
     classification: "Reported",
-    score: 100, // Reported scams are 100% scams
+    score: analysis.isAuthentic ? 100 : 0, 
     explanation: lang === 'hi' 
       ? "सफलतापूर्वक दर्ज किया गया। याद रखें: आधिकारिक शिकायत दर्ज करने के लिए टोल-फ्री 1930 नंबर डायल करें।" 
       : lang === 'gu'
@@ -278,8 +282,11 @@ app.post('/api/report', (req, res) => {
     lang
   });
 
+  // 3. Return response with AI summary
   return res.json({
     success: true,
+    isAuthentic: analysis.isAuthentic,
+    summary: analysis.summary,
     message: "Report logged locally for demo",
     dbId: reportLog ? reportLog.id : null,
     timestamp: reportLog ? reportLog.timestamp : new Date().toISOString()

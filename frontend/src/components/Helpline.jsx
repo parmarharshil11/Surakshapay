@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PhoneCall, Globe, CheckCircle2, ShieldAlert, FileText } from 'lucide-react';
 
 export default function Helpline({ t, language, onScanComplete }) {
@@ -7,6 +7,13 @@ export default function Helpline({ t, language, onScanComplete }) {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [submitError, setSubmitError] = useState('');
+
+  // Ask for notification permission on mount so we can simulate push alerts
+  useEffect(() => {
+    if ("Notification" in window && Notification.permission === "default") {
+      Notification.requestPermission();
+    }
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -41,6 +48,18 @@ export default function Helpline({ t, language, onScanComplete }) {
         setSuccess(true);
         setScammerDetails('');
         setDescription('');
+        
+        // --- NEW: Simulate Push Notification for authentic scams ---
+        if (data.isAuthentic && data.summary && "Notification" in window) {
+          if (Notification.permission === "granted") {
+            new Notification(language === 'hi' ? "नया स्कैम अलर्ट!" : language === 'gu' ? "નવું સ્કેમ એલર્ટ!" : "New Scam Alert!", {
+              body: data.summary,
+              icon: "/icons/icon-192x192.png", // Use app icon if available
+              badge: "/icons/icon-192x192.png"
+            });
+          }
+        }
+        
         if (onScanComplete) {
           onScanComplete();
         }

@@ -131,8 +131,50 @@ Respond strictly with a JSON object in this exact format — no extra text, no m
     };
   }
 }
+/**
+ * Analyzes a user-submitted scam report for authenticity using Gemini.
+ * Returns { isAuthentic, summary }
+ */
+async function analyzeReportAuth(scammerDetails, description, lang = 'en') {
+  const langName = lang === 'hi' ? 'Hindi' : lang === 'gu' ? 'Gujarati' : 'English';
+  
+  const prompt = `
+You are an AI moderator for a community scam reporting platform called SuRakshaPay.
+A user has submitted a report of a scam. You need to determine if this is an authentic, realistic report of a scam, OR if it's just spam/gibberish (like "asdf" or "pizza delivery").
+
+If it IS an authentic scam, generate a very short, punchy 1-sentence warning summary (maximum 15 words) in ${langName} to send as a push notification to other users. 
+Example summaries: "Beware of fake electricity bill SMS from 98765-XXXXX." or "New loan app scam reported, do not download AnyDesk."
+
+Scammer Details provided: "${scammerDetails}"
+Description provided: "${description}"
+
+Respond strictly with a JSON object in this exact format — no extra text, just JSON:
+{
+  "isAuthentic": <boolean true or false>,
+  "summary": <if authentic, the 1-sentence warning string in ${langName}. if not authentic, just empty string "">
+}
+`;
+
+  try {
+    const result = await callGeminiAPI(prompt);
+    // Ensure boolean
+    if (typeof result.isAuthentic !== 'boolean') {
+      result.isAuthentic = result.isAuthentic === 'true';
+    }
+    return result;
+  } catch (error) {
+    console.error("AI Analysis Error (Report):", error.message);
+    return {
+      isAuthentic: true, // Fallback to accepting it if API fails
+      summary: lang === 'hi' ? "नई संभावित ठगी की रिपोर्ट की गई। सतर्क रहें!" : 
+               lang === 'gu' ? "નવી સંભવિત છેતરપિંડીની જાણ થઈ. સાવધાન રહો!" : 
+               "New potential scam reported by community. Stay alert!"
+    };
+  }
+}
 
 module.exports = {
   analyzeMessage,
-  analyzeUpiRequest
+  analyzeUpiRequest,
+  analyzeReportAuth
 };
