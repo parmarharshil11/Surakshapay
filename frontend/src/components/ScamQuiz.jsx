@@ -292,6 +292,13 @@ export default function ScamQuiz({ t, language, onActivityPerformed }) {
       voice = voices.find(v => v.name.toLowerCase().includes('hindi') || v.name.includes('हिन्दी'));
     }
 
+    // Windows usually lacks regional TTS out-of-the-box. Show helpful alert.
+    if (voices.length > 0 && !voice && language !== 'en' && navigator.userAgent.includes('Windows')) {
+      alert(language === 'gu' 
+        ? "Windows PC માં ગુજરાતી અવાજ (TTS) ઇન્સ્ટોલ કરેલ નથી. કૃપા કરીને Windows Settings > Time & Language માં જઈને 'Gujarati' ભાષા ડાઉનલોડ કરો." 
+        : "Windows PC में हिंदी आवाज़ (TTS) इंस्टॉल नहीं है। कृपया Windows Settings > Time & Language में जाकर 'Hindi' भाषा डाउनलोड करें।");
+    }
+
     if (voice) {
       utterance.voice = voice;
     }
