@@ -1,7 +1,10 @@
 {
-  "name": "frontend",
+  "name": "surakshapay-frontend",
+  "description": "SuRakshaPay — AI-Powered Financial Safety App for Rural India (Frontend)",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "author": "Harshil Parmar & Kush Thacker",
+  "keywords": ["scam-detection", "upi-fraud", "ai", "rural-india", "gemini", "react"],
   "type": "module",
   "scripts": {
     "dev": "vite",

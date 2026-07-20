@@ -1,12 +1,13 @@
 {
-  "name": "backend",
+  "name": "surakshapay-backend",
   "version": "1.0.0",
-  "description": "SuRakshaPay backend REST API",
+  "description": "SuRakshaPay backend — Express REST API integrating Google Gemini AI for SMS and UPI scam detection",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "node --watch server.js"
   },
-  "keywords": [],
+  "keywords": ["scam-detection", "upi-fraud", "gemini-ai", "express", "rural-india", "cybercrime"],
   "author": "Harshil Parmar & Kush Thacker",
   "license": "ISC",
   "dependencies": {

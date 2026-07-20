@@ -1,16 +1,54 @@
-# React + Vite
+# SuRakshaPay — Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+React 19 + Vite 8 + Tailwind CSS 4 frontend for the SuRakshaPay AI financial safety app.
 
-Currently, two official plugins are available:
+## 🚀 Development
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```bash
+npm install
+npm run dev       # Start dev server at http://localhost:5173
+npm run build     # Build for production
+npm run preview   # Preview production build
+```
 
-## React Compiler
+## 🔐 Environment Variables
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Copy `.env.local.example` or create a `.env.local` file:
 
-## Expanding the Oxlint configuration
+```env
+# Backend API URL (defaults to localhost for development)
+VITE_API_BASE_URL=http://localhost:5000
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+# Firebase (optional — app runs in local mock mode without these)
+VITE_FIREBASE_API_KEY=
+VITE_FIREBASE_AUTH_DOMAIN=
+VITE_FIREBASE_PROJECT_ID=
+VITE_FIREBASE_STORAGE_BUCKET=
+VITE_FIREBASE_MESSAGING_SENDER_ID=
+VITE_FIREBASE_APP_ID=
+```
+
+## 📁 Key Files
+
+| Path | Purpose |
+|---|---|
+| `src/App.jsx` | Root layout, navigation, language state |
+| `src/translations.js` | All English / Hindi / Gujarati strings |
+| `src/firebase.js` | Firebase init with graceful mock fallback |
+| `src/components/MessageChecker.jsx` | SMS scam checker + OCR + voice I/O |
+| `src/components/UpiChecker.jsx` | UPI request fraud detector |
+| `src/components/QrScanner.jsx` | QR code scanner + AI analysis |
+| `src/components/ScamQuiz.jsx` | Safety quiz with XP system |
+| `src/components/EducationLibrary.jsx` | Scam education + SMS guide |
+| `src/components/SmsGuide.jsx` | Indian SMS sender ID decoder |
+| `src/components/Helpline.jsx` | Emergency contacts + scam reporter |
+| `public/sw.js` | PWA service worker for push notifications |
+
+## 🌐 Multilingual Support
+
+The app supports **English**, **Hindi**, and **Gujarati**. All strings live in `src/translations.js`. Text-to-Speech and Speech-to-Text also switch language automatically based on the selected UI language.
+
+## 🔒 Security
+
+- All user-facing HTML is sanitized with **DOMPurify** before rendering to prevent XSS attacks.
+- No sensitive credentials are stored in the frontend — API keys stay in the backend `.env`.
