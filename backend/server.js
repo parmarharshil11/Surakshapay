@@ -11,6 +11,7 @@ const PORT = process.env.PORT || 5000;
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:4173',
+  'https://surakshapay-v1.vercel.app',      // Your Vercel domain
   'https://surakshapay.vercel.app',         // Primary Vercel domain
   'https://surakshapay-harshil.vercel.app', // Alternate Vercel domain
   process.env.FRONTEND_URL,                 // Override via Render env var
