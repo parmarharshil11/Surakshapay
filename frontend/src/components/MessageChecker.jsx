@@ -216,7 +216,15 @@ export default function MessageChecker({ t, language, onScanComplete, onActivity
 
     // Force voice selection for the correct accent
     const voices = window.speechSynthesis.getVoices();
-    const voice = voices.find(v => v.lang.replace('_', '-').startsWith(language));
+    let voice = voices.find(v => v.lang.replace('_', '-').toLowerCase().startsWith(language.toLowerCase()));
+    
+    if (!voice && language === 'gu') {
+      voice = voices.find(v => v.name.toLowerCase().includes('gujarati') || v.name.includes('ગુજરાતી'));
+    }
+    if (!voice && language === 'hi') {
+      voice = voices.find(v => v.name.toLowerCase().includes('hindi') || v.name.includes('हिन्दी'));
+    }
+
     if (voice) {
       utterance.voice = voice;
     }
