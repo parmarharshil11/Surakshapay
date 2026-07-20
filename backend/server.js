@@ -1,6 +1,7 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const { analyzeMessage, analyzeUpiRequest } = require('./rules');
+const { analyzeMessage, analyzeUpiRequest } = require('./ai');
 const { getHistory, addHistoryEntry, clearHistory } = require('./db');
 
 const app = express();
@@ -158,13 +159,13 @@ const SCAMS_LIBRARY = [
 ];
 
 // 1. Text/SMS Checker Endpoint
-app.post('/api/check-message', (req, res) => {
+app.post('/api/check-message', async (req, res) => {
   const { text, lang = 'en' } = req.body;
   if (!text) {
     return res.status(400).json({ error: "Message text is required" });
   }
 
-  const analysis = analyzeMessage(text, lang);
+  const analysis = await analyzeMessage(text, lang);
   
   // Log check to database
   const loggedEntry = addHistoryEntry({
@@ -185,14 +186,14 @@ app.post('/api/check-message', (req, res) => {
 });
 
 // 2. Fake UPI Request Detector Endpoint
-app.post('/api/check-upi', (req, res) => {
+app.post('/api/check-upi', async (req, res) => {
   const { upiId, amount, message = "", lang = 'en' } = req.body;
   
   if (!upiId) {
     return res.status(400).json({ error: "UPI ID is required" });
   }
 
-  const analysis = analyzeUpiRequest(upiId, amount, message, lang);
+  const analysis = await analyzeUpiRequest(upiId, amount, message, lang);
 
   // Log check to database
   const loggedEntry = addHistoryEntry({

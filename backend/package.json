@@ -10,7 +10,9 @@
   "author": "Antigravity",
   "license": "ISC",
   "dependencies": {
+    "@google/genai": "^2.12.0",
     "cors": "^2.8.5",
+    "dotenv": "^17.4.2",
     "express": "^4.21.1"
   }
 }

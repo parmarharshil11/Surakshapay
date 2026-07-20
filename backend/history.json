@@ -1,1 +1,157 @@
-[]
+[
+  {
+    "id": "check_1784554723778_ef0xco0wd",
+    "timestamp": "2026-07-20T13:38:43.778Z",
+    "type": "message",
+    "inputText": "Congratulations! You have won Rs. 25 Lakhs from KBC Lucky Draw. Send bank account details and photo to WhatsApp 88776-55443 to claim your prize.",
+    "score": 95,
+    "classification": "Scam",
+    "matchedKeywords": [
+      "won",
+      "Rs. 25 Lakhs",
+      "KBC Lucky Draw",
+      "bank account details",
+      "WhatsApp"
+    ],
+    "explanation": "આ એક સ્પષ્ટ છેતરપિંડી (Scam) છે. KBC કે અન્ય કોઈ પણ લોટરી જીતવા માટે ક્યારેય બેંક વિગતો કે વ્યક્તિગત માહિતી માંગવામાં આવતી નથી. અજાણ્યા નંબર પર તમારી બેંક વિગતો કે ફોટા ક્યારેય મોકલશો નહીં, કારણ કે આ તમારી સાથે નાણાકીય છેતરપિંડી કરવા માટેનો પ્રયાસ છે. કૃપા કરીને આ મેસેજને ડિલીટ કરો અને આ નંબરને બ્લોક કરો.",
+    "lang": "gu"
+  },
+  {
+    "id": "check_1784554689513_nahfnjukg",
+    "timestamp": "2026-07-20T13:38:09.513Z",
+    "type": "message",
+    "inputText": "Congratulations! You have won Rs. 25 Lakhs from KBC Lucky Draw. Send bank account details and photo to WhatsApp 88776-55443 to claim your prize.",
+    "score": 95,
+    "classification": "Scam",
+    "matchedKeywords": [
+      "won",
+      "Rs. 25 Lakhs",
+      "KBC Lucky Draw",
+      "bank account details",
+      "WhatsApp"
+    ],
+    "explanation": "यह एक स्पष्ट धोखाधड़ी (Scam) है। KBC या किसी भी लॉटरी के नाम पर पैसे जीतने का दावा करने वाले संदेश हमेशा फर्जी होते हैं। कोई भी वैध संस्था आपसे WhatsApp पर बैंक विवरण या व्यक्तिगत फोटो नहीं मांगती है। अपनी बैंक जानकारी साझा करने से आपके खाते से पैसे चोरी हो सकते हैं। कृपया इस नंबर को ब्लॉक करें और इस संदेश का उत्तर न दें।",
+    "lang": "hi"
+  },
+  {
+    "id": "check_1784554669223_mrtqq750j",
+    "timestamp": "2026-07-20T13:37:49.223Z",
+    "type": "message",
+    "inputText": "Congratulations! You have won Rs. 25 Lakhs from KBC Lucky Draw. Send bank account details and photo to WhatsApp 88776-55443 to claim your prize.",
+    "score": 98,
+    "classification": "Scam",
+    "matchedKeywords": [
+      "won",
+      "Rs. 25 Lakhs",
+      "KBC Lucky Draw",
+      "bank account details",
+      "WhatsApp"
+    ],
+    "explanation": "This is a classic financial fraud attempt. Legitimate organizations like KBC do not conduct lucky draws via SMS, nor do they ask for sensitive bank account details or personal photos via WhatsApp. Sharing your bank details and identity documents can lead to unauthorized access to your funds and identity theft. Do not reply to this message, do not send any information, and block the sender immediately.",
+    "lang": "en"
+  },
+  {
+    "id": "check_1784554610640_2mrhoa3zh",
+    "timestamp": "2026-07-20T13:36:50.640Z",
+    "type": "message",
+    "inputText": "Congratulations! You have won a lottery of 25 lakhs. Click here to claim your prize.",
+    "score": 95,
+    "classification": "Scam",
+    "matchedKeywords": [
+      "Congratulations",
+      "won a lottery",
+      "25 lakhs",
+      "Click here"
+    ],
+    "explanation": "This message is a classic phishing scam. Legitimate lotteries do not notify winners via unsolicited SMS, and they never require you to click a link to claim a prize. Scammers use large sums of money like '25 lakhs' to create excitement and urgency. Clicking the link could lead to a malicious website designed to steal your personal information or bank details. Do not click the link, do not share any personal information, and delete the message immediately.",
+    "lang": "en"
+  },
+  {
+    "id": "check_1784554526131_mwac1jxm1",
+    "timestamp": "2026-07-20T13:35:26.131Z",
+    "type": "message",
+    "inputText": "Congratulations! You have won Rs. 25 Lakhs from KBC Lucky Draw. Send bank account details and photo to WhatsApp 88776-55443 to claim your prize.",
+    "score": 50,
+    "classification": "Suspicious",
+    "matchedKeywords": [],
+    "explanation": "We couldn't analyze this message right now. Please be cautious and avoid clicking unknown links.",
+    "lang": "en"
+  },
+  {
+    "id": "check_1784554509203_9ock5fzqg",
+    "timestamp": "2026-07-20T13:35:09.203Z",
+    "type": "message",
+    "inputText": "Congratulations! You have won Rs. 25 Lakhs from KBC Lucky Draw. Send bank account details and photo to WhatsApp 88776-55443 to claim your prize.",
+    "score": 50,
+    "classification": "Suspicious",
+    "matchedKeywords": [],
+    "explanation": "We couldn't analyze this message right now. Please be cautious and avoid clicking unknown links.",
+    "lang": "en"
+  },
+  {
+    "id": "check_1784554404835_y1hyp05nh",
+    "timestamp": "2026-07-20T13:33:24.835Z",
+    "type": "message",
+    "inputText": "Congratulations! You have won a lottery of 25 lakhs. Click here to claim your prize.",
+    "score": 98,
+    "classification": "Scam",
+    "matchedKeywords": [
+      "Congratulations",
+      "won a lottery",
+      "25 lakhs",
+      "Click here",
+      "claim your prize"
+    ],
+    "explanation": "This message is a classic lottery scam. No legitimate organization or lottery awards prizes of 25 lakhs to random people who did not purchase a ticket. Scammers send these messages to steal your personal information or trick you into paying a 'processing fee' to claim the fake prize. Do not click on the link, do not share any personal or banking details, and delete this message immediately.",
+    "lang": "en"
+  },
+  {
+    "id": "check_1784554211614_2ahrza7et",
+    "timestamp": "2026-07-20T13:30:11.614Z",
+    "type": "message",
+    "inputText": "Dear customer, your bank account is suspended due to pending KYC verification. Please call bank manager at 98765-43210 immediately to update.",
+    "score": 50,
+    "classification": "Suspicious",
+    "matchedKeywords": [],
+    "explanation": "We couldn't analyze this message right now. Please be cautious and avoid clicking unknown links.",
+    "lang": "en"
+  },
+  {
+    "id": "check_1784554082559_bnxkm9054",
+    "timestamp": "2026-07-20T13:28:02.559Z",
+    "type": "message",
+    "inputText": "Dear customer, your bank account is suspended due to pending KYC verification. Please call bank manager at 98765-43210 immediately to update.",
+    "score": 50,
+    "classification": "Suspicious",
+    "matchedKeywords": [],
+    "explanation": "We couldn't analyze this message right now. Please be cautious and avoid clicking unknown links.",
+    "lang": "en"
+  },
+  {
+    "id": "check_1784554031482_q1gko190x",
+    "timestamp": "2026-07-20T13:27:11.482Z",
+    "type": "message",
+    "inputText": "Congratulations! You have won a lottery of 25 lakhs. Click here to claim your prize.",
+    "score": 98,
+    "classification": "Scam",
+    "matchedKeywords": [
+      "won a lottery",
+      "25 lakhs",
+      "Click here",
+      "claim your prize"
+    ],
+    "explanation": "This message is a classic lottery scam. No legitimate organization awards prizes of 25 lakhs out of nowhere, especially if you did not buy a ticket. The link provided is highly dangerous and is designed to steal your personal information, bank details, or install harmful software on your phone. Please do not click the link, do not share any personal or financial details, and block the sender immediately to stay safe.",
+    "lang": "en"
+  },
+  {
+    "id": "check_1784553951836_rkr5wu7k2",
+    "timestamp": "2026-07-20T13:25:51.836Z",
+    "type": "message",
+    "inputText": "Congratulations! You have won a lottery of 25 lakhs. Click here to claim your prize.",
+    "score": 50,
+    "classification": "Suspicious",
+    "matchedKeywords": [],
+    "explanation": "We couldn't analyze this message right now. Please be cautious and avoid clicking unknown links.",
+    "lang": "en"
+  }
+]

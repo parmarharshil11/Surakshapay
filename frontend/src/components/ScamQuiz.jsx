@@ -278,7 +278,15 @@ export default function ScamQuiz({ t, language, onActivityPerformed }) {
     const currentScenario = QUIZ_SCENARIOS[currentIdx];
     const explanationText = currentScenario.explanation[language] || currentScenario.explanation['en'];
     const utterance = new SpeechSynthesisUtterance(explanationText);
-    utterance.lang = language === 'hi' ? 'hi-IN' : language === 'gu' ? 'gu-IN' : 'en-US';
+    const targetLang = language === 'hi' ? 'hi-IN' : language === 'gu' ? 'gu-IN' : 'en-US';
+    utterance.lang = targetLang;
+
+    // Force voice selection for the correct accent
+    const voices = window.speechSynthesis.getVoices();
+    const voice = voices.find(v => v.lang.replace('_', '-').startsWith(language));
+    if (voice) {
+      utterance.voice = voice;
+    }
 
     utterance.onstart = () => setSpeaking(true);
     utterance.onend = () => setSpeaking(false);
