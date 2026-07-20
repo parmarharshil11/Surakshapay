@@ -102,8 +102,12 @@ export default function MessageChecker({ t, language, onScanComplete, onActivity
       const fallbackResult = {
         score: 55,
         classification: "Suspicious",
-        matchedKeywords: ["kyc", "block", "link"],
-        explanation: "Offline Fallback: Suspicious text structures detected. Always verify sender identity directly before responding."
+        matchedKeywords: [],
+        explanation: language === 'hi'
+          ? "AI सेवा अभी उपलब्ध नहीं है। संदेश संदिग्ध लग सकता है। किसी भी अनजान लिंक पर क्लिक करने से बचें और प्रेषक की पहचान सत्यापित करें।"
+          : language === 'gu'
+          ? "AI સેવા અત્યારે ઉપલબ્ધ નથી. સંદેશ શંકાસ્પદ હોઈ શકે છે. કોઈ અજાણ્યી લિંક પર ક્લિક ન કરો અને મોકલનારની ઓળખ ચકાસો."
+          : "AI service is temporarily unavailable. The message may be suspicious. Avoid clicking unknown links and verify the sender's identity directly."
       };
       setResult(fallbackResult);
       if (onScanComplete) {

@@ -75,7 +75,7 @@ export default function About({ t, language }) {
           <div className="pt-4 border-t border-white/10 flex flex-wrap justify-center gap-4 text-xs font-semibold text-slate-300">
             <div className="flex items-center gap-1.5 px-3 py-1 bg-white/10 rounded-full">
               <Cpu className="w-4 h-4 text-blue-450" />
-              {language === 'hi' ? 'नियम-आधारित स्थानीय मिलान' : language === 'gu' ? 'નિયમ-આધારિત સ્થાનિક ચકાસણી' : 'Rule-Based Local Matching'}
+              {language === 'hi' ? '🤖 गूगल जेमिनी AI इंजन' : language === 'gu' ? '🤖 ગૂગલ જેમિની AI એન્જિન' : '🤖 Google Gemini AI Engine'}
             </div>
             <div className="flex items-center gap-1.5 px-3 py-1 bg-white/10 rounded-full">
               <Users className="w-4 h-4 text-green-450" />

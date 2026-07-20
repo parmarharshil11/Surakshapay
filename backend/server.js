@@ -105,7 +105,7 @@ const SCAMS_LIBRARY = [
     whatToDo: {
       en: [
         "Remember the GOLDEN RULE: You NEVER need to enter your UPI PIN to receive money.",
-        "Declined any request that asks you to click 'Pay' if you are expecting to receive money.",
+        "Decline any request that asks you to click 'Pay' if you are expecting to receive money.",
         "Regularly check receiver details and transaction amounts before submitting."
       ],
       hi: [

@@ -7,7 +7,7 @@
     "start": "node server.js"
   },
   "keywords": [],
-  "author": "Antigravity",
+  "author": "Harshil Parmar & Kush Thacker",
   "license": "ISC",
   "dependencies": {
     "@google/genai": "^2.12.0",

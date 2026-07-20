@@ -1,5 +1,22 @@
 [
   {
+    "id": "check_1784555134207_weun8yh1i",
+    "timestamp": "2026-07-20T13:45:34.207Z",
+    "type": "message",
+    "inputText": "Congratulations! You have won Rs. 25 Lakhs from KBC Lucky Draw. Send bank account details and photo to WhatsApp 88776-55443 to claim your prize.",
+    "score": 98,
+    "classification": "Scam",
+    "matchedKeywords": [
+      "won",
+      "Rs. 25 Lakhs",
+      "KBC Lucky Draw",
+      "bank account details",
+      "WhatsApp"
+    ],
+    "explanation": "This is a classic phishing scam. Legitimate organizations like KBC do not conduct lucky draws via unsolicited SMS, nor do they ask for sensitive bank account details or personal photos via WhatsApp. Sharing your bank details and personal identity documents can lead to severe financial loss and identity theft. Do not reply to this message, do not send any information, and block the sender immediately.",
+    "lang": "en"
+  },
+  {
     "id": "check_1784554723778_ef0xco0wd",
     "timestamp": "2026-07-20T13:38:43.778Z",
     "type": "message",
