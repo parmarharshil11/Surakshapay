@@ -151,13 +151,15 @@ function App() {
 
           {/* Controls: Notification Bell + Dark Mode + i18n */}
           <div className="flex items-center gap-1 sm:gap-3 shrink-0">
-            {/* Notification Bell alert toggle */}
-            <NotificationBell language={language} t={t} />
+            {/* Notification Bell alert toggle (Hidden on Mobile) */}
+            <div className="hidden sm:block">
+              <NotificationBell language={language} t={t} />
+            </div>
 
-            {/* Dark Mode Toggle */}
+            {/* Dark Mode Toggle (Hidden on Mobile) */}
             <button
               onClick={() => setDarkMode(!darkMode)}
-              className="p-1.5 sm:p-2 rounded-xl bg-blue-800 hover:bg-blue-700 text-blue-200 hover:text-white transition-colors cursor-pointer border border-blue-750"
+              className="hidden sm:block p-1.5 sm:p-2 rounded-xl bg-blue-800 hover:bg-blue-700 text-blue-200 hover:text-white transition-colors cursor-pointer border border-blue-750"
               aria-label={darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
             >
               {darkMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4" />}
@@ -348,7 +350,7 @@ function App() {
         {tab === 'helpline' && <Helpline t={t} language={language} onScanComplete={fetchHistory} />}
         {tab === 'history' && <History t={t} history={history} onClear={handleClearHistory} setTab={setTab} language={language} />}
         {tab === 'about' && <About t={t} language={language} />}
-        {tab === 'menu' && <Menu setTab={setTab} t={t} />}
+        {tab === 'menu' && <Menu setTab={setTab} t={t} darkMode={darkMode} setDarkMode={setDarkMode} language={language} />}
       </main>
 
       {/* Bottom Navigation (Mobile Only) */}

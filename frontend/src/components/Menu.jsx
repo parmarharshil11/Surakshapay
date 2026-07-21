@@ -1,7 +1,8 @@
 import React from 'react';
-import { BookOpen, HelpCircle, History, Info, Award, ChevronRight } from 'lucide-react';
+import { BookOpen, HelpCircle, History, Info, Award, ChevronRight, Sun, Moon } from 'lucide-react';
+import NotificationBell from './NotificationBell';
 
-export default function Menu({ setTab, t }) {
+export default function Menu({ setTab, t, darkMode, setDarkMode, language }) {
   const menuItems = [
     { id: 'library', icon: BookOpen, label: t.navLibrary, desc: t.btnLearnScamsDesc || 'Learn about scams', color: 'text-green-500', bg: 'bg-green-50 dark:bg-green-500/10' },
     { id: 'quiz', icon: Award, label: t.navQuiz, desc: t.btnPlayQuizDesc || 'Test your knowledge', color: 'text-purple-500', bg: 'bg-purple-50 dark:bg-purple-500/10' },
@@ -12,7 +13,27 @@ export default function Menu({ setTab, t }) {
 
   return (
     <div className="space-y-4 animate-fade-in text-left max-w-md mx-auto mt-2 mb-8">
-      <h2 className="text-2xl font-bold px-2 mb-6 text-slate-800 dark:text-slate-100">Menu</h2>
+      <h2 className="text-2xl font-bold px-2 mb-4 text-slate-800 dark:text-slate-100">Menu</h2>
+
+      {/* Mobile Settings Row */}
+      <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-4 mb-6 flex items-center justify-between sm:hidden">
+        <div className="flex items-center gap-3">
+          <NotificationBell language={language} t={t} />
+          <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+            {language === 'hi' ? 'सूचनाएँ' : language === 'gu' ? 'સૂચનાઓ' : 'Notifications'}
+          </span>
+        </div>
+        
+        <button
+          onClick={() => setDarkMode(!darkMode)}
+          className="flex items-center gap-2 p-2 px-4 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors cursor-pointer border border-slate-200 dark:border-slate-700"
+        >
+          {darkMode ? <Sun className="w-5 h-5 text-amber-500" /> : <Moon className="w-5 h-5 text-indigo-500" />}
+          <span className="text-sm font-semibold whitespace-nowrap">
+            {darkMode ? (language === 'hi' ? 'लाइट मोड' : language === 'gu' ? 'લાઇટ મોડ' : 'Light Mode') : (language === 'hi' ? 'डार्क मोड' : language === 'gu' ? 'ડાર્ક મોડ' : 'Dark Mode')}
+          </span>
+        </button>
+      </div>
       
       <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden divide-y divide-slate-100 dark:divide-slate-800">
         {menuItems.map((item) => {
