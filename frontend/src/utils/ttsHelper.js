@@ -146,7 +146,8 @@ function playGoogleTTS({ text, lang, onStart, onEnd, onError }) {
   try {
     // Truncate to first 250 characters for fast audio streaming
     const chunk = text.slice(0, 250);
-    const audioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(chunk)}&tl=${lang}&client=tw-ob`;
+    const baseUrl = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000').replace(/\/$/, '');
+    const audioUrl = `${baseUrl}/api/tts?text=${encodeURIComponent(chunk)}&lang=${lang}`;
 
     const audio = new Audio();
     currentAudio = audio;

@@ -508,6 +508,33 @@ app.post('/api/report', async (req, res) => {
   });
 });
 
+// 7. Proxy Endpoint for Google Translate TTS to bypass CORS
+const https = require('https');
+
+app.get('/api/tts', (req, res) => {
+  const { text, lang } = req.query;
+  if (!text) {
+    return res.status(400).json({ error: 'Text is required' });
+  }
+
+  const targetLang = lang || 'en';
+  const url = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=${targetLang}&client=tw-ob`;
+
+  https.get(url, (response) => {
+    if (response.statusCode !== 200) {
+      return res.status(response.statusCode).json({ error: 'TTS request failed' });
+    }
+    
+    // Pipe the audio stream with correct content type
+    res.setHeader('Content-Type', 'audio/mpeg');
+    res.setHeader('Cache-Control', 'public, max-age=86400');
+    response.pipe(res);
+  }).on('error', (err) => {
+    console.error('TTS Proxy Error:', err);
+    res.status(500).json({ error: 'Internal server error fetching TTS' });
+  });
+});
+
 // Start express server
 app.listen(PORT, () => {
   console.log(`SuRakshaPay backend running on port ${PORT}`);
