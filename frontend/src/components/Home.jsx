@@ -198,36 +198,41 @@ export default function Home({ setTab, t, historyCount, language, score, onReset
         {/* Emergency helpline card */}
         <a
           href="tel:1930"
-          className="flex items-center gap-5 bg-red-50/60 dark:bg-red-950/20 border border-red-200/60 dark:border-red-900/40 hover:border-red-400 rounded-2xl p-6 transition-all duration-300 group cursor-pointer"
+          className="flex items-center gap-4 bg-red-50/60 dark:bg-red-950/20 border border-red-200/60 dark:border-red-900/40 hover:border-red-400 rounded-3xl p-6 transition-all duration-300 group cursor-pointer shadow-sm"
         >
-          <div className="flex-shrink-0 w-12 h-12 rounded-full bg-red-500 text-white flex items-center justify-center group-hover:scale-110 transition-transform">
+          <div className="flex-shrink-0 w-12 h-12 rounded-2xl bg-red-500 text-white flex items-center justify-center group-hover:scale-105 transition-transform shadow-md">
             <PhoneCall className="w-6 h-6" />
           </div>
-          <div className="space-y-1">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-red-600 dark:text-red-400 flex items-center gap-1.5">
-              <span>{t.helplineTitle}</span>
+          <div className="space-y-1 min-w-0 flex-1">
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-extrabold uppercase tracking-wider text-red-600 dark:text-red-400">{t.helplineTitle}</span>
               <span className="text-[10px] bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300 px-2 py-0.5 rounded-full font-bold">24/7</span>
-            </h4>
-            <p className="text-slate-800 dark:text-slate-100 font-black text-lg md:text-xl group-hover:text-red-600 transition-colors">
+            </div>
+            <p className="text-slate-800 dark:text-slate-100 font-black text-lg group-hover:text-red-600 transition-colors truncate">
               {t.homeHelplineLabel || "National Cyber Helpline: 1930"}
             </p>
-            <p className="text-slate-500 dark:text-slate-400 text-xs leading-relaxed">
+            <p className="text-slate-500 dark:text-slate-400 text-xs leading-normal">
               {t.helplineCardDesc}
             </p>
           </div>
         </a>
 
-        {/* History card summary */}
-        <div className="flex items-center justify-between gap-4 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 transition-colors duration-300">
-          <div className="flex items-center gap-4">
-            <div className="flex-shrink-0 w-12 h-12 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400">
+        {/* History & Activity Card */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm transition-all duration-300 hover:border-blue-500/40">
+          <div className="flex items-start gap-4 flex-1 min-w-0">
+            <div className="flex-shrink-0 w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 shadow-sm">
               <History className="w-6 h-6" />
             </div>
-            <div className="space-y-1">
-              <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                {t.navHistory}
-              </h4>
-              <p className="text-slate-800 dark:text-slate-200 font-bold text-lg">
+            <div className="space-y-1 min-w-0 flex-1">
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                  {t.navHistory || "History & Activity"}
+                </span>
+                <span className="text-[10px] bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 px-2 py-0.5 rounded-full font-bold">
+                  {historyCount} {historyCount === 1 ? 'Item' : 'Items'}
+                </span>
+              </div>
+              <p className="text-slate-800 dark:text-slate-100 font-bold text-sm sm:text-base leading-snug">
                 {t.recentCheckStatus.replace('{count}', historyCount)}
               </p>
             </div>
@@ -235,9 +240,10 @@ export default function Home({ setTab, t, historyCount, language, score, onReset
 
           <button
             onClick={() => setTab('history')}
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-sm cursor-pointer transition-colors flex-shrink-0"
+            className="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-md hover:shadow-blue-500/25 transition-all cursor-pointer flex-shrink-0 self-start sm:self-center flex items-center gap-1"
           >
-            {getLocalizedText("View Logs →", "लॉग देखें →", "લોગ જુઓ →")}
+            <span>{getLocalizedText("View Logs", "लॉग देखें", "લોગ જુઓ")}</span>
+            <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>
