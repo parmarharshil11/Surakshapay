@@ -14,6 +14,33 @@ export default function NotificationBell({ language, t }) {
   const [toastMsg, setToastMsg] = useState('');
   const [toastType, setToastType] = useState('success'); // 'success' | 'error'
 
+  const showPushNotification = async (title, body) => {
+    if (typeof Notification === 'undefined' || permission !== 'granted') return;
+    
+    try {
+      if ('serviceWorker' in navigator) {
+        const reg = await navigator.serviceWorker.ready;
+        if (reg && reg.showNotification) {
+          await reg.showNotification(title, {
+            body,
+            icon: '/favicon.ico',
+            badge: '/favicon.ico'
+          });
+          return;
+        }
+      }
+    } catch (e) {
+      console.error("Service worker notification failed:", e);
+    }
+    
+    // Fallback for desktop browsers
+    try {
+      new Notification(title, { body, icon: '/favicon.ico' });
+    } catch (e) {
+      console.error("Fallback notification failed:", e);
+    }
+  };
+
   useEffect(() => {
     if (subscribed && permission === 'granted') {
       // Connect to Firestore real-time subscriber if active
@@ -21,13 +48,8 @@ export default function NotificationBell({ language, t }) {
         const title = newScam.title[language] || newScam.title['en'] || "New Scam Alert";
         const body = `Alert: Scammers active in ${newScam.region[language] || newScam.region['en'] || 'your region'}`;
         
-        // Push local alert
-        if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
-          new Notification(`🚨 ${title}`, {
-            body,
-            icon: '/favicon.ico'
-          });
-        }
+        // Push local alert using SW fallback logic
+        showPushNotification(`🚨 ${title}`, body);
         setUnreadCount(prev => prev + 1);
       });
       return () => unsubscribe();
@@ -73,12 +95,12 @@ export default function NotificationBell({ language, t }) {
     }
   };
 
-  const handleTestNotification = () => {
+  const handleTestNotification = async () => {
     if (typeof Notification !== 'undefined' && permission === 'granted') {
-      new Notification('🚨 New Alert: FedEx Scam', {
-        body: 'Scammers impersonating FedEx are demanding customs fees via UPI.',
-        icon: '/favicon.ico'
-      });
+      await showPushNotification(
+        '🚨 New Alert: FedEx Scam',
+        'Scammers impersonating FedEx are demanding customs fees via UPI.'
+      );
       setUnreadCount(prev => prev + 1);
     } else {
       alert("Enable notifications first to test!");
