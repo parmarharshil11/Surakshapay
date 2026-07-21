@@ -1,5 +1,20 @@
 [
   {
+    "id": "check_1784642495500_aheydjs35",
+    "timestamp": "2026-07-21T14:01:35.500Z",
+    "type": "message",
+    "inputText": "Dear customer, your bank account is suspended due to pending KYC verification. Please call bank manager at 98765-43210 immediately to update.",
+    "score": 95,
+    "classification": "Scam",
+    "matchedKeywords": [
+      "bank account is suspended",
+      "pending KYC verification",
+      "call bank manager"
+    ],
+    "explanation": "This message is a common scam designed to steal your money by creating panic about your bank account. Banks will never ask you to call a personal mobile number to update your KYC; they will always ask you to visit your nearest branch or use their official app. If you call the number provided, the fraudster will try to trick you into sharing your OTP, PIN, or bank details. Do not call the number, do not share any personal information, and delete this message immediately. If you are worried about your account, please visit your local bank branch in person to speak with an official.",
+    "lang": "en"
+  },
+  {
     "id": "check_1784639272368_oliktis9l",
     "timestamp": "2026-07-21T13:07:52.369Z",
     "type": "message",

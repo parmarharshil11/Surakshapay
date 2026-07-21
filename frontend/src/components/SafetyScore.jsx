@@ -1,33 +1,39 @@
 import React from 'react';
-import { ShieldCheck, ShieldAlert, Award, Zap } from 'lucide-react';
+import { ShieldCheck, ShieldAlert, Award, Zap, Star, Hexagon, Crown } from 'lucide-react';
 
 export default function SafetyScore({ score, language, t }) {
-  // Determine Level and Progress details
-  let levelName = "";
-  let badgeIcon = null;
-  let maxPoints = 50;
-  let progressPercent = 0;
-  let levelNum = 1;
+  // Infinite Leveling Math
+  const XP_PER_LEVEL = 100;
+  const levelNum = Math.floor(score / XP_PER_LEVEL) + 1;
+  const currentLevelXp = score % XP_PER_LEVEL;
+  const maxPoints = XP_PER_LEVEL;
+  const progressPercent = Math.min(100, Math.max(0, (currentLevelXp / XP_PER_LEVEL) * 100));
 
-  if (score <= 50) {
-    levelName = language === 'hi' ? "स्तर १: शुरुआती" : language === 'gu' ? "સ્તર ૧: શિખાઉ" : "Level 1: Beginner";
-    badgeIcon = <ShieldAlert className="w-8 h-8 text-amber-500 fill-amber-500/10 animate-pulse" />;
-    maxPoints = 50;
-    progressPercent = Math.min(100, Math.max(0, (score / 50) * 100));
-    levelNum = 1;
-  } else if (score <= 150) {
-    levelName = language === 'hi' ? "स्तर २: जागरूक नागरिक" : language === 'gu' ? "સ્તર ૨: જાગૃત નાગરિક" : "Level 2: Scam Aware";
-    badgeIcon = <ShieldCheck className="w-8 h-8 text-blue-500 fill-blue-500/15" />;
-    maxPoints = 150;
-    progressPercent = Math.min(100, Math.max(0, ((score - 50) / 100) * 100));
-    levelNum = 2;
-  } else {
-    levelName = language === 'hi' ? "स्तर ३: सुरक्षा विशेषज्ञ" : language === 'gu' ? "સ્તર ૩: સુરક્ષા નિષ્ણાત" : "Level 3: Safety Expert";
-    badgeIcon = <Award className="w-8 h-8 text-green-500 fill-green-500/20 animate-bounce" />;
-    maxPoints = 300; // soft cap indicator
-    progressPercent = Math.min(100, Math.max(0, ((score - 150) / 150) * 100));
-    levelNum = 3;
-  }
+  // Determine localized Level Name
+  const levelName = language === 'hi' ? `स्तर ${levelNum}` 
+                  : language === 'gu' ? `સ્તર ${levelNum}` 
+                  : `Level ${levelNum}`;
+
+  // Badges cycle through icons and colors based on level
+  const getBadge = (lvl) => {
+    if (lvl === 1) return { icon: <ShieldAlert className="w-8 h-8 text-amber-500 fill-amber-500/10 animate-pulse" />, title: { en: 'Beginner', hi: 'शुरुआती', gu: 'શિખાઉ' }};
+    if (lvl === 2) return { icon: <ShieldCheck className="w-8 h-8 text-blue-500 fill-blue-500/15" />, title: { en: 'Aware Citizen', hi: 'जागरूक नागरिक', gu: 'જાગૃત નાગરિક' }};
+    if (lvl === 3) return { icon: <Award className="w-8 h-8 text-green-500 fill-green-500/20" />, title: { en: 'Safety Expert', hi: 'सुरक्षा विशेषज्ञ', gu: 'સુરક્ષા નિષ્ણાત' }};
+    if (lvl === 4) return { icon: <Star className="w-8 h-8 text-purple-500 fill-purple-500/20 animate-bounce" />, title: { en: 'Cyber Ninja', hi: 'साइबर निंजा', gu: 'સાયબર નિન્જા' }};
+    if (lvl === 5) return { icon: <Hexagon className="w-8 h-8 text-rose-500 fill-rose-500/20" />, title: { en: 'Fraud Buster', hi: 'धोखाधड़ी निवारक', gu: 'છેતરપિંડી નિવારક' }};
+    // Level 6+ gets the crown
+    return { icon: <Crown className="w-8 h-8 text-yellow-500 fill-yellow-500/30 animate-pulse" />, title: { en: 'Digital Guardian', hi: 'डिजिटल रक्षक', gu: 'ડિજિટલ રક્ષક' }};
+  };
+
+  const badgeInfo = getBadge(levelNum);
+  const badgeTitle = badgeInfo.title[language] || badgeInfo.title['en'];
+  const fullLevelName = `${levelName}: ${badgeTitle}`;
+
+  // Encouraging Text
+  const getEncouragement = () => {
+    if (levelNum === 1) return language === 'hi' ? `अगले स्तर के लिए ${XP_PER_LEVEL - currentLevelXp} अंक और चाहिए!` : language === 'gu' ? `આગલા સ્તર માટે ${XP_PER_LEVEL - currentLevelXp} પોઇન્ટ વધુ જોઈએ!` : `Need ${XP_PER_LEVEL - currentLevelXp} more XP to reach Level ${levelNum + 1}!`;
+    return language === 'hi' ? `शानदार! अगले स्तर के लिए ${XP_PER_LEVEL - currentLevelXp} अंक प्राप्त करें।` : language === 'gu' ? `સરસ! આગલા સ્તર માટે ${XP_PER_LEVEL - currentLevelXp} પોઇન્ટ મેળવો.` : `Great job! Earn ${XP_PER_LEVEL - currentLevelXp} more XP for Level ${levelNum + 1}.`;
+  };
 
   return (
     <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl shadow-sm transition-colors duration-300 space-y-4">
@@ -51,11 +57,11 @@ export default function SafetyScore({ score, language, t }) {
 
       {/* Progress & Badge */}
       <div className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-slate-950/40 border border-slate-100 dark:border-slate-800 rounded-xl">
-        <div className="flex-shrink-0">{badgeIcon}</div>
+        <div className="flex-shrink-0">{badgeInfo.icon}</div>
         <div className="flex-grow space-y-1.5 text-left">
           <div className="flex justify-between text-xs font-bold text-slate-700 dark:text-slate-400">
-            <span>{levelName}</span>
-            <span>{score} / {maxPoints}</span>
+            <span>{fullLevelName}</span>
+            <span>{currentLevelXp} / {maxPoints}</span>
           </div>
           <div className="w-full bg-slate-200 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden">
             <div
@@ -64,9 +70,7 @@ export default function SafetyScore({ score, language, t }) {
             ></div>
           </div>
           <p className="text-[10px] text-slate-400 dark:text-slate-500 leading-normal">
-            {levelNum === 1 && (language === 'hi' ? 'शुरुआती स्तर। ५० अंक पर स्तर २ पर पहुंचें!' : language === 'gu' ? 'શરૂઆતી સ્તર. ૫૦ પોઇન્ટ પર સ્તર ૨ પર પહોંચો!' : 'Keep verifying messages to reach Level 2 at 50 XP!')}
-            {levelNum === 2 && (language === 'hi' ? 'शानदार! १५० अंक पर स्तर ३ सुरक्षा विशेषज्ञ बनें!' : language === 'gu' ? 'સરસ! ૧૫૦ પોઇન્ટ પર સ્તર ૩ સુરક્ષા નિષ્ણાત બનો!' : 'Excellent! Reach Level 3 at 150 XP for safety expert badge.')}
-            {levelNum === 3 && (language === 'hi' ? 'बधाई हो! आप ग्रामीण भारत के डिजिटल रक्षक हैं।' : language === 'gu' ? 'અભિનંદન! તમે ગ્રામીણ ભારતના ડિજિટલ રક્ષક છો.' : 'Incredible! You are a master digital protector.')}
+            {getEncouragement()}
           </p>
         </div>
       </div>

@@ -248,10 +248,68 @@ Text to translate:
   }
 }
 
+/**
+ * Generates dynamic quiz questions for Scam Education using Gemini.
+ */
+async function generateQuizQuestions(count = 3) {
+  const prompt = `
+You are a highly advanced financial fraud detection educator for a rural Indian safety app called SuRakshaPay.
+Generate an array of exactly ${count} multiple-choice quiz scenarios to test the user's awareness of digital financial scams (e.g., UPI, phishing, loan apps, KYC).
+For EACH scenario, provide the text in 3 languages simultaneously: English (en), Hindi (hi), and Gujarati (gu).
+Make sure to randomize the order of the options array (sometimes 'safe' is first, sometimes 'scam' is first) so it's not predictable.
+
+Respond strictly with a JSON array in this exact format — no extra text, no markdown:
+[
+  {
+    "id": <unique integer>,
+    "scenario": {
+      "en": "<scenario description>",
+      "hi": "<hindi translation>",
+      "gu": "<gujarati translation>"
+    },
+    "options": [
+      {
+        "type": "scam",
+        "label": {
+          "en": "<incorrect/scam action description>",
+          "hi": "<hindi translation>",
+          "gu": "<gujarati translation>"
+        }
+      },
+      {
+        "type": "safe",
+        "label": {
+          "en": "<correct/safe action description>",
+          "hi": "<hindi translation>",
+          "gu": "<gujarati translation>"
+        }
+      }
+    ],
+    "correctAnswer": "<'scam' or 'safe'>",
+    "explanation": {
+      "en": "<detailed explanation of why the correct answer is right>",
+      "hi": "<hindi translation>",
+      "gu": "<gujarati translation>"
+    }
+  }
+]
+`;
+
+  try {
+    const result = await callGeminiAPI(prompt);
+    // Add unique IDs safely
+    return result.map((q, idx) => ({ ...q, id: Date.now() + idx }));
+  } catch (error) {
+    console.error("AI Analysis Error (Quiz Generation):", error.message);
+    throw error;
+  }
+}
+
 module.exports = {
   analyzeMessage,
   analyzeUpiRequest,
   analyzeReportAuth,
   getCommunityStats,
-  translateText
+  translateText,
+  generateQuizQuestions
 };

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Award, AlertCircle, CheckCircle2, XCircle, Volume2, RotateCcw, ShieldCheck, ArrowRight, Zap } from 'lucide-react';
 
-const QUIZ_SCENARIOS = [
+const DEFAULT_QUIZ_SCENARIOS = [
   {
     id: 1,
     scenario: {
@@ -165,6 +165,8 @@ const QUIZ_SCENARIOS = [
 ];
 
 export default function ScamQuiz({ t, language, onActivityPerformed }) {
+  const [scenarios, setScenarios] = useState(DEFAULT_QUIZ_SCENARIOS);
+  const [isGenerating, setIsGenerating] = useState(false);
   const [currentIdx, setCurrentIdx] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null); // 'safe' or 'scam'
   const [score, setScore] = useState(0);
@@ -220,7 +222,7 @@ export default function ScamQuiz({ t, language, onActivityPerformed }) {
 
     setSelectedAnswer(answer);
     setShowExplanation(true);
-    const correct = answer === QUIZ_SCENARIOS[currentIdx].correctAnswer;
+    const correct = answer === scenarios[currentIdx].correctAnswer;
     playSound(correct);
 
     if (correct) {
@@ -235,12 +237,12 @@ export default function ScamQuiz({ t, language, onActivityPerformed }) {
   const handleNext = () => {
     setSelectedAnswer(null);
     setShowExplanation(false);
-    if (currentIdx < QUIZ_SCENARIOS.length - 1) {
+    if (currentIdx < scenarios.length - 1) {
       setCurrentIdx(prev => prev + 1);
     } else {
       // Calculate completion bonus
       let bonus = 10;
-      if (score === QUIZ_SCENARIOS.length) {
+      if (score === scenarios.length) {
         bonus = 50;
       } else if (score >= 3) {
         bonus = 30;
@@ -253,13 +255,29 @@ export default function ScamQuiz({ t, language, onActivityPerformed }) {
     }
   };
 
-  const resetQuiz = () => {
-    setCurrentIdx(0);
-    setSelectedAnswer(null);
-    setScore(0);
-    setSessionXp(0);
+  const resetQuiz = async () => {
+    setIsGenerating(true);
     setQuizFinished(false);
-    setShowExplanation(false);
+    try {
+      const baseUrl = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000').replace(/\/$/, '');
+      const response = await fetch(`${baseUrl}/api/generate-quiz?count=3`);
+      if (response.ok) {
+        const newQuestions = await response.json();
+        if (newQuestions && newQuestions.length > 0) {
+          setScenarios(newQuestions);
+        }
+      }
+    } catch (e) {
+      console.error("Failed to generate AI quiz, falling back to default.", e);
+      setScenarios(DEFAULT_QUIZ_SCENARIOS);
+    } finally {
+      setCurrentIdx(0);
+      setSelectedAnswer(null);
+      setScore(0);
+      setSessionXp(0);
+      setShowExplanation(false);
+      setIsGenerating(false);
+    }
   };
 
   const handleSpeakExplanation = () => {
@@ -275,7 +293,7 @@ export default function ScamQuiz({ t, language, onActivityPerformed }) {
       return;
     }
 
-    const currentScenario = QUIZ_SCENARIOS[currentIdx];
+    const currentScenario = scenarios[currentIdx];
     const explanationText = currentScenario.explanation[language] || currentScenario.explanation['en'];
     const utterance = new SpeechSynthesisUtterance(explanationText);
     const targetLang = language === 'hi' ? 'hi-IN' : language === 'gu' ? 'gu-IN' : 'en-US';
@@ -313,7 +331,7 @@ export default function ScamQuiz({ t, language, onActivityPerformed }) {
 
   const getButtonClass = (option) => {
     const isSelected = selectedAnswer === option.type;
-    const isCorrect = option.type === QUIZ_SCENARIOS[currentIdx].correctAnswer;
+    const isCorrect = option.type === scenarios[currentIdx].correctAnswer;
 
     if (selectedAnswer === null) {
       return "border-slate-200 dark:border-slate-800 hover:bg-blue-50 dark:hover:bg-blue-950/20 text-slate-800 dark:text-slate-100 hover:border-blue-500";
@@ -332,7 +350,7 @@ export default function ScamQuiz({ t, language, onActivityPerformed }) {
   if (quizFinished) {
     let feedback = "";
     let rating = "";
-    if (score === QUIZ_SCENARIOS.length) {
+    if (score === scenarios.length) {
       feedback = language === 'hi' ? "उत्कृष्ट! आप ऑनलाइन ठगी के खिलाफ एक सुरक्षा ढाल हैं।" :
                  language === 'gu' ? "અદ્ભુત! તમે ઓનલાઈન છેતરપિંડી સામે રક્ષક છો." :
                  "Incredible! You have perfect mastery over digital safety protocols.";
@@ -371,7 +389,7 @@ export default function ScamQuiz({ t, language, onActivityPerformed }) {
               {language === 'hi' ? 'कुल सही उत्तर' : language === 'gu' ? 'કુલ સાચા ઉત્તર' : 'Safety Rating'}
             </span>
             <span className="text-2xl font-black text-slate-900 dark:text-slate-100">
-              {score} / {QUIZ_SCENARIOS.length}
+              {score} / {scenarios.length}
             </span>
           </div>
 
@@ -402,16 +420,32 @@ export default function ScamQuiz({ t, language, onActivityPerformed }) {
     );
   }
 
-  const current = QUIZ_SCENARIOS[currentIdx];
+  const current = scenarios[currentIdx];
+
+  if (isGenerating) {
+    return (
+      <div className="max-w-2xl mx-auto bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-12 rounded-3xl shadow-md text-center space-y-6 animate-fade-in">
+        <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
+        <div className="space-y-2">
+          <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100">
+            {language === 'hi' ? 'नए प्रश्न बनाए जा रहे हैं...' : language === 'gu' ? 'નવા પ્રશ્નો બનાવવામાં આવી રહ્યા છે...' : 'Generating new AI scenarios...'}
+          </h3>
+          <p className="text-slate-500 text-sm">
+            {language === 'hi' ? 'Gemini AI आपके लिए नए स्कैम परिदृश्य तैयार कर रहा है।' : language === 'gu' ? 'Gemini AI તમારા માટે નવા સ્કેમ દૃશ્યો તૈયાર કરી રહ્યું છે.' : 'Gemini AI is crafting fresh scam scenarios for you.'}
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-2xl mx-auto space-y-6 animate-fade-in text-left">
       {/* Tracker headers */}
       <div className="flex justify-between items-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-5 py-3 rounded-2xl shadow-sm transition-colors duration-300">
         <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-          {language === 'hi' ? `प्रश्न ${currentIdx + 1} / ${QUIZ_SCENARIOS.length}` : 
-           language === 'gu' ? `પ્રશ્ન ${currentIdx + 1} / ${QUIZ_SCENARIOS.length}` : 
-           `Question ${currentIdx + 1} of ${QUIZ_SCENARIOS.length}`}
+          {language === 'hi' ? `प्रश्न ${currentIdx + 1} / ${scenarios.length}` : 
+           language === 'gu' ? `પ્રશ્ન ${currentIdx + 1} / ${scenarios.length}` : 
+           `Question ${currentIdx + 1} of ${scenarios.length}`}
         </span>
         <div className="flex items-center gap-1.5 text-xs font-bold text-amber-500">
           <Zap className="w-4 h-4 fill-amber-500 text-amber-500" />

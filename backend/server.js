@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const { analyzeMessage, analyzeUpiRequest, analyzeReportAuth, getCommunityStats, translateText } = require('./ai');
+const { analyzeMessage, analyzeUpiRequest, analyzeReportAuth, getCommunityStats, translateText, generateQuizQuestions } = require('./ai');
 const { getHistory, addHistoryEntry, clearHistory } = require('./db');
 
 const app = express();
@@ -283,6 +283,18 @@ app.post('/api/check-upi', async (req, res) => {
 // 3. Scam Education Library Endpoint
 app.get('/api/scams', (req, res) => {
   return res.json(SCAMS_LIBRARY);
+});
+
+// 4. Generate Dynamic Quiz Endpoint
+app.get('/api/generate-quiz', async (req, res) => {
+  try {
+    const count = parseInt(req.query.count) || 3;
+    const questions = await generateQuizQuestions(count);
+    return res.json(questions);
+  } catch (error) {
+    console.error("Error generating quiz:", error);
+    return res.status(500).json({ error: "Failed to generate quiz." });
+  }
 });
 
 // 7. Community Stats (Gemini-powered) Endpoint
