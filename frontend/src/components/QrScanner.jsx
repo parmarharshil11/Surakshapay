@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Camera, Image as ImageIcon, Loader2, ShieldCheck, AlertTriangle, ShieldX, Volume2, VideoOff, RefreshCw } from 'lucide-react';
+import { speakText } from '../utils/ttsHelper';
 import jsQR from 'jsqr';
 import ShareCard from './ShareCard';
 
@@ -226,38 +227,13 @@ export default function QrScanner({ t, language, onActivityPerformed }) {
     }
 
     const speakContent = `${statusText} ${checkResult.explanation}`;
-    const utterance = new SpeechSynthesisUtterance(speakContent);
-    const targetLang = language === 'hi' ? 'hi-IN' : language === 'gu' ? 'gu-IN' : 'en-US';
-    utterance.lang = targetLang;
-
-    // Force voice selection for the correct accent
-    const voices = window.speechSynthesis.getVoices();
-    let voice = voices.find(v => v.lang.replace('_', '-').toLowerCase().startsWith(language.toLowerCase()));
-    
-    if (!voice && language === 'gu') {
-      voice = voices.find(v => v.name.toLowerCase().includes('gujarati') || v.name.includes('ગુજરાતી'));
-    }
-    if (!voice && language === 'hi') {
-      voice = voices.find(v => v.name.toLowerCase().includes('hindi') || v.name.includes('हिन्दी'));
-    }
-
-    // Windows usually lacks regional TTS out-of-the-box. Show helpful alert.
-    if (voices.length > 0 && !voice && language !== 'en' && navigator.userAgent.includes('Windows')) {
-      alert(language === 'gu' 
-        ? "Windows PC માં ગુજરાતી અવાજ (TTS) ઇન્સ્ટોલ કરેલ નથી. કૃપા કરીને Windows Settings > Time & Language માં જઈને 'Gujarati' ભાષા ડાઉનલોડ કરો." 
-        : "Windows PC में हिंदी आवाज़ (TTS) इंस्टॉल नहीं है। कृपया Windows Settings > Time & Language में जाकर 'Hindi' भाषा डाउनलोड करें।");
-    }
-
-    if (voice) {
-      utterance.voice = voice;
-    }
-
-    utterance.onstart = () => setSpeaking(true);
-    utterance.onend = () => setSpeaking(false);
-    utterance.onerror = () => setSpeaking(false);
-
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(utterance);
+    speakText({
+      text: speakContent,
+      lang: language,
+      onStart: () => setSpeaking(true),
+      onEnd: () => setSpeaking(false),
+      onError: () => setSpeaking(false)
+    });
   };
 
   return (

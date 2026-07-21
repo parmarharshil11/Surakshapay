@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { ShieldCheck, AlertTriangle, ShieldX, Sparkles, CheckSquare, XCircle, Volume2, QrCode, X, VideoOff, Upload } from 'lucide-react';
 import ShareCard from './ShareCard';
+import { speakText } from '../utils/ttsHelper';
 import jsQR from 'jsqr';
 
 // ── SVG Donut Chart helper ────────────────────────────────────────────
@@ -334,57 +335,14 @@ export default function UpiChecker({ t, language, onScanComplete, onActivityPerf
     }
 
     const speakContent = `${statusText} ${result.explanation}`;
-    const utterance = new SpeechSynthesisUtterance(speakContent);
-    const targetLang = language === 'hi' ? 'hi-IN' : language === 'gu' ? 'gu-IN' : 'en-US';
-    utterance.lang = targetLang;
-
-    const findVoice = () => {
-      const voices = window.speechSynthesis.getVoices();
-      if (language === 'gu') {
-        return voices.find(v => /gu[-_]IN/i.test(v.lang)) ||
-               voices.find(v => /gujarati/i.test(v.name) || v.name.includes('ગુજ')) ||
-               voices.find(v => /gu/i.test(v.lang)) ||
-               voices.find(v => /hi[-_]IN/i.test(v.lang)) ||
-               null;
-      }
-      if (language === 'hi') {
-        return voices.find(v => /hi[-_]IN/i.test(v.lang)) ||
-               voices.find(v => /hindi/i.test(v.name) || v.name.includes('हिन्दी')) ||
-               voices.find(v => /hi/i.test(v.lang)) ||
-               null;
-      }
-      return voices.find(v => /en[-_](US|GB|IN)/i.test(v.lang)) ||
-             voices.find(v => /en/i.test(v.lang)) ||
-             null;
-    };
-
-    const doSpeak = () => {
-      const voice = findVoice();
-      if (language !== 'en' && !voice) {
-        const msg = language === 'gu'
-          ? 'ગુજરાતી TTS ઉપલબ્ધ નથી. Windows Settings > Time & Language > ગુજરાતી ઇન્સ્ટોલ કરો. હવે ઈંગ્લિશ અવાજ વાપરીએ.'
-          : 'हिंदी आवाज़ उपलब्ध नहीं है। Windows Settings > Time & Language में हिंदी डाउनलोड करें। अभी अंग्रेज़ी में बोलते हैं।';
-        setTtsToast(msg);
-        utterance.lang = 'en-US';
-      } else if (voice) {
-        utterance.voice = voice;
-      }
-      utterance.onstart = () => setSpeaking(true);
-      utterance.onend = () => setSpeaking(false);
-      utterance.onerror = () => setSpeaking(false);
-      window.speechSynthesis.cancel();
-      window.speechSynthesis.speak(utterance);
-    };
-
-    const voices = window.speechSynthesis.getVoices();
-    if (voices.length > 0) {
-      doSpeak();
-    } else {
-      window.speechSynthesis.onvoiceschanged = () => {
-        window.speechSynthesis.onvoiceschanged = null;
-        doSpeak();
-      };
-    }
+    speakText({
+      text: speakContent,
+      lang: language,
+      onStart: () => setSpeaking(true),
+      onEnd: () => setSpeaking(false),
+      onError: () => setSpeaking(false),
+      setToast: setTtsToast
+    });
   };
 
   return (

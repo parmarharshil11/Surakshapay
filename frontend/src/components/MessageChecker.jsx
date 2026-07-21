@@ -3,6 +3,7 @@ import { AlertTriangle, CheckCircle, ShieldAlert, Sparkles, Trash2, Mic, MicOff,
 import Tesseract from 'tesseract.js';
 import DOMPurify from 'dompurify';
 import ShareCard from './ShareCard';
+import { speakText } from '../utils/ttsHelper';
 
 // ── SVG Donut Chart helper ────────────────────────────────────────────
 function RiskDonutChart({ score, classification }) {
@@ -303,62 +304,15 @@ export default function MessageChecker({ t, language, onScanComplete, onActivity
                      'This message appears to be Safe.';
     }
 
-    const speakText = `${resultPrefix} ${result.explanation}`;
-    const utterance = new SpeechSynthesisUtterance(speakText);
-    const targetLang = language === 'hi' ? 'hi-IN' : language === 'gu' ? 'gu-IN' : 'en-US';
-    utterance.lang = targetLang;
-
-    // Helper: find the best available voice for the target language
-    const findVoice = () => {
-      const voices = window.speechSynthesis.getVoices();
-      if (language === 'gu') {
-        return voices.find(v => /gu[-_]IN/i.test(v.lang)) ||
-               voices.find(v => /gujarati/i.test(v.name) || v.name.includes('ગુજ')) ||
-               voices.find(v => /gu/i.test(v.lang)) ||
-               voices.find(v => /hi[-_]IN/i.test(v.lang)) || // Hindi as near-fallback
-               null;
-      }
-      if (language === 'hi') {
-        return voices.find(v => /hi[-_]IN/i.test(v.lang)) ||
-               voices.find(v => /hindi/i.test(v.name) || v.name.includes('हिन्दी')) ||
-               voices.find(v => /hi/i.test(v.lang)) ||
-               null;
-      }
-      return voices.find(v => /en[-_](US|GB|IN)/i.test(v.lang)) ||
-             voices.find(v => /en/i.test(v.lang)) ||
-             null;
-    };
-
-    const doSpeak = () => {
-      const voice = findVoice();
-      if (language !== 'en' && !voice) {
-        // Show friendly in-page toast instead of blocking alert
-        const msg = language === 'gu'
-          ? 'ગુજરાતી TTS ઉપલબ્ધ નથી. Windows Settings > Time & Language > Add Language > ગુજરાતી ઇન્સ્ટોલ કરો. હવે ઈંગ્લિશ અવાજ વ્રપ્ત કરીએ.'
-          : 'हिंदी आवाज़ उपलब्ध नहीं है। Windows Settings > Time & Language में हिंदी भाषा डाउनलोड करें। अभी अंग्रेज़ी आवाज़ में बोलते हैं।';
-        setTtsToast(msg);
-        // Still speak using default voice as fallback
-        utterance.lang = 'en-US';
-      } else if (voice) {
-        utterance.voice = voice;
-      }
-      utterance.onstart = () => setSpeaking(true);
-      utterance.onend = () => setSpeaking(false);
-      utterance.onerror = () => setSpeaking(false);
-      window.speechSynthesis.cancel();
-      window.speechSynthesis.speak(utterance);
-    };
-
-    // Voices may not be loaded yet — wait for voiceschanged event
-    const voices = window.speechSynthesis.getVoices();
-    if (voices.length > 0) {
-      doSpeak();
-    } else {
-      window.speechSynthesis.onvoiceschanged = () => {
-        window.speechSynthesis.onvoiceschanged = null;
-        doSpeak();
-      };
-    }
+    const speakTextContent = `${resultPrefix} ${result.explanation}`;
+    speakText({
+      text: speakTextContent,
+      lang: language,
+      onStart: () => setSpeaking(true),
+      onEnd: () => setSpeaking(false),
+      onError: () => setSpeaking(false),
+      setToast: setTtsToast
+    });
   };
 
   // OCR File Reading Scanner
