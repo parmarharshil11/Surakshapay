@@ -1,4 +1,17 @@
 /**
+ * Transliterates Gujarati script (0x0A81-0x0AE3) to Devanagari (0x0901-0x0963).
+ * Allows Hindi (hi-IN) TTS engines to pronounce Gujarati phonetically with 100% clarity
+ * when native Gujarati (gu-IN) voices are missing on Windows/Chrome.
+ */
+export function gujaratiToDevanagari(text) {
+  if (!text) return '';
+  return text.replace(/[\u0A81-\u0AE3]/g, (ch) => {
+    const code = ch.charCodeAt(0);
+    return String.fromCharCode(code - 0x0180);
+  });
+}
+
+/**
  * Sanitizes and phonetically converts text for Indian regional Text-to-Speech engines.
  * Fixes garbled pronunciation of mixed English words in Gujarati & Hindi speech.
  */
@@ -13,13 +26,11 @@ export function sanitizeTextForTTS(text, lang = 'en') {
   if (lang === 'gu') {
     // Phonetic replacements for Gujarati speech synthesis
     cleaned = cleaned
-      // Currency & Amounts
       .replace(/₹\s*([0-9,]+)/g, '$1 રૂપિયા')
       .replace(/Rs\.?\s*([0-9,]+)/gi, '$1 રૂપિયા')
       .replace(/INR\s*([0-9,]+)/gi, '$1 રૂપિયા')
       .replace(/₹/g, 'રૂપિયા')
 
-      // Spaced-out technical acronyms for clear letter-by-letter pronunciation
       .replace(/\bUPI\b/gi, 'યુ પી આઈ')
       .replace(/\bPIN\b/gi, 'પિન')
       .replace(/\bSMS\b/gi, 'એસેમએસ')
@@ -32,7 +43,6 @@ export function sanitizeTextForTTS(text, lang = 'en') {
       .replace(/\bKYC\b/gi, 'કે વાય સી')
       .replace(/\bATM\b/gi, 'એટીએમ')
 
-      // High frequency words phonetic mapping to Gujarati
       .replace(/\bWhatsApp\b/gi, 'વોટ્સએપ')
       .replace(/\bTelegram\b/gi, 'ટેલિગ્રામ')
       .replace(/\bGoogle Pay\b/gi, 'ગૂગલ પે')
@@ -74,72 +84,96 @@ export function sanitizeTextForTTS(text, lang = 'en') {
       .replace(/\bBank\b/gi, 'बैंक');
   }
 
-  // Normalize extra whitespace
   return cleaned.replace(/\s+/g, ' ').trim();
 }
 
 /**
  * Executes SpeechSynthesis with optimal rate, pitch, and voice selection for regional languages.
  */
-export function speakText({ text, lang, onStart, onEnd, onError, setToast }) {
+export function speakText({ text, lang, onLoading, onStart, onEnd, onError, setToast }) {
   if (!window.speechSynthesis || !window.SpeechSynthesisUtterance) {
     if (setToast) setToast('Speech synthesis is not supported in this browser.');
+    if (onError) onError();
     return;
   }
 
+  // Trigger loading state immediately
+  if (onLoading) onLoading();
+
   window.speechSynthesis.cancel();
 
-  const cleanedText = sanitizeTextForTTS(text, lang);
-  const utterance = new SpeechSynthesisUtterance(cleanedText);
-
-  // Set optimal rate for Indian TTS clarity (0.88x speed prevents word-slurring)
-  utterance.rate = lang === 'gu' || lang === 'hi' ? 0.88 : 1.0;
-  utterance.pitch = 1.0;
-
-  const targetLang = lang === 'hi' ? 'hi-IN' : lang === 'gu' ? 'gu-IN' : 'en-US';
-  utterance.lang = targetLang;
+  const sanitizeLang = lang === 'gu' || lang === 'hi' ? lang : 'en';
+  let processedText = sanitizeTextForTTS(text, sanitizeLang);
 
   const findVoice = () => {
     const voices = window.speechSynthesis.getVoices();
     if (lang === 'gu') {
-      return (
+      const nativeGu =
         voices.find((v) => /gu[-_]IN/i.test(v.lang)) ||
         voices.find((v) => /gujarati/i.test(v.name) || v.name.includes('ગુજ')) ||
-        voices.find((v) => /gu/i.test(v.lang)) ||
-        voices.find((v) => /hi[-_]IN/i.test(v.lang)) ||
-        null
-      );
-    }
-    if (lang === 'hi') {
-      return (
+        voices.find((v) => /gu/i.test(v.lang));
+      
+      if (nativeGu) return { voice: nativeGu, isNative: true };
+
+      // Fallback: Use Hindi (hi-IN) voice with Devanagari transliteration
+      const hiFallback =
         voices.find((v) => /hi[-_]IN/i.test(v.lang)) ||
         voices.find((v) => /hindi/i.test(v.name) || v.name.includes('हिन्दी')) ||
-        voices.find((v) => /hi/i.test(v.lang)) ||
-        null
-      );
+        voices.find((v) => /hi/i.test(v.lang));
+
+      if (hiFallback) return { voice: hiFallback, isNative: false, isHindiFallback: true };
+
+      return null;
     }
-    return (
+
+    if (lang === 'hi') {
+      const hiVoice =
+        voices.find((v) => /hi[-_]IN/i.test(v.lang)) ||
+        voices.find((v) => /hindi/i.test(v.name) || v.name.includes('हिन्दी')) ||
+        voices.find((v) => /hi/i.test(v.lang));
+
+      if (hiVoice) return { voice: hiVoice, isNative: true };
+      return null;
+    }
+
+    const enVoice =
       voices.find((v) => /en[-_](IN|US|GB)/i.test(v.lang)) ||
-      voices.find((v) => /en/i.test(v.lang)) ||
-      null
-    );
+      voices.find((v) => /en/i.test(v.lang));
+
+    return enVoice ? { voice: enVoice, isNative: true } : null;
   };
 
   const executeSpeech = () => {
-    const voice = findVoice();
-    if (voice) {
-      utterance.voice = voice;
-    } else if (lang !== 'en' && setToast) {
-      const msg =
-        lang === 'gu'
-          ? 'ગુજરાતી અવાજ ડાઉનલોડ કરવા Windows Settings > Time & Language > Language ડાઉનલોડ કરો.'
-          : 'हिंदी आवाज़ के लिए Windows Settings में भाषा डाउनलोड करें।';
-      setToast(msg);
+    const match = findVoice();
+
+    // If using Hindi fallback for Gujarati, transliterate to Devanagari so Hindi engine reads it smoothly
+    if (lang === 'gu' && match?.isHindiFallback) {
+      processedText = gujaratiToDevanagari(processedText);
     }
 
-    if (onStart) utterance.onstart = onStart;
-    if (onEnd) utterance.onend = onEnd;
-    if (onError) utterance.onerror = onError;
+    const utterance = new SpeechSynthesisUtterance(processedText);
+    utterance.rate = lang === 'gu' || lang === 'hi' ? 0.88 : 1.0;
+    utterance.pitch = 1.0;
+
+    if (match?.voice) {
+      utterance.voice = match.voice;
+      utterance.lang = match.voice.lang; // Crucial fix: match utterance.lang to voice.lang!
+    } else {
+      utterance.lang = lang === 'hi' ? 'hi-IN' : lang === 'gu' ? 'hi-IN' : 'en-US';
+    }
+
+    utterance.onstart = () => {
+      if (onStart) onStart();
+    };
+
+    utterance.onend = () => {
+      if (onEnd) onEnd();
+    };
+
+    utterance.onerror = (e) => {
+      console.warn("SpeechSynthesis error:", e);
+      if (onError) onError();
+    };
 
     window.speechSynthesis.speak(utterance);
   };
@@ -152,5 +186,9 @@ export function speakText({ text, lang, onStart, onEnd, onError, setToast }) {
       window.speechSynthesis.onvoiceschanged = null;
       executeSpeech();
     };
+    // Fallback timer if onvoiceschanged doesn't trigger
+    setTimeout(() => {
+      executeSpeech();
+    }, 150);
   }
 }

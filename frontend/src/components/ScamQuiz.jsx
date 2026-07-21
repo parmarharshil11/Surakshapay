@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Award, AlertCircle, CheckCircle2, XCircle, Volume2, RotateCcw, ShieldCheck, ArrowRight, Zap, Sparkles, RefreshCw } from 'lucide-react';
+import { Award, AlertCircle, CheckCircle2, XCircle, Volume2, RotateCcw, ShieldCheck, ArrowRight, Zap, Sparkles, RefreshCw, Loader2 } from 'lucide-react';
 import { speakText } from '../utils/ttsHelper';
 
 const DEFAULT_QUIZ_SCENARIOS = [
@@ -175,6 +175,7 @@ export default function ScamQuiz({ t, language, onActivityPerformed }) {
   const [quizFinished, setQuizFinished] = useState(false);
   const [showExplanation, setShowExplanation] = useState(false);
   const [speaking, setSpeaking] = useState(false);
+  const [ttsLoading, setTtsLoading] = useState(false);
 
   useEffect(() => {
     const handleSpeechEnd = () => setSpeaking(false);
@@ -277,9 +278,10 @@ export default function ScamQuiz({ t, language, onActivityPerformed }) {
   };
 
   const handleSpeakExplanation = () => {
-    if (speaking) {
+    if (speaking || ttsLoading) {
       window.speechSynthesis.cancel();
       setSpeaking(false);
+      setTtsLoading(false);
       return;
     }
 
@@ -293,9 +295,10 @@ export default function ScamQuiz({ t, language, onActivityPerformed }) {
     speakText({
       text: explanationText,
       lang: language,
-      onStart: () => setSpeaking(true),
-      onEnd: () => setSpeaking(false),
-      onError: () => setSpeaking(false)
+      onLoading: () => { setTtsLoading(true); setSpeaking(false); },
+      onStart: () => { setTtsLoading(false); setSpeaking(true); },
+      onEnd: () => { setTtsLoading(false); setSpeaking(false); },
+      onError: () => { setTtsLoading(false); setSpeaking(false); }
     });
   };
 
@@ -495,12 +498,17 @@ export default function ScamQuiz({ t, language, onActivityPerformed }) {
               <button
                 type="button"
                 onClick={handleSpeakExplanation}
+                disabled={ttsLoading}
                 className={`ml-auto p-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-blue-100 dark:hover:bg-blue-950/40 text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 rounded-lg transition-all cursor-pointer border border-slate-200/50 dark:border-slate-700/50 ${
                   speaking ? 'ring-2 ring-blue-500 animate-pulse text-blue-600' : ''
                 }`}
                 title="Read Explanation Aloud"
               >
-                <Volume2 className="w-4 h-4" />
+                {ttsLoading ? (
+                  <Loader2 className="w-4 h-4 animate-spin text-blue-500" />
+                ) : (
+                  <Volume2 className="w-4 h-4" />
+                )}
               </button>
             </div>
             
