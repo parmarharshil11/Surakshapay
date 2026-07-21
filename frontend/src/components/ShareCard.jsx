@@ -1,40 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { Share2, Download, ExternalLink, ChevronDown, Loader2 } from 'lucide-react';
+import React from 'react';
+import { Share2, Download, ExternalLink } from 'lucide-react';
 
 export default function ShareCard({ classification, type, text, explanation, language, t, score }) {
-  // Allow user to choose report language independently of app language
-  const [reportLang, setReportLang] = useState(language || 'en');
-  const [isTranslating, setIsTranslating] = useState(false);
-  const [translatedExplanation, setTranslatedExplanation] = useState(explanation);
-
-  useEffect(() => {
-    if (reportLang === language || reportLang === 'en') {
-      setTranslatedExplanation(explanation);
-      return;
-    }
-    const fetchTranslation = async () => {
-      setIsTranslating(true);
-      const baseUrl = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000').replace(/\/$/, '');
-      try {
-        const res = await fetch(`${baseUrl}/api/translate`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text: explanation, targetLang: reportLang })
-        });
-        if (res.ok) {
-          const data = await res.json();
-          setTranslatedExplanation(data.translatedText || explanation);
-        }
-      } catch (err) {
-        console.error('Translation error:', err);
-        setTranslatedExplanation(explanation);
-      } finally {
-        setIsTranslating(false);
-      }
-    };
-    fetchTranslation();
-  }, [reportLang, explanation, language]);
-
   // Descriptive risk label based on score
   const getRiskLabel = (score, lang) => {
     const pct = score || 0;
@@ -54,15 +21,12 @@ export default function ShareCard({ classification, type, text, explanation, lan
   };
 
   const getLocalizedText = (en, hi, gu) => {
-    if (reportLang === 'hi') return hi;
-    if (reportLang === 'gu') return gu;
+    if (language === 'hi') return hi;
+    if (language === 'gu') return gu;
     return en;
   };
 
   const handleDownloadImage = () => {
-    if (isTranslating) return; // Wait for translation to finish
-
-
     const canvas = document.createElement('canvas');
     canvas.width = 620;
     canvas.height = 460;
@@ -123,7 +87,7 @@ export default function ShareCard({ classification, type, text, explanation, lan
 
     // Risk label with percentage
     if (score !== undefined) {
-      const riskLbl = getRiskLabel(score, reportLang);
+      const riskLbl = getRiskLabel(score, language);
       ctx.fillStyle = '#94a3b8';
       ctx.font = 'bold 13px sans-serif';
       ctx.fillText(`\u26A0\uFE0F ${getLocalizedText('Risk Level', 'जोखिम स्तर', 'જોખમ સ્તર')}: ${riskLbl}`, 30, 132);
@@ -172,7 +136,7 @@ export default function ShareCard({ classification, type, text, explanation, lan
 
     ctx.fillStyle = '#e2e8f0';
     ctx.font = '13px sans-serif';
-    wrapText(translatedExplanation, 30, 225, 560, 22);
+    wrapText(explanation, 30, 225, 560, 22);
 
     // Footer divider
     ctx.strokeStyle = '#1e293b';
@@ -203,7 +167,7 @@ export default function ShareCard({ classification, type, text, explanation, lan
     // Language watermark
     ctx.fillStyle = '#334155';
     ctx.font = '10px sans-serif';
-    ctx.fillText(`Report language: ${reportLang === 'hi' ? 'हिंदी' : reportLang === 'gu' ? 'ગુજરાતી' : 'English'}`, 480, 450);
+    ctx.fillText(`Report language: ${language === 'hi' ? 'हिंदी' : language === 'gu' ? 'ગુજરાતી' : 'English'}`, 480, 450);
 
     const link = document.createElement('a');
     link.download = 'suraksha_safety_alert.png';
@@ -212,19 +176,17 @@ export default function ShareCard({ classification, type, text, explanation, lan
   };
 
   const handleShareWhatsApp = () => {
-    if (isTranslating) return;
-
     const alertHeader = classification === 'Scam'
       ? getLocalizedText('🚨 *SCAM ALERT by SuRakshaPay* 🚨', '🚨 *सुरक्षापे स्कैम चेतावनी* 🚨', '🚨 *સુરક્ષાપે કૌભાંડ ચેતવણી* 🚨')
       : getLocalizedText('⚠️ *SUSPICIOUS MESSAGE ALERT* ⚠️', '⚠️ *संदिग्ध संदेश चेतावनी* ⚠️', '⚠️ *શંકાસ્પદ સંદેશ ચેતવણી* ⚠️');
 
-    const riskInfo = score !== undefined ? `\n*${getLocalizedText('Risk Level', 'जोखिम स्तर', 'જોખમ સ્તર')}:* ${getRiskLabel(score, reportLang)}` : '';
+    const riskInfo = score !== undefined ? `\n*${getLocalizedText('Risk Level', 'जोखिम स्तर', 'જોખમ સ્તર')}:* ${getRiskLabel(score, language)}` : '';
 
-    const body = reportLang === 'hi'
-      ? `सावधान! SuRakshaPay ने इस संदेश में खतरा पाया है:${riskInfo}\n\n*विवरण:* "${text.slice(0, 100)}..." \n\n*विश्लेषण:* ${translatedExplanation}\n\n📞 धोखाधड़ी हुई हो तो तुरंत *1930* पर कॉल करें।`
-      : reportLang === 'gu'
-      ? `સાવધ! SuRakshaPay એ આ સંદેશમાં જોખમ શોધ્યું:${riskInfo}\n\n*વિગત:* "${text.slice(0, 100)}..." \n\n*વિશ્લેષણ:* ${translatedExplanation}\n\n📞 છેતરપિંડી થઈ હોય તો *1930* પર તરત કોલ કરો.`
-      : `Warning! SuRakshaPay detected a financial scam threat:${riskInfo}\n\n*Details:* "${text.slice(0, 100)}..." \n\n*Analysis:* ${translatedExplanation}\n\n📞 Call *1930* immediately if you fell for a digital payment scam.`;
+    const body = language === 'hi'
+      ? `सावधान! SuRakshaPay ने इस संदेश में खतरा पाया है:${riskInfo}\n\n*विवरण:* "${text.slice(0, 100)}..." \n\n*विश्लेषण:* ${explanation}\n\n📞 धोखाधड़ी हुई हो तो तुरंत *1930* पर कॉल करें।`
+      : language === 'gu'
+      ? `સાવધ! SuRakshaPay એ આ સંદેશમાં જોખમ શોધ્યું:${riskInfo}\n\n*વિગત:* "${text.slice(0, 100)}..." \n\n*વિશ્લેષણ:* ${explanation}\n\n📞 છેતરપિંડી થઈ હોય તો *1930* પર તરત કોલ કરો.`
+      : `Warning! SuRakshaPay detected a financial scam threat:${riskInfo}\n\n*Details:* "${text.slice(0, 100)}..." \n\n*Analysis:* ${explanation}\n\n📞 Call *1930* immediately if you fell for a digital payment scam.`;
 
     const encodedText = encodeURIComponent(`${alertHeader}\n\n${body}`);
     window.open(`https://api.whatsapp.com/send?text=${encodedText}`, '_blank');
@@ -243,25 +205,6 @@ export default function ShareCard({ classification, type, text, explanation, lan
         </div>
       </div>
 
-      {/* Language selector for report */}
-      <div className="space-y-1">
-        <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 block">
-          {language === 'hi' ? 'रिपोर्ट भाषा चुनें' : language === 'gu' ? 'રિપોર્ટ ભાષા પસંદ કરો' : 'Report Language'}
-        </label>
-        <div className="relative">
-          <select
-            value={reportLang}
-            onChange={(e) => setReportLang(e.target.value)}
-            className="w-full appearance-none pl-3 pr-8 py-2 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer transition-colors"
-          >
-            <option value="en">🇬🇧 English</option>
-            <option value="hi">🇮🇳 हिंदी (Hindi)</option>
-            <option value="gu">🇮🇳 ગુજરાતી (Gujarati)</option>
-          </select>
-          <ChevronDown className="absolute right-2.5 top-2 w-3.5 h-3.5 text-slate-400 pointer-events-none" />
-        </div>
-      </div>
-
       {/* Risk label preview */}
       {score !== undefined && (
         <div className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold border ${
@@ -270,7 +213,7 @@ export default function ShareCard({ classification, type, text, explanation, lan
             : 'bg-amber-50 dark:bg-amber-950/20 border-amber-200 dark:border-amber-900/40 text-amber-700 dark:text-amber-300'
         }`}>
           <span>⚠️</span>
-          <span>{getRiskLabel(score, reportLang)}</span>
+          <span>{getRiskLabel(score, language)}</span>
         </div>
       )}
 
@@ -283,19 +226,17 @@ export default function ShareCard({ classification, type, text, explanation, lan
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1.5">
         <button
           onClick={handleDownloadImage}
-          disabled={isTranslating}
-          className="flex items-center justify-center gap-2 px-3 py-2 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-300 transition-colors cursor-pointer disabled:opacity-50"
+          className="flex items-center justify-center gap-2 px-3 py-2 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-300 transition-colors cursor-pointer"
         >
-          {isTranslating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5" />}
-          <span>{isTranslating ? (language === 'hi' ? 'अनुवाद कर रहे...' : language === 'gu' ? 'અનુવાદ થઈ રહ્યું...' : 'Translating...') : (language === 'hi' ? 'कार्ड डाउनलोड' : language === 'gu' ? 'કાર્ડ ડાઉનલોડ' : 'Download Card')}</span>
+          <Download className="w-3.5 h-3.5" />
+          <span>{language === 'hi' ? 'कार्ड डाउनलोड' : language === 'gu' ? 'કાર્ડ ડાઉનલોડ' : 'Download Card'}</span>
         </button>
         <button
           onClick={handleShareWhatsApp}
-          disabled={isTranslating}
-          className="flex items-center justify-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded-xl text-xs font-bold transition-colors cursor-pointer disabled:opacity-50"
+          className="flex items-center justify-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded-xl text-xs font-bold transition-colors cursor-pointer"
         >
-          {isTranslating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <ExternalLink className="w-3.5 h-3.5" />}
-          <span>{isTranslating ? (language === 'hi' ? 'अनुवाद कर रहे...' : language === 'gu' ? 'અનુવાદ થઈ રહ્યું...' : 'Translating...') : (language === 'hi' ? 'व्हाट्सएप शेयर' : language === 'gu' ? 'વૉટ્સએપ શેર' : 'Share to WhatsApp')}</span>
+          <ExternalLink className="w-3.5 h-3.5" />
+          <span>{language === 'hi' ? 'व्हाट्सएप शेयर' : language === 'gu' ? 'વૉટ્સએપ શેર' : 'Share to WhatsApp'}</span>
         </button>
       </div>
     </div>
