@@ -70,7 +70,7 @@ export default function History({ t, history, onClear, setTab, language }) {
                       : 'border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100/50 dark:hover:bg-slate-800/50'
                   }`}
                 >
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-3 flex-1 min-w-0">
                     {/* Icon */}
                     <div className="p-2 rounded-lg bg-white dark:bg-slate-800 shadow-sm border border-slate-100 dark:border-slate-700 text-slate-500 flex-shrink-0">
                       {item.type === 'message' && <span>💬</span>}
@@ -78,24 +78,24 @@ export default function History({ t, history, onClear, setTab, language }) {
                       {item.type === 'reported_scam' && <span>🚨</span>}
                     </div>
 
-                    <div className="space-y-1">
+                    <div className="space-y-1 flex-1 min-w-0">
                       <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">
                         {item.type === 'message' ? t.histTypeSms : item.type === 'upi' ? t.histTypeUpi : t.histTypeReport}
                       </span>
-                      <p className="text-slate-700 dark:text-slate-200 text-sm font-semibold truncate max-w-[200px] sm:max-w-[300px]">
+                      <p className="text-slate-700 dark:text-slate-200 text-sm font-semibold truncate">
                         {item.type === 'message' ? item.inputText : 
                          item.type === 'upi' ? `₹${item.amount} to ${item.upiId}` : 
                          `Reported: ${item.scammerDetails}`}
                       </p>
-                      <div className="flex items-center gap-1.5 text-[10px] text-slate-400 dark:text-slate-500 font-medium">
-                        <Calendar className="w-3 h-3" />
-                        <span>{formatDate(item.timestamp)}</span>
+                      <div className="flex items-center gap-1.5 text-[10px] text-slate-400 dark:text-slate-500 font-medium truncate">
+                        <Calendar className="w-3 h-3 flex-shrink-0" />
+                        <span className="truncate">{formatDate(item.timestamp)}</span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3">
-                    <span className={`text-[10px] sm:text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded border ${riskColor}`}>
+                  <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0 ml-2">
+                    <span className={`text-[10px] sm:text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded border flex-shrink-0 ${riskColor}`}>
                       {item.classification === 'Reported' ? (language === 'hi' ? 'रिपोर्ट किया गया' : language === 'gu' ? 'રિપોર્ટ કરેલ' : 'Reported') : 
                        item.classification === 'Scam' ? (language === 'hi' ? 'स्कैम' : language === 'gu' ? 'છેતરપિંડી' : 'Scam') : 
                        item.classification === 'Suspicious' ? (language === 'hi' ? 'संदिग्ध' : language === 'gu' ? 'શંકાસ્પદ' : 'Suspicious') : 
