@@ -221,6 +221,126 @@ const SCAMS_LIBRARY = [
         "ફરિયાદ નોંધો — cybercrime.gov.in પર અથવા રાષ્ટ્રીય હેલ્પલાઈન 1930 પર AI વૉઈસ/વીડિયો સ્કૅમ કોલની તાત્કાલિક ફરિયાદ નોંધો."
       ]
     }
+  },
+  {
+    id: "digital_arrest_scam",
+    category: "digital_arrest",
+    title: {
+      en: "Digital Arrest & Fake CBI/Police Video Call",
+      hi: "डिजिटल अरेस्ट और फर्जी सीबीआई/पुलिस वीडियो कॉल",
+      gu: "ડિજિટલ અરેસ્ટ અને નકલી CBI/પોલીસ વીડિયો કોલ"
+    },
+    dangerLevel: "High",
+    howItWorks: {
+      en: "Scammers call you on WhatsApp or Skype posing as Police, CBI, ED, or TRAI officers. They show fake badges or official-looking police station backgrounds. They claim a parcel containing illegal drugs/passport was sent in your name, and place you under 'Digital Arrest', forcing you to stay on video call for hours while transferring your life savings to 'government verification accounts'.",
+      hi: "ठग पुलिस, सीबीआई, ईडी या ट्राई अधिकारी बनकर व्हाट्सएप या स्काइप पर वीडियो कॉल करते हैं। वे फर्जी बैच या थाने जैसा बैकग्राउंड दिखाते हैं। वे दावा करते हैं कि आपके नाम से ड्रग्स/पासपोर्ट का पार्सल भेजा गया है और आपको 'डिजिटल अरेस्ट' में रखकर घंटों कॉल पर रखते हुए आपके पैसे 'सरकारी सत्यापन खातों' में ट्रांसफर करवाते हैं।",
+      gu: "ઠગ પોલીસ, CBI, ED અથવા TRAI અધિકારી બનીને વોટ્સએપ કે સ્કાઇપ પર વીડિયો કોલ કરે છે. તેઓ નકલી બેજ કે પોલીસ સ્ટેશન જેવું બેકગ્રાઉન્ડ બતાવે છે. તેઓ દાવો કરે છે કે તમારા નામે ડ્રગ્સ/પાસપોર્ટનું પાર્સલ મોકલાયું છે અને તમને 'ડિજિટલ અરેસ્ટ'માં રાખીને કલાકો સુધી કોલ પર રાખી તમારી બચત 'સરકારી વેરિફિકેશન ખાતા'માં ટ્રાન્સફર કરાવે છે."
+    },
+    example: {
+      en: "\"This is Officer Sharma from Mumbai Cyber Crime. A SIM registered on your Aadhaar was used in international money laundering. You are under Digital Arrest. Keep camera ON and transfer funds for clearance: http://cbi-verification.in\"",
+      hi: "\"मैं मुंबई साइबर क्राइम से ऑफिसर शर्मा बोल रहा हूं। आपके आधार पर पंजीकृत सिम का उपयोग मनी लॉन्ड्रिंग में हुआ है। आप डिजिटल अरेस्ट के तहत हैं। कैमरा चालू रखें और क्लीयरेंस के लिए फंड ट्रांसफर करें।\"",
+      gu: "\"હું મુંબઈ સાયબર ક્રાઈમથી ઓફિસર શર્મા બોલું છું. તમારા આધાર પર બનેલા સિમનો ઉપયોગ મની લોન્ડરિંગમાં થયો છે. તમે ડિજિટલ અરેસ્ટ હેઠળ છો. કેમેરો ચાલુ રાખો અને ક્લિયરન્સ માટે ફંડ ટ્રાન્સફર કરો.\""
+    },
+    whatToDo: {
+      en: [
+        "REMEMBER: There is NO law or procedure for 'Digital Arrest' in India. Police or CBI NEVER arrest anyone via video call.",
+        "Hang up the video call immediately if someone threatens you with arrest or claims your Aadhaar/parcel is involved in illegal activity.",
+        "Never transfer money to any 'safe account' or 'verification account'. Government agencies do not have secret verification bank accounts.",
+        "Report the incident immediately on 1930 or cybercrime.gov.in."
+      ],
+      hi: [
+        "याद रखें: भारत में 'डिजिटल अरेस्ट' नाम का कोई कानून या प्रक्रिया नहीं है। पुलिस या सीबीआई कभी भी वीडियो कॉल पर अरेस्ट नहीं करती।",
+        "यदि कोई आपको अरेस्ट की धमकी देता है या आपके पार्सल को गैरकानूनी बताता है, तो तुरंत वीडियो कॉल काट दें।",
+        "किसी भी 'सुरक्षित खाते' या 'सत्यापन खाते' में पैसे ट्रांसफर न करें। सरकारी एजेंसियों के पास कोई गुप्त सत्यापन खाते नहीं होते।",
+        "घटना की तुरंत 1930 या cybercrime.gov.in पर रिपोर्ट करें।"
+      ],
+      gu: [
+        "યાદ રાખો: ભારતમાં 'ડિજિટલ અરેસ્ટ' નામનો કોઈ કાયદો કે પ્રક્રિયા નથી. પોલીસ કે CBI ક્યારેય વીડિયો કોલ પર કોઈની અરેસ્ટ કરતી નથી.",
+        "જો કોઈ તમને અરેસ્ટની ધમકી આપે અથવા તમારા પાર્સલને ગેરકાયદેસર બતાવે, તો તરત જ વીડિયો કોલ કાપી નાખો.",
+        "કોઈપણ 'સુરક્ષિત ખાતા' કે 'ચકાસણી ખાતા'માં પૈસા ટ્રાન્સફર ન કરો. સરકારી એજન્સીઓ પાસે કોઈ ગુપ્ત વેરિફિકેશન ખાતા હોતા નથી.",
+        "ઘટનાની તરત જ 1930 અથવા cybercrime.gov.in પર ફરિયાદ નોંધાવો."
+      ]
+    }
+  },
+  {
+    id: "job_task_scam",
+    category: "jobs_loans",
+    title: {
+      en: "Work-From-Home & Telegram Task Scam",
+      hi: "वर्क-फ्रॉम-होम और टेलीग्राम टास्क ठगी",
+      gu: "વર્ક-ફ્રોમ-હોમ અને ટેલિગ્રામ ટાસ્ક છેતરપિંડી"
+    },
+    dangerLevel: "High",
+    howItWorks: {
+      en: "You get a message offering part-time work from home (e.g., liking YouTube videos, rating Google Maps locations, reviewing products). They pay small amounts (₹150-₹300) initially to build trust, then invite you to a Telegram group. They ask you to deposit money in 'Prepaid High-Yield Tasks' or 'Crypto Trading', refusing to let you withdraw your money until you pay massive 'fees'.",
+      hi: "आपको घर बैठे पार्ट-टाइम काम का मैसेज आता है (जैसे यूट्यूब वीडियो लाइक करना, गूगल मैप्स रेटिंग देना)। वे शुरुआत में भरोसा जीतने के लिए ₹150-₹300 का छोटा भुगतान करते हैं, फिर टेलीग्राम ग्रुप में जोड़ते हैं। वहां वे 'प्रिपेड टास्क' या 'क्रिप्टो ट्रेडिंग' के नाम पर पैसे जमा करवाते हैं और बाद में 'टैक्स/फीस' के नाम पर और पैसे ऐंठते हैं।",
+      gu: "તમને ઘરે બેઠા પાર્ટ-ટાઇમ કામનો મેસેજ આવે છે (જેમ કે યુટ્યુબ વીડિયો લાઈક કરવા, ગૂગલ મેપ્સ રેટિંગ આપવું). તેઓ શરૂઆતમાં વિશ્વાસ જીતવા ₹150-₹300 ચૂકવે છે, પછી ટેલિગ્રામ ગ્રુપમાં ઉમેરે છે. ત્યાં તેઓ 'પ્રીપેડ ટાસ્ક' કે 'ક્રિપ્ટો ટ્રેડિંગ'ના નામે પૈસા જમા કરાવે છે અને પછી પૈસા ઉપાડવા ન દઈ વધુ ફી માંગે છે."
+    },
+    example: {
+      en: "\"Earn Rs 3000 daily from home by simply liking 3 YouTube videos! Free registration. Contact HR Meera on Telegram: t.me/wfh_tasks_2026\"",
+      hi: "\"घर बैठे रोजाना 3 यूट्यूब वीडियो लाइक करके ₹3000 कमाएं! मुफ्त रजिस्ट्रेशन। टेलीग्राम पर एचआर मीरा से संपर्क करें: t.me/wfh_tasks_2026\"",
+      gu: "\"ઘરે બેઠા રોજ 3 યુટ્યુબ વીડિયો લાઈક કરીને ₹3000 કમાઓ! મફત રજીસ્ટ્રેશન. ટેલિગ્રામ પર HR મીરાંનો સંપર્ક કરો: t.me/wfh_tasks_2026\""
+    },
+    whatToDo: {
+      en: [
+        "Legitimate companies never ask employees to deposit money to get paid for work.",
+        "Be extremely suspicious of job offers received via WhatsApp or Telegram from unknown numbers.",
+        "If an online job asks for 'prepaid recharge' or 'crypto investment' to unlock earnings, STOP immediately — it is a scam.",
+        "Never share bank details or OTPs with unknown recruiters."
+      ],
+      hi: [
+        "वैध कंपनियां कभी भी काम का भुगतान पाने के लिए कर्मचारियों से पैसे जमा करने को नहीं कहती हैं।",
+        "अज्ञात नंबरों से व्हाट्सएप या टेलीग्राम पर मिले नौकरी के प्रस्तावों पर अत्यधिक संदेह करें।",
+        "यदि कोई ऑनलाइन जॉब कमाई अनलॉक करने के लिए 'प्रीपेड रीचार्ज' या 'क्रिप्टो इन्वेस्टमेंट' मांगती है, तो तुरंत रुकें — यह एक स्कैम है।",
+        "अज्ञात भर्तीकर्ताओं के साथ बैंक विवरण या ओटीपी कभी साझा न करें।"
+      ],
+      gu: [
+        "પ્રતિષ્ઠિત કંપનીઓ ક્યારેય કામના પૈસા મેળવવા માટે કર્મચારીઓ પાસેથી પૈસા જમા કરાવતી નથી.",
+        "અજાણ્યા નંબર પરથી વોટ્સએપ કે ટેલિગ્રામ પર મળતી જોબ ઓફર્સથી સાવધ રહો.",
+        "જો કોઈ ઓનલાઈન જોબ કમાણી અનલોક કરવા માટે 'પ્રીપેડ રિચાર્જ' કે 'ક્રિપ્ટો રોકાણ' માંગે, તો તરત અટકી જાઓ — આ છેતરપિંડી છે.",
+        "અજાણ્યા રિક્રુટર્સ સાથે બેંક વિગતો કે OTP ક્યારેય શેર ન કરો."
+      ]
+    }
+  },
+  {
+    id: "pension_dlc_scam",
+    category: "banking",
+    title: {
+      en: "Pensioner Life Certificate (Jeevan Pramaan) Scam",
+      hi: "पेंशनभोगी डिजिटल जीवन प्रमाण पत्र ठगी",
+      gu: "પેન્શનર ડિજિટલ જીવન પ્રમાણપત્ર છેતરપિંડી"
+    },
+    dangerLevel: "Medium",
+    howItWorks: {
+      en: "Scammers target senior citizens and retired government employees during pension renewal months. They send messages or call posing as Treasury/Bank officials, claiming their Life Certificate (Jeevan Pramaan) is invalid and pension will be stopped immediately. They ask the senior citizen to share an OTP or download a remote screen-share app to 'renew' it online, wiping out their pension savings.",
+      hi: "ठग वरिष्ठ नागरिकों और सेवानिवृत्त कर्मचारियों को निशाना बनाते हैं। वे कोषागार/बैंक अधिकारी बनकर फोन करते हैं कि जीवन प्रमाण पत्र अमान्य है और पेंशन रुक जाएगी। वे पेंशन 'नवीनीकृत' करने के लिए ओटीपी मांगते हैं या रिमोट स्क्रीन-शेयर ऐप डाउनलोड करवाते हैं और बैंक खाता खाली कर देते हैं।",
+      gu: "ઠગ સિનિયર સિટિઝન્સ અને નિવૃત્ત કર્મચારીઓને નિશાન બનાવે છે. તેઓ ટ્રેઝરી/બેંક અધિકારી બનીને ફોન કરે છે કે જીવન પ્રમાણપત્ર અમાન્ય છે અને પેન્શન અટકી જશે. તેઓ પેન્શન 'નવીનીકૃત' કરવા ઓટીપી માંગે છે અથવા સ્ક્રીન-શેર એપ ડાઉનલોડ કરાવી ખાતું ખાલી કરી દે છે."
+    },
+    example: {
+      en: "\"Dear Pensioner, your Digital Life Certificate is rejected. Pension stopped for this month. Call Treasury Helpdesk 98112-XXXXX to complete biometric update via OTP.\"",
+      hi: "\"प्रिय पेंशनभोगी, आपका डिजिटल जीवन प्रमाण पत्र रद्द कर दिया गया है। इस महीने की पेंशन रोक दी गई है। ओटीपी के माध्यम से अपडेट पूरा करने के लिए ट्रेजरी हेल्पडेस्क 98112-XXXXX पर कॉल करें।\"",
+      gu: "\"પ્રિય પેન્શનર, તમારું ડિજિટલ જીવન પ્રમાણપત્ર રદ કરવામાં આવ્યું છે. આ મહિનાનું પેન્શન અટકાવવામાં આવ્યું છે. OTP દ્વારા અપડેટ પૂરું કરવા ટ્રેઝરી હેલ્પડેસ્ક 98112-XXXXX પર કોલ કરો.\""
+    },
+    whatToDo: {
+      en: [
+        "Treasury offices or banks NEVER update Life Certificates over a phone call using OTP.",
+        "Always submit Digital Life Certificates through official Jeevan Pramaan app, authorised bank branches, or CSC (Common Service Centres).",
+        "Help elderly family members understand that no official will ever ask for OTPs to unblock pension.",
+        "If scammed, freeze your bank account immediately by calling 1930."
+      ],
+      hi: [
+        "कोषागार कार्यालय या बैंक कभी भी ओटीपी का उपयोग करके फोन कॉल पर जीवन प्रमाण पत्र अपडेट नहीं करते हैं।",
+        "हमेशा आधिकारिक 'जीवन प्रमाण' ऐप, अधिकृत बैंक शाखाओं या सीएससी (CSC) केंद्रों के माध्यम से जीवन प्रमाण पत्र जमा करें।",
+        "परिवार के बुजुर्गों को समझाएं कि पेंशन चालू करने के लिए कोई भी अधिकारी ओटीपी नहीं मांगता।",
+        "धोखाधड़ी होने पर 1930 पर कॉल करके तुरंत अपना बैंक खाता फ्रीज करवाएं।"
+      ],
+      gu: [
+        "ટ્રેઝરી ઓફિસ કે બેંક ક્યારેય પણ OTP નો ઉપયોગ કરીને ફોન કોલ પર જીવન પ્રમાણપત્ર અપડેટ કરતી નથી.",
+        "હંમેશા સત્તાવાર 'જીવન પ્રમાણ' એપ, માન્ય બેંક શાખાઓ અથવા CSC કેન્દ્રો દ્વારા જ જીવન પ્રમાણપત્ર જમા કરો.",
+        "પરિવારના વડીલોને સમજાવો કે પેન્શન ચાલુ કરવા કોઈ અધિકારી ક્યારેય OTP માંગતો નથી.",
+        "છેતરપિંડી થાય તો 1930 પર કોલ કરી તરત જ તમારું બેંક ખાતું ફ્રીઝ કરાવો."
+      ]
+    }
   }
 ];
 
