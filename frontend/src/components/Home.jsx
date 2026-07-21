@@ -4,7 +4,7 @@ import TrendingTicker from './TrendingTicker';
 import SafetyScore from './SafetyScore';
 import CommunityMap from './CommunityMap';
 
-export default function Home({ setTab, t, historyCount, language, score }) {
+export default function Home({ setTab, t, historyCount, language, score, onResetXp }) {
   return (
     <div className="space-y-8 animate-fade-in text-left">
       {/* Hero Section */}
@@ -119,7 +119,7 @@ export default function Home({ setTab, t, historyCount, language, score }) {
       {/* Gamification Dashboard widgets side-by-side rows */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Safety Score levels progression widget */}
-        <SafetyScore score={score} language={language} t={t} />
+        <SafetyScore score={score} language={language} t={t} onResetXp={onResetXp} />
 
         {/* Community Scam Threat Bar Chart */}
         <CommunityMap language={language} t={t} />

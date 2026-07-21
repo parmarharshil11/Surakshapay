@@ -1,7 +1,7 @@
 import React from 'react';
-import { ShieldCheck, ShieldAlert, Award, Zap, Star, Hexagon, Crown } from 'lucide-react';
+import { ShieldCheck, ShieldAlert, Award, Zap, Star, Hexagon, Crown, RotateCcw } from 'lucide-react';
 
-export default function SafetyScore({ score, language, t }) {
+export default function SafetyScore({ score, language, t, onResetXp }) {
   // Infinite Leveling Math
   const XP_PER_LEVEL = 100;
   const levelNum = Math.floor(score / XP_PER_LEVEL) + 1;
@@ -29,6 +29,18 @@ export default function SafetyScore({ score, language, t }) {
   const badgeTitle = badgeInfo.title[language] || badgeInfo.title['en'];
   const fullLevelName = `${levelName}: ${badgeTitle}`;
 
+  // Reset XP handler
+  const handleReset = () => {
+    const confirmMsg = language === 'hi'
+      ? 'क्या आप अपना सारा XP रीसेट करना चाहते हैं? यह क्रिया पूर्ववत नहीं की जा सकती।'
+      : language === 'gu'
+      ? 'શું તમે તમારો બધો XP રીસેટ કરવા માંગો છો? આ ક્રિયા પૂર્વવત થઈ શકશે નહીં.'
+      : 'Are you sure you want to reset all your XP? This cannot be undone.';
+    if (window.confirm(confirmMsg) && onResetXp) {
+      onResetXp();
+    }
+  };
+
   // Encouraging Text
   const getEncouragement = () => {
     if (levelNum === 1) return language === 'hi' ? `अगले स्तर के लिए ${XP_PER_LEVEL - currentLevelXp} अंक और चाहिए!` : language === 'gu' ? `આગલા સ્તર માટે ${XP_PER_LEVEL - currentLevelXp} પોઇન્ટ વધુ જોઈએ!` : `Need ${XP_PER_LEVEL - currentLevelXp} more XP to reach Level ${levelNum + 1}!`;
@@ -53,6 +65,16 @@ export default function SafetyScore({ score, language, t }) {
             </span>
           </div>
         </div>
+        {/* Reset XP Button */}
+        {onResetXp && score > 0 && (
+          <button
+            onClick={handleReset}
+            title={language === 'hi' ? 'XP रीसेट करें' : language === 'gu' ? 'XP રીસેટ કરો' : 'Reset XP'}
+            className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-red-50 dark:hover:bg-red-950/30 text-slate-400 hover:text-red-500 dark:hover:text-red-400 border border-slate-200 dark:border-slate-700 transition-all cursor-pointer"
+          >
+            <RotateCcw className="w-4 h-4" />
+          </button>
+        )}
       </div>
 
       {/* Progress & Badge */}

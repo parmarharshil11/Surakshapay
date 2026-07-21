@@ -69,6 +69,17 @@ function App() {
     }
   };
 
+  // Callback to reset safety score to zero
+  const handleResetXp = async () => {
+    try {
+      const uid = auth?.currentUser?.uid || 'local_demo_user';
+      localStorage.setItem(`suraksha_score_${uid}`, '0');
+      setScore(0);
+    } catch (e) {
+      console.error("Failed to reset safety score:", e);
+    }
+  };
+
   // Fetch history on load
   const fetchHistory = async () => {
     const baseUrl = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000').replace(/\/$/, '');
@@ -297,6 +308,7 @@ function App() {
             historyCount={history.length} 
             language={language}
             score={score}
+            onResetXp={handleResetXp}
           />
         )}
         {tab === 'message' && (
