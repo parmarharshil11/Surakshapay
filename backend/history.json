@@ -1,5 +1,38 @@
 [
   {
+    "id": "check_1784646671386_m3a97tied",
+    "timestamp": "2026-07-21T15:11:11.386Z",
+    "type": "message",
+    "inputText": "Dear customer, electricity connection will be disconnected at 9:30 PM tonight because your previous month bill was not updated. Call electricity officer 90012-34567 immediately.",
+    "score": 50,
+    "classification": "Suspicious",
+    "matchedKeywords": [],
+    "explanation": "AI service is temporarily unavailable. The message may be suspicious. Avoid clicking unknown links and verify the sender's identity directly.",
+    "lang": "en"
+  },
+  {
+    "id": "check_1784646669957_tvjf3lcnc",
+    "timestamp": "2026-07-21T15:11:09.957Z",
+    "type": "message",
+    "inputText": "Dear customer, electricity connection will be disconnected at 9:30 PM tonight because your previous month bill was not updated. Call electricity officer 90012-34567 immediately.",
+    "score": 50,
+    "classification": "Suspicious",
+    "matchedKeywords": [],
+    "explanation": "AI service is temporarily unavailable. The message may be suspicious. Avoid clicking unknown links and verify the sender's identity directly.",
+    "lang": "en"
+  },
+  {
+    "id": "check_1784646663696_x3cka9j9w",
+    "timestamp": "2026-07-21T15:11:03.696Z",
+    "type": "message",
+    "inputText": "Dear customer, electricity connection will be disconnected at 9:30 PM tonight because your previous month bill was not updated. Call electricity officer 90012-34567 immediately.",
+    "score": 50,
+    "classification": "Suspicious",
+    "matchedKeywords": [],
+    "explanation": "AI service is temporarily unavailable. The message may be suspicious. Avoid clicking unknown links and verify the sender's identity directly.",
+    "lang": "en"
+  },
+  {
     "id": "check_1784642495500_aheydjs35",
     "timestamp": "2026-07-21T14:01:35.500Z",
     "type": "message",

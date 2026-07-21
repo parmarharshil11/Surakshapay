@@ -463,7 +463,7 @@ export default function MessageChecker({ t, language, onScanComplete, onActivity
           )}
 
           {/* Bottom input toolbar */}
-          <div className="flex items-center justify-between pt-1 border-t border-slate-100 dark:border-slate-800 mt-2">
+          <div className="flex flex-wrap items-center justify-between gap-y-3 pt-3 border-t border-slate-100 dark:border-slate-800 mt-2">
             <div className="flex gap-2">
               {/* Mic transcription button */}
               <button
@@ -499,7 +499,7 @@ export default function MessageChecker({ t, language, onScanComplete, onActivity
               </label>
             </div>
             
-            <div className="flex gap-3">
+            <div className="flex gap-2 sm:gap-3 ml-auto sm:ml-0">
               {text && (
                 <button
                   type="button"
@@ -507,7 +507,7 @@ export default function MessageChecker({ t, language, onScanComplete, onActivity
                     setText('');
                     setResult(null);
                   }}
-                  className="flex items-center gap-1.5 px-4 py-2 text-sm text-slate-500 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+                  className="flex items-center justify-center gap-1.5 px-3 sm:px-4 py-2 text-xs sm:text-sm text-slate-500 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors cursor-pointer whitespace-nowrap"
                 >
                   <Trash2 className="w-4 h-4" />
                   {t.btnClear}
@@ -517,12 +517,12 @@ export default function MessageChecker({ t, language, onScanComplete, onActivity
               <button
                 onClick={handleCheck}
                 disabled={!text.trim() || loading || ocrLoading}
-                className="flex items-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 disabled:bg-slate-200 disabled:text-slate-400 dark:disabled:bg-slate-800 dark:disabled:text-slate-600 disabled:cursor-not-allowed text-white font-bold rounded-xl shadow-sm transition-all cursor-pointer"
+                className="flex items-center justify-center gap-2 px-4 sm:px-6 py-2 sm:py-2.5 bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 disabled:bg-slate-200 disabled:text-slate-400 dark:disabled:bg-slate-800 dark:disabled:text-slate-600 disabled:cursor-not-allowed text-white text-sm sm:text-base font-bold rounded-xl shadow-sm transition-all cursor-pointer whitespace-nowrap"
               >
                 {loading ? (
                   <>
                     <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                    {language === 'en' ? 'Analyzing...' : language === 'hi' ? 'जांच की जा रही है...' : 'તપાસ...'}
+                    {language === 'en' ? 'Analyzing...' : language === 'hi' ? 'जांच...' : 'તપાસ...'}
                   </>
                 ) : (
                   <>
