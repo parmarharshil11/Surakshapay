@@ -88,6 +88,22 @@ export default function MessageChecker({ t, language, onScanComplete, onActivity
   const [ocrTextConfirm, setOcrTextConfirm] = useState('');
   const [showOcrConfirm, setShowOcrConfirm] = useState(false);
 
+  // Unmount cleanup for TTS & Speech Recognition
+  useEffect(() => {
+    return () => {
+      if (window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
+      if (window.recognitionInstance) {
+        try {
+          window.recognitionInstance.stop();
+        } catch (e) {
+          // ignore if already stopped
+        }
+      }
+    };
+  }, []);
+
   // Refs for cleanup and DOM access
   const fileInputRef = useRef(null);
 

@@ -2,7 +2,14 @@ import React, { useState } from 'react';
 import { Info, Shield } from 'lucide-react';
 
 export default function DisclaimerModal({ language }) {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(() => {
+    return localStorage.getItem('disclaimer_accepted') !== 'true';
+  });
+
+  const handleAccept = () => {
+    localStorage.setItem('disclaimer_accepted', 'true');
+    setIsOpen(false);
+  };
 
   if (!isOpen) return null;
 
@@ -52,7 +59,7 @@ export default function DisclaimerModal({ language }) {
 
         {/* Action */}
         <button
-          onClick={() => setIsOpen(false)}
+          onClick={handleAccept}
           className="mt-8 w-full py-3.5 px-4 bg-blue-700 hover:bg-blue-800 text-white font-bold rounded-xl transition-colors duration-200 shadow-md focus:outline-none focus:ring-4 focus:ring-blue-500/20"
         >
           {language === 'hi' ? 'मैं समझता/समझती हूँ' : language === 'gu' ? 'હું સમજુ છું' : 'I Understand'}
