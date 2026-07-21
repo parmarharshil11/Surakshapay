@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const { analyzeMessage, analyzeUpiRequest, analyzeReportAuth } = require('./ai');
+const { analyzeMessage, analyzeUpiRequest, analyzeReportAuth, getCommunityStats } = require('./ai');
 const { getHistory, addHistoryEntry, clearHistory } = require('./db');
 
 const app = express();
@@ -238,6 +238,28 @@ app.post('/api/check-upi', async (req, res) => {
 // 3. Scam Education Library Endpoint
 app.get('/api/scams', (req, res) => {
   return res.json(SCAMS_LIBRARY);
+});
+
+// 7. Community Stats (Gemini-powered) Endpoint
+// Simple in-memory cache: 5-minute TTL per language
+const communityCache = {};
+app.get('/api/community-stats', async (req, res) => {
+  const lang = req.query.lang || 'en';
+  const cacheKey = `community_${lang}`;
+  const now = Date.now();
+
+  if (communityCache[cacheKey] && (now - communityCache[cacheKey].ts) < 5 * 60 * 1000) {
+    return res.json({ ...communityCache[cacheKey].data, cached: true });
+  }
+
+  try {
+    const data = await getCommunityStats(lang);
+    communityCache[cacheKey] = { data, ts: now };
+    return res.json({ ...data, cached: false });
+  } catch (err) {
+    console.error('Community stats error:', err);
+    return res.status(500).json({ error: 'Failed to fetch community stats' });
+  }
 });
 
 // 4. Get History Endpoint

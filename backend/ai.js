@@ -173,8 +173,59 @@ Respond strictly with a JSON object in this exact format — no extra text, just
   }
 }
 
+/**
+ * Fetches AI-generated community scam stats for Indian states using Gemini.
+ * Returns { states: [{ state, count, topScamType, riskLevel, trend }] }
+ */
+async function getCommunityStats(lang = 'en') {
+  const langName = lang === 'hi' ? 'Hindi' : lang === 'gu' ? 'Gujarati' : 'English';
+
+  const prompt = `
+You are a cyber fraud analyst for India. Based on publicly available cybercrime data trends, provide realistic state-wise scam intensity data for India for the current period (2025-2026).
+
+Return data for exactly 8 Indian states (mix of high, medium, low risk). The "count" field should represent relative scam reports per 1000 population (realistic values between 10 and 65). The "topScamType" must be in ${langName}.
+
+Respond strictly with a JSON object — no markdown, no extra text:
+{
+  "states": [
+    {
+      "state": "<State Name in English>",
+      "count": <integer 10-65>,
+      "topScamType": "<primary scam type in ${langName}>",
+      "riskLevel": "<High|Medium|Low>",
+      "trend": "<rising|stable|falling>"
+    }
+  ],
+  "summary": "<one sentence in ${langName} summarizing the current overall cyber fraud landscape in India>"
+}
+`;
+
+  try {
+    return await callGeminiAPI(prompt);
+  } catch (error) {
+    console.error("AI Analysis Error (Community Stats):", error.message);
+    // Fallback static data
+    return {
+      states: [
+        { state: "Gujarat", count: 48, topScamType: lang === 'hi' ? "बिजली बिल धोखाधड़ी" : lang === 'gu' ? "વીજળી બિલ છેતરપિંડી" : "Electricity Bill Scam", riskLevel: "High", trend: "rising" },
+        { state: "Uttar Pradesh", count: 41, topScamType: lang === 'hi' ? "केबीसी लॉटरी" : lang === 'gu' ? "કેબીસી લોટરી" : "KBC Lottery Scam", riskLevel: "High", trend: "stable" },
+        { state: "Maharashtra", count: 35, topScamType: lang === 'hi' ? "रिमोट एक्सेस" : lang === 'gu' ? "રિમોટ એક્સેસ" : "Remote Access Fraud", riskLevel: "High", trend: "rising" },
+        { state: "Rajasthan", count: 22, topScamType: lang === 'hi' ? "केवाईसी धोखाधड़ी" : lang === 'gu' ? "KYC છેતરપિંડી" : "KYC Suspension SMS", riskLevel: "Medium", trend: "stable" },
+        { state: "Bihar", count: 18, topScamType: lang === 'hi' ? "नकली नौकरी" : lang === 'gu' ? "નકલી નોકરી" : "Fake Job Offers", riskLevel: "Medium", trend: "rising" },
+        { state: "Karnataka", count: 29, topScamType: lang === 'hi' ? "निवेश धोखाधड़ी" : lang === 'gu' ? "રોકાણ છેતરપિંડી" : "Investment Fraud", riskLevel: "Medium", trend: "falling" },
+        { state: "Delhi", count: 38, topScamType: lang === 'hi' ? "फिशिंग" : lang === 'gu' ? "ફિશિંગ" : "Phishing & OTP Fraud", riskLevel: "High", trend: "stable" },
+        { state: "Tamil Nadu", count: 14, topScamType: lang === 'hi' ? "नकली लोन ऐप" : lang === 'gu' ? "નકલી લોન એપ" : "Fake Loan Apps", riskLevel: "Low", trend: "falling" }
+      ],
+      summary: lang === 'hi' ? "भारत में साइबर धोखाधड़ी की घटनाएं बढ़ रही हैं, खासकर उत्तरी और पश्चिमी राज्यों में।" :
+               lang === 'gu' ? "ભારતમાં સાઈબર છેતરપિંડીના કેસો વધી રહ્યા છે, ખાસ કરીને ઉત્તરી અને પશ્ચિમી રાજ્યોમાં." :
+               "Cyber fraud incidents are rising across India, especially in northern and western states."
+    };
+  }
+}
+
 module.exports = {
   analyzeMessage,
   analyzeUpiRequest,
-  analyzeReportAuth
+  analyzeReportAuth,
+  getCommunityStats
 };

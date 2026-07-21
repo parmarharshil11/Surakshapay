@@ -3,12 +3,50 @@ import { ShieldCheck, AlertTriangle, ShieldX, Sparkles, CheckSquare, XCircle, Vo
 import ShareCard from './ShareCard';
 import jsQR from 'jsqr';
 
+// ── SVG Donut Chart helper ────────────────────────────────────────────
+function RiskDonutChart({ score, classification }) {
+  const radius = 48;
+  const stroke = 10;
+  const normalizedRadius = radius - stroke / 2;
+  const circumference = 2 * Math.PI * normalizedRadius;
+  const filled = circumference - (score / 100) * circumference;
+
+  const color = classification === 'Scam' ? '#ef4444' :
+                classification === 'Suspicious' ? '#f59e0b' : '#22c55e';
+  const trackColor = classification === 'Scam' ? '#fee2e2' :
+                     classification === 'Suspicious' ? '#fef3c7' : '#dcfce7';
+  const darkTrack = classification === 'Scam' ? '#450a0a' :
+                    classification === 'Suspicious' ? '#451a03' : '#052e16';
+
+  return (
+    <div className="flex flex-col items-center justify-center gap-1">
+      <svg width={radius * 2} height={radius * 2} style={{ transform: 'rotate(-90deg)' }}>
+        <circle cx={radius} cy={radius} r={normalizedRadius} fill="none" stroke={trackColor} className="dark:hidden" strokeWidth={stroke} />
+        <circle cx={radius} cy={radius} r={normalizedRadius} fill="none" stroke={darkTrack} className="hidden dark:block" strokeWidth={stroke} />
+        <circle
+          cx={radius} cy={radius} r={normalizedRadius}
+          fill="none" stroke={color} strokeWidth={stroke}
+          strokeDasharray={circumference} strokeDashoffset={filled}
+          strokeLinecap="round"
+          style={{ transition: 'stroke-dashoffset 1s ease-out' }}
+        />
+        <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle"
+          fontSize="16" fontWeight="bold" fill={color}
+          style={{ transform: 'rotate(90deg)', transformOrigin: '50% 50%' }}>
+          {score}%
+        </text>
+      </svg>
+    </div>
+  );
+}
+
 export default function UpiChecker({ t, language, onScanComplete, onActivityPerformed }) {
   const [upiId, setUpiId] = useState('');
   const [amount, setAmount] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
+  const [ttsToast, setTtsToast] = useState('');
 
   // QR scanner state
   const [qrOpen, setQrOpen] = useState(false);
@@ -31,6 +69,13 @@ export default function UpiChecker({ t, language, onScanComplete, onActivityPerf
       window.speechSynthesis?.removeEventListener?.('end', handleSpeechEnd);
     };
   }, []);
+
+  // Dismiss TTS toast after 5 seconds
+  useEffect(() => {
+    if (!ttsToast) return;
+    const tid = setTimeout(() => setTtsToast(''), 5000);
+    return () => clearTimeout(tid);
+  }, [ttsToast]);
 
   // ── QR CAMERA HELPERS ──────────────────────────────────────────
   const stopQrCamera = useCallback(() => {
@@ -267,23 +312,25 @@ export default function UpiChecker({ t, language, onScanComplete, onActivityPerf
 
     const SpeechSynthesisUtterance = window.SpeechSynthesisUtterance;
     if (!window.speechSynthesis || !SpeechSynthesisUtterance) {
-      alert("Voice features not supported in this browser.");
+      setTtsToast(language === 'gu' ? 'આ બ્રાઉઝરમાં ભાષણ સૂવિધા ઉપલબ્ધ નથી.' :
+                  language === 'hi' ? 'इस ब्राउज़र में भाषण सुविधा उपलब्ध नहीं है।' :
+                  'Speech synthesis is not supported in this browser.');
       return;
     }
 
-    let statusText = "";
+    let statusText = '';
     if (result.classification === 'Scam') {
-      statusText = language === 'hi' ? "चेतावनी: यह यूपीआई अनुरोध धोखाधड़ी है।" :
-                   language === 'gu' ? "ચેતવણી: આ UPI ચુકવણી છેતરપિંડી છે." :
-                   "Warning: This UPI request is classified as a Scam.";
+      statusText = language === 'hi' ? 'चेतावनी: यह यूपीआई अनुरोध धोखाधड़ी है।' :
+                   language === 'gu' ? 'ચેતવણી: આ UPI ચુકવણી છેતરપિંડી છે.' :
+                   'Warning: This UPI request is classified as a Scam.';
     } else if (result.classification === 'Suspicious') {
-      statusText = language === 'hi' ? "ध्यान दें: यह यूपीआई आईडी संदिग्ध है।" :
-                   language === 'gu' ? "ધ્યાન આપો: આ UPI આઈડી શંકાસ્પદ છે." :
-                   "Attention: This UPI ID is classified as Suspicious.";
+      statusText = language === 'hi' ? 'ध्यान दें: यह यूपीआई आईडी संदिग्ध है।' :
+                   language === 'gu' ? 'ધ્યાન આપો: આ UPI આઈડી શંકાસ્પદ છે.' :
+                   'Attention: This UPI ID is classified as Suspicious.';
     } else {
-      statusText = language === 'hi' ? "यह यूपीआई आईडी सुरक्षित है।" :
-                   language === 'gu' ? "આ UPI આઈડી સુરક્ષિત લાગે છે." :
-                   "This UPI ID appears to be Safe.";
+      statusText = language === 'hi' ? 'यह यूपीआई आईडी सुरक्षित है।' :
+                   language === 'gu' ? 'આ UPI આઈડી સુરક્ષિત લાગે છે.' :
+                   'This UPI ID appears to be Safe.';
     }
 
     const speakContent = `${statusText} ${result.explanation}`;
@@ -291,38 +338,66 @@ export default function UpiChecker({ t, language, onScanComplete, onActivityPerf
     const targetLang = language === 'hi' ? 'hi-IN' : language === 'gu' ? 'gu-IN' : 'en-US';
     utterance.lang = targetLang;
 
-    // Force voice selection for the correct accent
+    const findVoice = () => {
+      const voices = window.speechSynthesis.getVoices();
+      if (language === 'gu') {
+        return voices.find(v => /gu[-_]IN/i.test(v.lang)) ||
+               voices.find(v => /gujarati/i.test(v.name) || v.name.includes('ગુજ')) ||
+               voices.find(v => /gu/i.test(v.lang)) ||
+               voices.find(v => /hi[-_]IN/i.test(v.lang)) ||
+               null;
+      }
+      if (language === 'hi') {
+        return voices.find(v => /hi[-_]IN/i.test(v.lang)) ||
+               voices.find(v => /hindi/i.test(v.name) || v.name.includes('हिन्दी')) ||
+               voices.find(v => /hi/i.test(v.lang)) ||
+               null;
+      }
+      return voices.find(v => /en[-_](US|GB|IN)/i.test(v.lang)) ||
+             voices.find(v => /en/i.test(v.lang)) ||
+             null;
+    };
+
+    const doSpeak = () => {
+      const voice = findVoice();
+      if (language !== 'en' && !voice) {
+        const msg = language === 'gu'
+          ? 'ગુજરાતી TTS ઉપલબ્ધ નથી. Windows Settings > Time & Language > ગુજરાતી ઇન્સ્ટોલ કરો. હવે ઈંગ્લિશ અવાજ વાપરીએ.'
+          : 'हिंदी आवाज़ उपलब्ध नहीं है। Windows Settings > Time & Language में हिंदी डाउनलोड करें। अभी अंग्रेज़ी में बोलते हैं।';
+        setTtsToast(msg);
+        utterance.lang = 'en-US';
+      } else if (voice) {
+        utterance.voice = voice;
+      }
+      utterance.onstart = () => setSpeaking(true);
+      utterance.onend = () => setSpeaking(false);
+      utterance.onerror = () => setSpeaking(false);
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utterance);
+    };
+
     const voices = window.speechSynthesis.getVoices();
-    let voice = voices.find(v => v.lang.replace('_', '-').toLowerCase().startsWith(language.toLowerCase()));
-    
-    if (!voice && language === 'gu') {
-      voice = voices.find(v => v.name.toLowerCase().includes('gujarati') || v.name.includes('ગુજરાતી'));
+    if (voices.length > 0) {
+      doSpeak();
+    } else {
+      window.speechSynthesis.onvoiceschanged = () => {
+        window.speechSynthesis.onvoiceschanged = null;
+        doSpeak();
+      };
     }
-    if (!voice && language === 'hi') {
-      voice = voices.find(v => v.name.toLowerCase().includes('hindi') || v.name.includes('हिन्दी'));
-    }
-
-    // Windows usually lacks regional TTS out-of-the-box. Show helpful alert.
-    if (voices.length > 0 && !voice && language !== 'en' && navigator.userAgent.includes('Windows')) {
-      alert(language === 'gu' 
-        ? "Windows PC માં ગુજરાતી અવાજ (TTS) ઇન્સ્ટોલ કરેલ નથી. કૃપા કરીને Windows Settings > Time & Language માં જઈને 'Gujarati' ભાષા ડાઉનલોડ કરો." 
-        : "Windows PC में हिंदी आवाज़ (TTS) इंस्टॉल नहीं है। कृपया Windows Settings > Time & Language में जाकर 'Hindi' भाषा डाउनलोड करें।");
-    }
-
-    if (voice) {
-      utterance.voice = voice;
-    }
-
-    utterance.onstart = () => setSpeaking(true);
-    utterance.onend = () => setSpeaking(false);
-    utterance.onerror = () => setSpeaking(false);
-
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(utterance);
   };
 
   return (
     <div className="space-y-6 animate-fade-in max-w-4xl mx-auto">
+
+      {/* TTS Toast notification */}
+      {ttsToast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 max-w-sm w-full px-4 py-3 bg-amber-50 dark:bg-amber-950/90 border border-amber-300 dark:border-amber-700 rounded-2xl shadow-xl flex items-start gap-2 animate-fade-in">
+          <span className="text-amber-600 dark:text-amber-400 text-base leading-none mt-0.5">🔊</span>
+          <p className="text-amber-800 dark:text-amber-200 text-xs font-medium leading-relaxed flex-1">{ttsToast}</p>
+          <button onClick={() => setTtsToast('')} className="text-amber-400 hover:text-amber-600 text-xs font-bold cursor-pointer">✕</button>
+        </div>
+      )}
 
       {/* QR Camera Modal */}
       {qrOpen && (
@@ -596,20 +671,22 @@ export default function UpiChecker({ t, language, onScanComplete, onActivityPerf
                 </button>
               </div>
 
-              {/* Confidence Gauge */}
-              <div className="space-y-1.5">
-                <div className="flex justify-between text-xs font-semibold text-slate-500 dark:text-slate-400">
-                  <span>{t.smsRiskLevel}</span>
-                  <span>{t.smsConfidence}: {result.score}%</span>
-                </div>
-                <div className="w-full bg-slate-100 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden">
-                  <div
-                    style={{ width: `${result.score}%` }}
-                    className={`h-full rounded-full transition-all duration-500 ${
-                      result.classification === 'Scam' ? 'bg-red-500' :
-                      result.classification === 'Suspicious' ? 'bg-amber-500' : 'bg-green-500'
-                    }`}
-                  ></div>
+              {/* Donut Risk Chart */}
+              <div className="flex items-center gap-4 py-2">
+                <RiskDonutChart score={result.score} classification={result.classification} />
+                <div className="flex-1 space-y-1.5">
+                  <div className="flex justify-between text-xs font-semibold text-slate-500 dark:text-slate-400">
+                    <span>{t.smsRiskLevel}</span>
+                    <span>{t.smsConfidence}: {result.score}%</span>
+                  </div>
+                  <div className="w-full bg-slate-100 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                    <div
+                      style={{ width: `${result.score}%` }}
+                      className={`h-full rounded-full transition-all duration-500 ${
+                        result.classification === 'Scam' ? 'bg-red-500' :
+                        result.classification === 'Suspicious' ? 'bg-amber-500' : 'bg-green-500'
+                      }`}
+                    /></div>
                 </div>
               </div>
 
@@ -688,6 +765,7 @@ export default function UpiChecker({ t, language, onScanComplete, onActivityPerf
                   text={`UPI ID: ${upiId}, Amount: ₹${amount}`}
                   explanation={result.explanation}
                   language={language}
+                  score={result.score}
                   t={t}
                 />
               )}

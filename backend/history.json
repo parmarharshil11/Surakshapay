@@ -1,5 +1,16 @@
 [
   {
+    "id": "check_1784638527263_1dod0rvyt",
+    "timestamp": "2026-07-21T12:55:27.263Z",
+    "type": "message",
+    "inputText": "Dear customer, your bank account is suspended due to pending KYC verification. Please call bank manager at 98765-43210 immediately to update.",
+    "score": 50,
+    "classification": "Suspicious",
+    "matchedKeywords": [],
+    "explanation": "AI service is temporarily unavailable. The message may be suspicious. Avoid clicking unknown links and verify the sender's identity directly.",
+    "lang": "en"
+  },
+  {
     "id": "check_1784556033968_1vasqcttk",
     "timestamp": "2026-07-20T14:00:33.968Z",
     "type": "message",

@@ -4,10 +4,79 @@ import Tesseract from 'tesseract.js';
 import DOMPurify from 'dompurify';
 import ShareCard from './ShareCard';
 
+// ── SVG Donut Chart helper ────────────────────────────────────────────
+function RiskDonutChart({ score, classification }) {
+  const radius = 48;
+  const stroke = 10;
+  const normalizedRadius = radius - stroke / 2;
+  const circumference = 2 * Math.PI * normalizedRadius;
+  const filled = circumference - (score / 100) * circumference;
+
+  const color = classification === 'Scam' ? '#ef4444' :
+                classification === 'Suspicious' ? '#f59e0b' : '#22c55e';
+  const trackColor = classification === 'Scam' ? '#fee2e2' :
+                     classification === 'Suspicious' ? '#fef3c7' : '#dcfce7';
+  const darkTrack = classification === 'Scam' ? '#450a0a' :
+                    classification === 'Suspicious' ? '#451a03' : '#052e16';
+
+  return (
+    <div className="flex flex-col items-center justify-center gap-1">
+      <svg width={radius * 2} height={radius * 2} style={{ transform: 'rotate(-90deg)' }}>
+        {/* Track */}
+        <circle
+          cx={radius}
+          cy={radius}
+          r={normalizedRadius}
+          fill="none"
+          stroke={trackColor}
+          className="dark:hidden"
+          strokeWidth={stroke}
+        />
+        <circle
+          cx={radius}
+          cy={radius}
+          r={normalizedRadius}
+          fill="none"
+          stroke={darkTrack}
+          className="hidden dark:block"
+          strokeWidth={stroke}
+        />
+        {/* Filled arc */}
+        <circle
+          cx={radius}
+          cy={radius}
+          r={normalizedRadius}
+          fill="none"
+          stroke={color}
+          strokeWidth={stroke}
+          strokeDasharray={circumference}
+          strokeDashoffset={filled}
+          strokeLinecap="round"
+          style={{ transition: 'stroke-dashoffset 1s ease-out' }}
+        />
+        {/* Center label – undo rotation */}
+        <text
+          x="50%"
+          y="50%"
+          dominantBaseline="middle"
+          textAnchor="middle"
+          fontSize="16"
+          fontWeight="bold"
+          fill={color}
+          style={{ transform: 'rotate(90deg)', transformOrigin: '50% 50%' }}
+        >
+          {score}%
+        </text>
+      </svg>
+    </div>
+  );
+}
+
 export default function MessageChecker({ t, language, onScanComplete, onActivityPerformed }) {
   const [text, setText] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
+  const [ttsToast, setTtsToast] = useState(''); // non-blocking TTS warning
 
   // Web Speech API States
   const [listening, setListening] = useState(false);
@@ -34,6 +103,13 @@ export default function MessageChecker({ t, language, onScanComplete, onActivity
       window.speechSynthesis?.removeEventListener?.('end', handleSpeechEnd);
     };
   }, []);
+
+  // Dismiss TTS toast after 5 seconds
+  useEffect(() => {
+    if (!ttsToast) return;
+    const t = setTimeout(() => setTtsToast(''), 5000);
+    return () => clearTimeout(t);
+  }, [ttsToast]);;
 
   const MOCK_TEMPLATES = {
     kyc: {
@@ -190,23 +266,25 @@ export default function MessageChecker({ t, language, onScanComplete, onActivity
 
     const SpeechSynthesisUtterance = window.SpeechSynthesisUtterance;
     if (!window.speechSynthesis || !SpeechSynthesisUtterance) {
-      alert("Speech features are not supported in this browser.");
+      setTtsToast(language === 'gu' ? 'આ બ્રાઉઝરમાં ભાષણ સૂવિધા ઉપલબ્ધ નથી.' :
+                  language === 'hi' ? 'इस ब्राउज़र में भाषण सुविधा उपलब्ध नहीं है।' :
+                  'Speech synthesis is not supported in this browser.');
       return;
     }
 
-    let resultPrefix = "";
+    let resultPrefix = '';
     if (result.classification === 'Scam') {
-      resultPrefix = language === 'hi' ? "चेतावनी: यह संदेश एक स्कैम है।" :
-                     language === 'gu' ? "ચેતવણી: આ મેસેજ છેતરપિંડી છે." :
-                     "Warning: This message is detected as a Scam.";
+      resultPrefix = language === 'hi' ? 'चेतावनी: यह संदेश एक स्कैम है।' :
+                     language === 'gu' ? 'ચેતવણી: આ મેસેજ છેતરપિંડી છે.' :
+                     'Warning: This message is detected as a Scam.';
     } else if (result.classification === 'Suspicious') {
-      resultPrefix = language === 'hi' ? "ध्यान दें: यह संदेश संदिग्ध है।" :
-                     language === 'gu' ? "ધ્યાન આપો: આ મેસેજ શંકાસ્પદ છે." :
-                     "Attention: This message is classified as Suspicious.";
+      resultPrefix = language === 'hi' ? 'ध्यान दें: यह संदेश संदिग्ध है।' :
+                     language === 'gu' ? 'ધ્યાન આપો: આ મેસેજ શંકાસ્પદ છે.' :
+                     'Attention: This message is classified as Suspicious.';
     } else {
-      resultPrefix = language === 'hi' ? "यह संदेश सुरक्षित दिख रहा है।" :
-                     language === 'gu' ? "આ મેસેજ સુરક્ષિત લાગે છે." :
-                     "This message appears to be Safe.";
+      resultPrefix = language === 'hi' ? 'यह संदेश सुरक्षित दिख रहा है।' :
+                     language === 'gu' ? 'આ મેસેજ સુરક્ષિત લાગે છે.' :
+                     'This message appears to be Safe.';
     }
 
     const speakText = `${resultPrefix} ${result.explanation}`;
@@ -214,34 +292,57 @@ export default function MessageChecker({ t, language, onScanComplete, onActivity
     const targetLang = language === 'hi' ? 'hi-IN' : language === 'gu' ? 'gu-IN' : 'en-US';
     utterance.lang = targetLang;
 
-    // Force voice selection for the correct accent
+    // Helper: find the best available voice for the target language
+    const findVoice = () => {
+      const voices = window.speechSynthesis.getVoices();
+      if (language === 'gu') {
+        return voices.find(v => /gu[-_]IN/i.test(v.lang)) ||
+               voices.find(v => /gujarati/i.test(v.name) || v.name.includes('ગુજ')) ||
+               voices.find(v => /gu/i.test(v.lang)) ||
+               voices.find(v => /hi[-_]IN/i.test(v.lang)) || // Hindi as near-fallback
+               null;
+      }
+      if (language === 'hi') {
+        return voices.find(v => /hi[-_]IN/i.test(v.lang)) ||
+               voices.find(v => /hindi/i.test(v.name) || v.name.includes('हिन्दी')) ||
+               voices.find(v => /hi/i.test(v.lang)) ||
+               null;
+      }
+      return voices.find(v => /en[-_](US|GB|IN)/i.test(v.lang)) ||
+             voices.find(v => /en/i.test(v.lang)) ||
+             null;
+    };
+
+    const doSpeak = () => {
+      const voice = findVoice();
+      if (language !== 'en' && !voice) {
+        // Show friendly in-page toast instead of blocking alert
+        const msg = language === 'gu'
+          ? 'ગુજરાતી TTS ઉપલબ્ધ નથી. Windows Settings > Time & Language > Add Language > ગુજરાતી ઇન્સ્ટોલ કરો. હવે ઈંગ્લિશ અવાજ વ્રપ્ત કરીએ.'
+          : 'हिंदी आवाज़ उपलब्ध नहीं है। Windows Settings > Time & Language में हिंदी भाषा डाउनलोड करें। अभी अंग्रेज़ी आवाज़ में बोलते हैं।';
+        setTtsToast(msg);
+        // Still speak using default voice as fallback
+        utterance.lang = 'en-US';
+      } else if (voice) {
+        utterance.voice = voice;
+      }
+      utterance.onstart = () => setSpeaking(true);
+      utterance.onend = () => setSpeaking(false);
+      utterance.onerror = () => setSpeaking(false);
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utterance);
+    };
+
+    // Voices may not be loaded yet — wait for voiceschanged event
     const voices = window.speechSynthesis.getVoices();
-    let voice = voices.find(v => v.lang.replace('_', '-').toLowerCase().startsWith(language.toLowerCase()));
-    
-    if (!voice && language === 'gu') {
-      voice = voices.find(v => v.name.toLowerCase().includes('gujarati') || v.name.includes('ગુજરાતી'));
+    if (voices.length > 0) {
+      doSpeak();
+    } else {
+      window.speechSynthesis.onvoiceschanged = () => {
+        window.speechSynthesis.onvoiceschanged = null;
+        doSpeak();
+      };
     }
-    if (!voice && language === 'hi') {
-      voice = voices.find(v => v.name.toLowerCase().includes('hindi') || v.name.includes('हिन्दी'));
-    }
-
-    // Windows usually lacks regional TTS out-of-the-box. Show helpful alert.
-    if (voices.length > 0 && !voice && language !== 'en' && navigator.userAgent.includes('Windows')) {
-      alert(language === 'gu' 
-        ? "Windows PC માં ગુજરાતી અવાજ (TTS) ઇન્સ્ટોલ કરેલ નથી. કૃપા કરીને Windows Settings > Time & Language માં જઈને 'Gujarati' ભાષા ડાઉનલોડ કરો." 
-        : "Windows PC में हिंदी आवाज़ (TTS) इंस्टॉल नहीं है। कृपया Windows Settings > Time & Language में जाकर 'Hindi' भाषा डाउनलोड करें।");
-    }
-
-    if (voice) {
-      utterance.voice = voice;
-    }
-
-    utterance.onstart = () => setSpeaking(true);
-    utterance.onend = () => setSpeaking(false);
-    utterance.onerror = () => setSpeaking(false);
-
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(utterance);
   };
 
   // OCR File Reading Scanner
@@ -313,6 +414,14 @@ export default function MessageChecker({ t, language, onScanComplete, onActivity
 
   return (
     <div className="space-y-6 animate-fade-in max-w-4xl mx-auto">
+      {/* TTS Toast notification */}
+      {ttsToast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 max-w-sm w-full px-4 py-3 bg-amber-50 dark:bg-amber-950/90 border border-amber-300 dark:border-amber-700 rounded-2xl shadow-xl flex items-start gap-2 animate-fade-in">
+          <span className="text-amber-600 dark:text-amber-400 text-base leading-none mt-0.5">🔊</span>
+          <p className="text-amber-800 dark:text-amber-200 text-xs font-medium leading-relaxed flex-1">{ttsToast}</p>
+          <button onClick={() => setTtsToast('')} className="text-amber-400 hover:text-amber-600 text-xs font-bold cursor-pointer">✕</button>
+        </div>
+      )}
       {/* Title */}
       <div>
         <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">
@@ -515,20 +624,22 @@ export default function MessageChecker({ t, language, onScanComplete, onActivity
                 </button>
               </div>
 
-              {/* Confidence Gauge & Score */}
-              <div className="space-y-1.5">
-                <div className="flex justify-between text-xs font-semibold text-slate-500 dark:text-slate-400">
-                  <span>{t.smsRiskLevel}</span>
-                  <span>{t.smsConfidence}: {result.score}%</span>
-                </div>
-                <div className="w-full bg-slate-100 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden">
-                  <div
-                    style={{ width: `${result.score}%` }}
-                    className={`h-full rounded-full transition-all duration-500 ${
-                      result.classification === 'Scam' ? 'bg-red-500' :
-                      result.classification === 'Suspicious' ? 'bg-amber-500' : 'bg-green-500'
-                    }`}
-                  ></div>
+              {/* Donut Risk Chart */}
+              <div className="flex items-center gap-4 py-2">
+                <RiskDonutChart score={result.score} classification={result.classification} />
+                <div className="flex-1 space-y-1.5">
+                  <div className="flex justify-between text-xs font-semibold text-slate-500 dark:text-slate-400">
+                    <span>{t.smsRiskLevel}</span>
+                    <span>{t.smsConfidence}: {result.score}%</span>
+                  </div>
+                  <div className="w-full bg-slate-100 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                    <div
+                      style={{ width: `${result.score}%` }}
+                      className={`h-full rounded-full transition-all duration-500 ${
+                        result.classification === 'Scam' ? 'bg-red-500' :
+                        result.classification === 'Suspicious' ? 'bg-amber-500' : 'bg-green-500'
+                      }`}
+                    /></div>
                 </div>
               </div>
 
@@ -611,6 +722,7 @@ export default function MessageChecker({ t, language, onScanComplete, onActivity
                   text={text}
                   explanation={result.explanation}
                   language={language}
+                  score={result.score}
                   t={t}
                 />
               )}
