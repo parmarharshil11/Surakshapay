@@ -156,10 +156,10 @@ function App() {
               <NotificationBell language={language} t={t} />
             </div>
 
-            {/* Dark Mode Toggle (Hidden on Mobile) */}
+            {/* Dark Mode Toggle */}
             <button
               onClick={() => setDarkMode(!darkMode)}
-              className="hidden sm:block p-1.5 sm:p-2 rounded-xl bg-blue-800 hover:bg-blue-700 text-blue-200 hover:text-white transition-colors cursor-pointer border border-blue-750"
+              className="p-1.5 sm:p-2 rounded-xl bg-blue-800 hover:bg-blue-700 text-blue-200 hover:text-white transition-colors cursor-pointer border border-blue-750"
               aria-label={darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
             >
               {darkMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4" />}
