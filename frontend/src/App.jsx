@@ -137,20 +137,20 @@ function App() {
           {/* Logo & Brand */}
           <button 
             onClick={() => setTab('home')}
-            className="flex items-center gap-2 cursor-pointer focus:outline-none"
+            className="flex items-center gap-1.5 sm:gap-2 cursor-pointer focus:outline-none shrink-0"
             aria-label="Go to Home"
           >
-            <div className="p-1.5 bg-blue-700/60 rounded-xl border border-blue-500/30">
-              <Shield className="w-6 h-6 text-green-400 fill-green-400/20" />
+            <div className="p-1 sm:p-1.5 bg-blue-700/60 rounded-xl border border-blue-500/30">
+              <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-green-400 fill-green-400/20" />
             </div>
             <div className="text-left">
-              <span className="text-xl font-black tracking-tight block">{t.brandName}</span>
+              <span className="text-lg sm:text-xl font-black tracking-tight block">SuRakshaPay</span>
               <span className="text-[10px] text-blue-200/90 font-medium -mt-1 block max-sm:hidden">{t.tagline}</span>
             </div>
           </button>
 
           {/* Controls: Notification Bell + Dark Mode + i18n */}
-          <div className="flex items-center gap-1.5 sm:gap-3">
+          <div className="flex items-center gap-1 sm:gap-3 shrink-0">
             {/* Notification Bell alert toggle */}
             <NotificationBell language={language} t={t} />
 
@@ -181,7 +181,8 @@ function App() {
                   language === 'hi' ? 'bg-blue-600 text-white shadow-sm' : 'text-blue-300 hover:text-white'
                 }`}
               >
-                हिन्दी
+                <span className="hidden sm:inline">हिन्दी</span>
+                <span className="sm:hidden">HI</span>
               </button>
               <button
                 onClick={() => setLanguage('gu')}
@@ -190,7 +191,8 @@ function App() {
                   language === 'gu' ? 'bg-blue-600 text-white shadow-sm' : 'text-blue-300 hover:text-white'
                 }`}
               >
-                ગુજરાતી
+                <span className="hidden sm:inline">ગુજરાતી</span>
+                <span className="sm:hidden">GU</span>
               </button>
             </div>
           </div>
