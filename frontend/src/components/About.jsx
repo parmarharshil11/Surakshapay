@@ -197,7 +197,7 @@ export default function About({ t, language }) {
             </div>
             <div>
               <h4 className="font-bold text-slate-800 dark:text-slate-100 text-base">Harshil Parmar</h4>
-              <p className="text-xs text-blue-600 dark:text-blue-400 font-semibold">{getLocalizedText("AI & Full-Stack Architect", "AI और फुल-स्टैक आर्किटेक्ट", "AI અને ફુલ-સ્ટોક આર્કિટેક્ટ")}</p>
+              <p className="text-xs text-blue-600 dark:text-blue-400 font-semibold">{getLocalizedText("Full-Stack Developer", "फुल-स्टैक डेवलपर", "ફુલ-સ્ટોક ડેવલપર")}</p>
             </div>
           </div>
 
@@ -207,7 +207,7 @@ export default function About({ t, language }) {
             </div>
             <div>
               <h4 className="font-bold text-slate-800 dark:text-slate-100 text-base">Kush Thacker</h4>
-              <p className="text-xs text-indigo-600 dark:text-indigo-400 font-semibold">{getLocalizedText("Frontend & UI/UX Specialist", "फ्रंटएंड और UI/UX विशेषज्ञ", "ફ્રન્ટએન્ડ અને UI/UX નિષ્ણાત")}</p>
+              <p className="text-xs text-indigo-600 dark:text-indigo-400 font-semibold">{getLocalizedText("Full-Stack Developer", "फुल-स्टैक डेवलपर", "ફુલ-સ્ટોક ડેવલપર")}</p>
             </div>
           </div>
         </div>
