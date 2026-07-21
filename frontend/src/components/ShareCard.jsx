@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Share2, Download, ExternalLink, ChevronDown } from 'lucide-react';
+import { Share2, Download, ExternalLink, ChevronDown, Loader2 } from 'lucide-react';
 
 export default function ShareCard({ classification, type, text, explanation, language, t, score }) {
   // Allow user to choose report language independently of app language
   const [reportLang, setReportLang] = useState(language || 'en');
+  const [isTranslating, setIsTranslating] = useState(false);
 
   // Descriptive risk label based on score
   const getRiskLabel = (score, lang) => {
@@ -29,7 +30,30 @@ export default function ShareCard({ classification, type, text, explanation, lan
     return en;
   };
 
-  const handleDownloadImage = () => {
+  const getTranslatedExplanation = async () => {
+    if (reportLang === language) return explanation;
+    const baseUrl = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000').replace(/\/$/, '');
+    try {
+      const res = await fetch(`${baseUrl}/api/translate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: explanation, targetLang: reportLang })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        return data.translatedText || explanation;
+      }
+    } catch (err) {
+      console.error('Translation error:', err);
+    }
+    return explanation; // fallback
+  };
+
+  const handleDownloadImage = async () => {
+    setIsTranslating(true);
+    const finalExplanation = await getTranslatedExplanation();
+    setIsTranslating(false);
+
     const canvas = document.createElement('canvas');
     canvas.width = 620;
     canvas.height = 460;
@@ -139,7 +163,7 @@ export default function ShareCard({ classification, type, text, explanation, lan
 
     ctx.fillStyle = '#e2e8f0';
     ctx.font = '13px sans-serif';
-    wrapText(explanation, 30, 225, 560, 22);
+    wrapText(finalExplanation, 30, 225, 560, 22);
 
     // Footer divider
     ctx.strokeStyle = '#1e293b';
@@ -178,7 +202,11 @@ export default function ShareCard({ classification, type, text, explanation, lan
     link.click();
   };
 
-  const handleShareWhatsApp = () => {
+  const handleShareWhatsApp = async () => {
+    setIsTranslating(true);
+    const finalExplanation = await getTranslatedExplanation();
+    setIsTranslating(false);
+
     const alertHeader = classification === 'Scam'
       ? getLocalizedText('🚨 *SCAM ALERT by SuRakshaPay* 🚨', '🚨 *सुरक्षापे स्कैम चेतावनी* 🚨', '🚨 *સુરક્ષાપે કૌભાંડ ચેતવણી* 🚨')
       : getLocalizedText('⚠️ *SUSPICIOUS MESSAGE ALERT* ⚠️', '⚠️ *संदिग्ध संदेश चेतावनी* ⚠️', '⚠️ *શંકાસ્પદ સંદેશ ચેતવણી* ⚠️');
@@ -186,10 +214,10 @@ export default function ShareCard({ classification, type, text, explanation, lan
     const riskInfo = score !== undefined ? `\n*${getLocalizedText('Risk Level', 'जोखिम स्तर', 'જોખમ સ્તર')}:* ${getRiskLabel(score, reportLang)}` : '';
 
     const body = reportLang === 'hi'
-      ? `सावधान! SuRakshaPay ने इस संदेश में खतरा पाया है:${riskInfo}\n\n*विवरण:* "${text.slice(0, 100)}..." \n\n*विश्लेषण:* ${explanation}\n\n📞 धोखाधड़ी हुई हो तो तुरंत *1930* पर कॉल करें।`
+      ? `सावधान! SuRakshaPay ने इस संदेश में खतरा पाया है:${riskInfo}\n\n*विवरण:* "${text.slice(0, 100)}..." \n\n*विश्लेषण:* ${finalExplanation}\n\n📞 धोखाधड़ी हुई हो तो तुरंत *1930* पर कॉल करें।`
       : reportLang === 'gu'
-      ? `સાવધ! SuRakshaPay એ આ સંદેશમાં જોખમ શોધ્યું:${riskInfo}\n\n*વિગત:* "${text.slice(0, 100)}..." \n\n*વિશ્લેષણ:* ${explanation}\n\n📞 છેતરપિંડી થઈ હોય તો *1930* પર તરત કોલ કરો.`
-      : `Warning! SuRakshaPay detected a financial scam threat:${riskInfo}\n\n*Details:* "${text.slice(0, 100)}..." \n\n*Analysis:* ${explanation}\n\n📞 Call *1930* immediately if you fell for a digital payment scam.`;
+      ? `સાવધ! SuRakshaPay એ આ સંદેશમાં જોખમ શોધ્યું:${riskInfo}\n\n*વિગત:* "${text.slice(0, 100)}..." \n\n*વિશ્લેષણ:* ${finalExplanation}\n\n📞 છેતરપિંડી થઈ હોય તો *1930* પર તરત કોલ કરો.`
+      : `Warning! SuRakshaPay detected a financial scam threat:${riskInfo}\n\n*Details:* "${text.slice(0, 100)}..." \n\n*Analysis:* ${finalExplanation}\n\n📞 Call *1930* immediately if you fell for a digital payment scam.`;
 
     const encodedText = encodeURIComponent(`${alertHeader}\n\n${body}`);
     window.open(`https://api.whatsapp.com/send?text=${encodedText}`, '_blank');
@@ -248,17 +276,19 @@ export default function ShareCard({ classification, type, text, explanation, lan
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1.5">
         <button
           onClick={handleDownloadImage}
-          className="flex items-center justify-center gap-2 px-3 py-2 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-300 transition-colors cursor-pointer"
+          disabled={isTranslating}
+          className="flex items-center justify-center gap-2 px-3 py-2 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-300 transition-colors cursor-pointer disabled:opacity-50"
         >
-          <Download className="w-3.5 h-3.5" />
-          <span>{language === 'hi' ? 'कार्ड डाउनलोड' : language === 'gu' ? 'કાર્ડ ડાઉનલોડ' : 'Download Card'}</span>
+          {isTranslating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5" />}
+          <span>{isTranslating ? (language === 'hi' ? 'अनुवाद कर रहे...' : language === 'gu' ? 'અનુવાદ થઈ રહ્યું...' : 'Translating...') : (language === 'hi' ? 'कार्ड डाउनलोड' : language === 'gu' ? 'કાર્ડ ડાઉનલોડ' : 'Download Card')}</span>
         </button>
         <button
           onClick={handleShareWhatsApp}
-          className="flex items-center justify-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded-xl text-xs font-bold transition-colors cursor-pointer"
+          disabled={isTranslating}
+          className="flex items-center justify-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded-xl text-xs font-bold transition-colors cursor-pointer disabled:opacity-50"
         >
-          <ExternalLink className="w-3.5 h-3.5" />
-          <span>{language === 'hi' ? 'व्हाट्सएप शेयर' : language === 'gu' ? 'વૉટ્સએપ શેર' : 'Share to WhatsApp'}</span>
+          {isTranslating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <ExternalLink className="w-3.5 h-3.5" />}
+          <span>{isTranslating ? (language === 'hi' ? 'अनुवाद कर रहे...' : language === 'gu' ? 'અનુવાદ થઈ રહ્યું...' : 'Translating...') : (language === 'hi' ? 'व्हाट्सएप शेयर' : language === 'gu' ? 'વૉટ્સએપ શેર' : 'Share to WhatsApp')}</span>
         </button>
       </div>
     </div>

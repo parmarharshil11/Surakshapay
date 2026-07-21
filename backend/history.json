@@ -1,5 +1,16 @@
 [
   {
+    "id": "check_1784639272368_oliktis9l",
+    "timestamp": "2026-07-21T13:07:52.369Z",
+    "type": "message",
+    "inputText": "Dear customer, electricity connection will be disconnected at 9:30 PM tonight because your previous month bill was not updated. Call electricity officer 90012-34567 immediately.",
+    "score": 50,
+    "classification": "Suspicious",
+    "matchedKeywords": [],
+    "explanation": "AI service is temporarily unavailable. The message may be suspicious. Avoid clicking unknown links and verify the sender's identity directly.",
+    "lang": "en"
+  },
+  {
     "id": "check_1784638527263_1dod0rvyt",
     "timestamp": "2026-07-21T12:55:27.263Z",
     "type": "message",

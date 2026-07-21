@@ -223,9 +223,35 @@ Respond strictly with a JSON object — no markdown, no extra text:
   }
 }
 
+/**
+ * Translates a given text to a target language.
+ */
+async function translateText(text, targetLang) {
+  if (targetLang === 'en') return text; // No translation needed
+
+  const langName = targetLang === 'hi' ? 'Hindi' : targetLang === 'gu' ? 'Gujarati' : 'English';
+  
+  const prompt = `
+Translate the following cyber fraud analysis explanation into ${langName}. 
+Keep the translation natural, accurate, and easy to understand for a rural Indian user.
+Do not add any extra text or conversational filler, just return the translated text.
+
+Text to translate:
+"${text}"
+`;
+
+  try {
+    return await callGeminiAPI(prompt);
+  } catch (error) {
+    console.error("AI Translation Error:", error.message);
+    return text; // Fallback to original text if API fails
+  }
+}
+
 module.exports = {
   analyzeMessage,
   analyzeUpiRequest,
   analyzeReportAuth,
-  getCommunityStats
+  getCommunityStats,
+  translateText
 };

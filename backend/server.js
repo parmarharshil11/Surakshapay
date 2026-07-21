@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const { analyzeMessage, analyzeUpiRequest, analyzeReportAuth, getCommunityStats } = require('./ai');
+const { analyzeMessage, analyzeUpiRequest, analyzeReportAuth, getCommunityStats, translateText } = require('./ai');
 const { getHistory, addHistoryEntry, clearHistory } = require('./db');
 
 const app = express();
@@ -259,6 +259,22 @@ app.get('/api/community-stats', async (req, res) => {
   } catch (err) {
     console.error('Community stats error:', err);
     return res.status(500).json({ error: 'Failed to fetch community stats' });
+  }
+});
+
+// 8. On-Demand Translation Endpoint
+app.post('/api/translate', async (req, res) => {
+  const { text, targetLang } = req.body;
+  if (!text || !targetLang) {
+    return res.status(400).json({ error: 'text and targetLang are required' });
+  }
+
+  try {
+    const translatedText = await translateText(text, targetLang);
+    return res.json({ translatedText });
+  } catch (err) {
+    console.error('Translation error:', err);
+    return res.status(500).json({ error: 'Failed to translate text' });
   }
 });
 
