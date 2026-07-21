@@ -3,7 +3,7 @@ import { AlertTriangle, CheckCircle, ShieldAlert, Sparkles, Trash2, Mic, MicOff,
 import Tesseract from 'tesseract.js';
 import DOMPurify from 'dompurify';
 import ShareCard from './ShareCard';
-import { speakText } from '../utils/ttsHelper';
+import { speakText, stopSpeech } from '../utils/ttsHelper';
 
 // ── SVG Donut Chart helper ────────────────────────────────────────────
 function RiskDonutChart({ score, classification }) {
@@ -277,7 +277,7 @@ export default function MessageChecker({ t, language, onScanComplete, onActivity
     if (!result) return;
 
     if (speaking || ttsLoading) {
-      window.speechSynthesis.cancel();
+      stopSpeech();
       setSpeaking(false);
       setTtsLoading(false);
       return;

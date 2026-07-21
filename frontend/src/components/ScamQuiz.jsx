@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Award, AlertCircle, CheckCircle2, XCircle, Volume2, RotateCcw, ShieldCheck, ArrowRight, Zap, Sparkles, RefreshCw, Loader2 } from 'lucide-react';
-import { speakText } from '../utils/ttsHelper';
+import { speakText, stopSpeech } from '../utils/ttsHelper';
 
 const DEFAULT_QUIZ_SCENARIOS = [
   {
@@ -279,7 +279,7 @@ export default function ScamQuiz({ t, language, onActivityPerformed }) {
 
   const handleSpeakExplanation = () => {
     if (speaking || ttsLoading) {
-      window.speechSynthesis.cancel();
+      stopSpeech();
       setSpeaking(false);
       setTtsLoading(false);
       return;

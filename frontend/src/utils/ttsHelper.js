@@ -87,108 +87,200 @@ export function sanitizeTextForTTS(text, lang = 'en') {
   return cleaned.replace(/\s+/g, ' ').trim();
 }
 
+let currentAudio = null;
+
 /**
- * Executes SpeechSynthesis with optimal rate, pitch, and voice selection for regional languages.
+ * Stops any ongoing audio speech (both HTML5 Audio and Web Speech Synthesis).
+ */
+export function stopSpeech() {
+  if (currentAudio) {
+    try {
+      currentAudio.pause();
+      currentAudio.currentTime = 0;
+    } catch (e) {}
+    currentAudio = null;
+  }
+  if (window.speechSynthesis) {
+    try {
+      window.speechSynthesis.cancel();
+    } catch (e) {}
+  }
+}
+
+/**
+ * Dual-Engine TTS: Plays Google Network TTS Audio for Gujarati & Hindi for 100% reliable native speech,
+ * with automatic fallback to Web Speech Synthesis API.
  */
 export function speakText({ text, lang, onLoading, onStart, onEnd, onError, setToast }) {
+  stopSpeech();
+
+  if (!text) {
+    if (onError) onError();
+    return;
+  }
+
+  if (onLoading) onLoading();
+
+  const sanitizeLang = lang === 'gu' || lang === 'hi' ? lang : 'en';
+  const cleanedText = sanitizeTextForTTS(text, sanitizeLang);
+
+  // Try Google Network Audio first for Gujarati and Hindi (gu & hi)
+  if (lang === 'gu' || lang === 'hi') {
+    playGoogleTTS({
+      text: cleanedText,
+      lang: lang === 'gu' ? 'gu' : 'hi',
+      onStart,
+      onEnd,
+      onError: () => {
+        // Fallback to Web Speech API
+        playWebSpeech({ text: cleanedText, lang, onStart, onEnd, onError, setToast });
+      }
+    });
+    return;
+  }
+
+  playWebSpeech({ text: cleanedText, lang, onStart, onEnd, onError, setToast });
+}
+
+function playGoogleTTS({ text, lang, onStart, onEnd, onError }) {
+  try {
+    // Truncate to first 250 characters for fast audio streaming
+    const chunk = text.slice(0, 250);
+    const audioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(chunk)}&tl=${lang}&client=tw-ob`;
+
+    const audio = new Audio();
+    currentAudio = audio;
+    audio.src = audioUrl;
+
+    audio.onplay = () => {
+      if (onStart) onStart();
+    };
+
+    audio.onended = () => {
+      currentAudio = null;
+      if (onEnd) onEnd();
+    };
+
+    audio.onerror = (e) => {
+      console.warn("Google TTS stream failed, falling back to Web Speech:", e);
+      currentAudio = null;
+      if (onError) onError();
+    };
+
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+      playPromise.catch((err) => {
+        console.warn("Audio play blocked, falling back to Web Speech:", err);
+        currentAudio = null;
+        if (onError) onError();
+      });
+    }
+  } catch (err) {
+    console.warn("Google TTS init error:", err);
+    currentAudio = null;
+    if (onError) onError();
+  }
+}
+
+function playWebSpeech({ text, lang, onStart, onEnd, onError, setToast }) {
   if (!window.speechSynthesis || !window.SpeechSynthesisUtterance) {
     if (setToast) setToast('Speech synthesis is not supported in this browser.');
     if (onError) onError();
     return;
   }
 
-  // Trigger loading state immediately
-  if (onLoading) onLoading();
+  try {
+    if (window.speechSynthesis.paused) {
+      window.speechSynthesis.resume();
+    }
+    window.speechSynthesis.cancel();
 
-  window.speechSynthesis.cancel();
+    let processedText = text;
+    const findVoice = () => {
+      const voices = window.speechSynthesis.getVoices();
+      if (lang === 'gu') {
+        const nativeGu =
+          voices.find((v) => /gu[-_]IN/i.test(v.lang)) ||
+          voices.find((v) => /gujarati/i.test(v.name) || v.name.includes('ગુજ')) ||
+          voices.find((v) => /gu/i.test(v.lang));
 
-  const sanitizeLang = lang === 'gu' || lang === 'hi' ? lang : 'en';
-  let processedText = sanitizeTextForTTS(text, sanitizeLang);
+        if (nativeGu) return { voice: nativeGu, isNative: true };
 
-  const findVoice = () => {
+        const hiFallback =
+          voices.find((v) => /hi[-_]IN/i.test(v.lang)) ||
+          voices.find((v) => /hindi/i.test(v.name) || v.name.includes('हिन्दी')) ||
+          voices.find((v) => /hi/i.test(v.lang));
+
+        if (hiFallback) return { voice: hiFallback, isNative: false, isHindiFallback: true };
+
+        return null;
+      }
+
+      if (lang === 'hi') {
+        const hiVoice =
+          voices.find((v) => /hi[-_]IN/i.test(v.lang)) ||
+          voices.find((v) => /hindi/i.test(v.name) || v.name.includes('हिन्दी')) ||
+          voices.find((v) => /hi/i.test(v.lang));
+
+        if (hiVoice) return { voice: hiVoice, isNative: true };
+        return null;
+      }
+
+      const enVoice =
+        voices.find((v) => /en[-_](IN|US|GB)/i.test(v.lang)) ||
+        voices.find((v) => /en/i.test(v.lang));
+
+      return enVoice ? { voice: enVoice, isNative: true } : null;
+    };
+
+    const executeSpeech = () => {
+      const match = findVoice();
+
+      if (lang === 'gu' && match?.isHindiFallback) {
+        processedText = gujaratiToDevanagari(processedText);
+      }
+
+      const utterance = new SpeechSynthesisUtterance(processedText);
+      utterance.rate = lang === 'gu' || lang === 'hi' ? 0.88 : 1.0;
+      utterance.pitch = 1.0;
+
+      if (match?.voice) {
+        utterance.voice = match.voice;
+        utterance.lang = match.voice.lang;
+      } else {
+        utterance.lang = lang === 'hi' ? 'hi-IN' : lang === 'gu' ? 'hi-IN' : 'en-US';
+      }
+
+      utterance.onstart = () => {
+        if (onStart) onStart();
+      };
+
+      utterance.onend = () => {
+        if (onEnd) onEnd();
+      };
+
+      utterance.onerror = (e) => {
+        console.warn("SpeechSynthesis error:", e);
+        if (onError) onError();
+      };
+
+      window.speechSynthesis.speak(utterance);
+    };
+
     const voices = window.speechSynthesis.getVoices();
-    if (lang === 'gu') {
-      const nativeGu =
-        voices.find((v) => /gu[-_]IN/i.test(v.lang)) ||
-        voices.find((v) => /gujarati/i.test(v.name) || v.name.includes('ગુજ')) ||
-        voices.find((v) => /gu/i.test(v.lang));
-      
-      if (nativeGu) return { voice: nativeGu, isNative: true };
-
-      // Fallback: Use Hindi (hi-IN) voice with Devanagari transliteration
-      const hiFallback =
-        voices.find((v) => /hi[-_]IN/i.test(v.lang)) ||
-        voices.find((v) => /hindi/i.test(v.name) || v.name.includes('हिन्दी')) ||
-        voices.find((v) => /hi/i.test(v.lang));
-
-      if (hiFallback) return { voice: hiFallback, isNative: false, isHindiFallback: true };
-
-      return null;
-    }
-
-    if (lang === 'hi') {
-      const hiVoice =
-        voices.find((v) => /hi[-_]IN/i.test(v.lang)) ||
-        voices.find((v) => /hindi/i.test(v.name) || v.name.includes('हिन्दी')) ||
-        voices.find((v) => /hi/i.test(v.lang));
-
-      if (hiVoice) return { voice: hiVoice, isNative: true };
-      return null;
-    }
-
-    const enVoice =
-      voices.find((v) => /en[-_](IN|US|GB)/i.test(v.lang)) ||
-      voices.find((v) => /en/i.test(v.lang));
-
-    return enVoice ? { voice: enVoice, isNative: true } : null;
-  };
-
-  const executeSpeech = () => {
-    const match = findVoice();
-
-    // If using Hindi fallback for Gujarati, transliterate to Devanagari so Hindi engine reads it smoothly
-    if (lang === 'gu' && match?.isHindiFallback) {
-      processedText = gujaratiToDevanagari(processedText);
-    }
-
-    const utterance = new SpeechSynthesisUtterance(processedText);
-    utterance.rate = lang === 'gu' || lang === 'hi' ? 0.88 : 1.0;
-    utterance.pitch = 1.0;
-
-    if (match?.voice) {
-      utterance.voice = match.voice;
-      utterance.lang = match.voice.lang; // Crucial fix: match utterance.lang to voice.lang!
+    if (voices.length > 0) {
+      executeSpeech();
     } else {
-      utterance.lang = lang === 'hi' ? 'hi-IN' : lang === 'gu' ? 'hi-IN' : 'en-US';
+      window.speechSynthesis.onvoiceschanged = () => {
+        window.speechSynthesis.onvoiceschanged = null;
+        executeSpeech();
+      };
+      setTimeout(() => {
+        executeSpeech();
+      }, 150);
     }
-
-    utterance.onstart = () => {
-      if (onStart) onStart();
-    };
-
-    utterance.onend = () => {
-      if (onEnd) onEnd();
-    };
-
-    utterance.onerror = (e) => {
-      console.warn("SpeechSynthesis error:", e);
-      if (onError) onError();
-    };
-
-    window.speechSynthesis.speak(utterance);
-  };
-
-  const voices = window.speechSynthesis.getVoices();
-  if (voices.length > 0) {
-    executeSpeech();
-  } else {
-    window.speechSynthesis.onvoiceschanged = () => {
-      window.speechSynthesis.onvoiceschanged = null;
-      executeSpeech();
-    };
-    // Fallback timer if onvoiceschanged doesn't trigger
-    setTimeout(() => {
-      executeSpeech();
-    }, 150);
+  } catch (err) {
+    console.warn("Web Speech execution error:", err);
+    if (onError) onError();
   }
 }

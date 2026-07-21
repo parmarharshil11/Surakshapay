@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Camera, Image as ImageIcon, Loader2, ShieldCheck, AlertTriangle, ShieldX, Volume2, VideoOff, RefreshCw } from 'lucide-react';
-import { speakText } from '../utils/ttsHelper';
+import { speakText, stopSpeech } from '../utils/ttsHelper';
 import jsQR from 'jsqr';
 import ShareCard from './ShareCard';
 
@@ -201,7 +201,7 @@ export default function QrScanner({ t, language, onActivityPerformed }) {
     if (!checkResult) return;
 
     if (speaking || ttsLoading) {
-      window.speechSynthesis.cancel();
+      stopSpeech();
       setSpeaking(false);
       setTtsLoading(false);
       return;

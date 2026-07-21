@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { ShieldCheck, AlertTriangle, ShieldX, Sparkles, CheckSquare, XCircle, Volume2, QrCode, X, VideoOff, Upload, Loader2 } from 'lucide-react';
 import ShareCard from './ShareCard';
-import { speakText } from '../utils/ttsHelper';
+import { speakText, stopSpeech } from '../utils/ttsHelper';
 import jsQR from 'jsqr';
 
 // ── SVG Donut Chart helper ────────────────────────────────────────────
@@ -307,7 +307,7 @@ export default function UpiChecker({ t, language, onScanComplete, onActivityPerf
     if (!result) return;
 
     if (speaking || ttsLoading) {
-      window.speechSynthesis.cancel();
+      stopSpeech();
       setSpeaking(false);
       setTtsLoading(false);
       return;
