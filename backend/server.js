@@ -176,6 +176,51 @@ const SCAMS_LIBRARY = [
         "લોન એપ્સને કોન્ટેક્ટ્સ (Contacts), ગેલેરી (Gallery) અથવા કોલ લોગ્સની પરવાનગી ક્યારેય ન આપો."
       ]
     }
+  },
+  {
+    id: "ai_impersonation_scam",
+    title: {
+      en: "AI Impersonation & Deepfake Scams",
+      hi: "AI नकल / डीपफेक धोखाधड़ी",
+      gu: "AI નકલ / ડીપફેક છેતરપિંડી"
+    },
+    dangerLevel: "High",
+    howItWorks: {
+      en: "Scammers use Artificial Intelligence to clone the voice of a family member or bank official from social media clips. They call you pretending to be that person in an emergency, asking for immediate money transfer. In more advanced attacks, they use AI-generated deepfake video calls that look and sound exactly like a real person — even a police officer or your boss — to pressure you into sending money or sharing sensitive details.",
+      hi: "ठग आर्टिफिशियल इंटेलिजेंस का उपयोग करके सोशल मीडिया क्लिप से किसी परिवार के सदस्य या बैंक अधिकारी की आवाज़ की नकल करते हैं। वे उस व्यक्ति के रूप में इमरजेंसी में फोन करके तुरंत पैसे ट्रांसफर करवाते हैं। अधिक उन्नत हमलों में वे AI-जनित डीपफेक वीडियो कॉल का उपयोग करते हैं जो बिल्कुल असली लगती है — यहां तक कि पुलिस अधिकारी या आपके बॉस जैसी — आपको पैसे भेजने या संवेदनशील जानकारी साझा करने के लिए दबाव बनाने के लिए।",
+      gu: "ઠગ આર્ટિફિશિયલ ઇન્ટેલિજન્સ વડે સોશ્યલ મીડિયા ક્લિપ્સ પરથી કોઈ પરિવારના સભ્ય અથવા બેંક અધિકારીના અવાજની નકલ કરે છે. તેઓ ઈમર્જન્સી ઊભી કરીને તાત્કાલિક પૈસા ટ્રાન્સફર કરાવવા ફોન કરે છે. વધુ અદ્યતન હુમલામાં, તેઓ AI-નિર્મિત ડીપફેક વીડિયો કોલ વાપરે છે જે બિલ્કુલ સાચા લાગે છે — પોલીસ અધિકારી કે તમારા બોસ જેવા — તમને પૈસા મોકલવા અથવા ગુપ્ત માહિતી શેર કરવા માટે દબાણ કરવા."
+    },
+    example: {
+      en: "\"Hello beta, I am in a serious accident near Surat. I need Rs 50,000 transferred to this number immediately. Please don't tell anyone, I'll explain later.\" (The voice sounds exactly like your relative, but it is AI-generated.)",
+      hi: "\"हेलो बेटा, मैं सूरत के पास एक गंभीर दुर्घटना में हूं। मुझे अभी इस नंबर पर ₹50,000 ट्रांसफर चाहिए। कृपया किसी को मत बताना, मैं बाद में समझाऊंगा।\" (आवाज़ बिल्कुल आपके रिश्तेदार जैसी लगती है, लेकिन यह AI द्वारा बनाई गई है।)",
+      gu: "\"હેલો બેટા, હું સુરત પાસે ગંભીર અકસ્માતમાં છું. મારે હમણાં જ આ નંબર પર ₹50,000 ટ્રાન્સફર જોઈએ. કૃપા કરીને કોઈને ન કહો, હું પછી સમજાવીશ.\" (અવાજ બિલ્કુલ તમારા સગા જેવો લાગે છે, પરંતુ તે AI દ્વારા બનાવેલો છે.)"
+    },
+    whatToDo: {
+      en: [
+        "DETECT — Listen for unnatural pauses, robotic tone, or slight distortion in the voice. AI clones often struggle with emotions and regional accents.",
+        "VERIFY — Always hang up and call back the person directly on their known saved number to confirm if it's really them.",
+        "USE A SECRET CODE — Set up a family 'safe word' that only real family members know, to use in emergencies as verification.",
+        "FREEZE THE CALL — On a video call, ask the person to wave their hand, touch their face in an unusual way, or read out a random word. Deepfakes often glitch with complex real-time movements.",
+        "NEVER TRANSFER MONEY — No matter how urgent the story sounds, do not send money based solely on a call or video request. Visit or call them on a second number first.",
+        "REPORT — Report AI voice/video scam calls to cybercrime.gov.in or call the national helpline 1930 immediately."
+      ],
+      hi: [
+        "पहचानें — आवाज़ में असुदृढ़ विराम, रोबोटिक टोन या हल्की विकृति को सुनें। AI क्लोन अक्सर भावनाओं और क्षेत्रीय उच्चारण के साथ संघर्ष करते हैं।",
+        "सत्यापित करें — हमेशा कॉल काटें और उस व्यक्ति को उनके ज्ञात सहेजे नंबर पर वापस कॉल करके पुष्टि करें।",
+        "गुप्त कोड बनाएं — परिवार में एक 'सेफ वर्ड' तय करें जो केवल असली परिवार के सदस्य जानते हों, ताकि आपात स्थिति में सत्यापन के रूप में उपयोग हो सके।",
+        "वीडियो कॉल पर — व्यक्ति को हाथ हिलाने, चेहरे को असामान्य तरीके से छूने या कोई यादृच्छिक शब्द बोलने को कहें। डीपफेक अक्सर जटिल रियल-टाइम हरकतों में गड़बड़ा जाते हैं।",
+        "पैसे ट्रांसफर न करें — कहानी कितनी भी जरूरी लगे, केवल कॉल या वीडियो अनुरोध के आधार पर पैसे न भेजें। पहले दूसरे नंबर से संपर्क करें।",
+        "रिपोर्ट करें — cybercrime.gov.in पर या राष्ट्रीय हेल्पलाइन 1930 पर तुरंत AI वॉयस/वीडियो स्कैम कॉल की रिपोर्ट करें।"
+      ],
+      gu: [
+        "ઓળખો — અવાજમાં અકુદરતી વિરામ, રોબોટિક સ્વર, કે હળવી વિકૃતિ સાંભળો. AI ક્લોન ઘણી વાર ભાવ અને પ્રાદેશિક ઉચ્ચારણ સાથે ઝઝૂમે છે.",
+        "ચકાસો — હંમેશા કોલ કાપીને તે વ્યક્તિને તેમના જાણીતા સેવ નંબર પર સીધા ફોન કરીને ખાતરી કરો.",
+        "ગુપ્ત કોડ નક્કી કરો — પરિવારમાં એક 'સેફ વર્ડ' ઠરાવો જે ફક્ત સાચા પરિવારના સભ્ય જ જાણે, ઈમર્જન્સીમાં ચકાસણી તરીકે વાપરવા.",
+        "વીડિયો કોલ પર — વ્યક્તિને હાથ હલાવવા, ચહેરાને અસામાન્ય રીતે સ્પર્શ કરવા, અથવા કોઈ રેન્ડમ શબ્દ બોલવા કહો. ડીપફેક ઘણી વાર ગૂંચવાઈ જાય છે.",
+        "પૈસા ટ્રાન્સફર ન કરો — વાત ગમે તેટલી તાકીદની લાગે, ફક્ત કોલ કે વીડિયો વિનંતીના આધારે પૈસા ન મોકલો. પહેલા બીજા નંબરેથી સંપર્ક કરો.",
+        "ફરિયાદ નોંધો — cybercrime.gov.in પર અથવા રાષ્ટ્રીય હેલ્પલાઈન 1930 પર AI વૉઈસ/વીડિયો સ્કૅમ કોલની તાત્કાલિક ફરિયાદ નોંધો."
+      ]
+    }
   }
 ];
 
