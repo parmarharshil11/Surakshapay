@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Shield, Home as HomeIcon, MessageSquare, AlertTriangle, BookOpen, HelpCircle, History as HistoryIcon, Info, Sun, Moon, Award, QrCode } from 'lucide-react';
+import { Shield, Home as HomeIcon, MessageSquare, AlertTriangle, BookOpen, HelpCircle, History as HistoryIcon, Info, Sun, Moon, Award, QrCode, Menu as MenuIcon } from 'lucide-react';
 import translations from './translations';
 import Home from './components/Home';
 import MessageChecker from './components/MessageChecker';
@@ -12,6 +12,7 @@ import ScamQuiz from './components/ScamQuiz';
 import QrScanner from './components/QrScanner';
 import NotificationBell from './components/NotificationBell';
 import DisclaimerModal from './components/DisclaimerModal';
+import Menu from './components/Menu';
 import { auth, getUserSafetyScore, updateUserSafetyScore } from './firebase';
 
 function App() {
@@ -196,8 +197,8 @@ function App() {
         </div>
       </header>
 
-      {/* Main Tab Navigation Subbar (Unified Desktop & Mobile) */}
-      <nav className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-sm transition-colors duration-300 overflow-x-auto custom-scrollbar">
+      {/* Main Tab Navigation Subbar (Desktop Only) */}
+      <nav className="hidden md:block bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-sm transition-colors duration-300 overflow-x-auto custom-scrollbar">
         <div className="max-w-7xl mx-auto px-4 flex gap-1 py-2 min-w-max">
           <button
             onClick={() => setTab('home')}
@@ -300,7 +301,7 @@ function App() {
       </nav>
 
       {/* Main Content Area */}
-      <main className="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 md:pb-8">
         {tab === 'home' && (
           <Home 
             setTab={setTab} 
@@ -345,12 +346,62 @@ function App() {
         {tab === 'helpline' && <Helpline t={t} language={language} onScanComplete={fetchHistory} />}
         {tab === 'history' && <History t={t} history={history} onClear={handleClearHistory} setTab={setTab} language={language} />}
         {tab === 'about' && <About t={t} language={language} />}
+        {tab === 'menu' && <Menu setTab={setTab} t={t} />}
       </main>
+
+      {/* Bottom Navigation (Mobile Only) */}
+      <nav className="md:hidden fixed bottom-4 left-4 right-4 bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl border border-slate-200/50 dark:border-slate-700/50 rounded-3xl shadow-lg z-50 transition-colors duration-300">
+        <div className="flex justify-around items-center h-16 px-2">
+          <button
+            onClick={() => setTab('home')}
+            aria-current={tab === 'home' ? 'page' : undefined}
+            className={`flex flex-col items-center justify-center w-[22%] h-12 rounded-2xl transition-all ${
+              tab === 'home' ? 'text-blue-600 dark:text-blue-400 bg-blue-50/80 dark:bg-blue-900/30' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50'
+            }`}
+          >
+            <HomeIcon className={`w-5 h-5 mb-0.5 ${tab === 'home' ? 'fill-blue-100 dark:fill-blue-900/50' : ''}`} />
+            <span className="text-[10px] font-medium leading-tight">{t.navHome}</span>
+          </button>
+          
+          <button
+            onClick={() => setTab('message')}
+            aria-current={tab === 'message' ? 'page' : undefined}
+            className={`flex flex-col items-center justify-center w-[22%] h-12 rounded-2xl transition-all ${
+              tab === 'message' ? 'text-blue-600 dark:text-blue-400 bg-blue-50/80 dark:bg-blue-900/30' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50'
+            }`}
+          >
+            <MessageSquare className={`w-5 h-5 mb-0.5 ${tab === 'message' ? 'fill-blue-100 dark:fill-blue-900/50' : ''}`} />
+            <span className="text-[10px] font-medium leading-tight">{t.btnCheckSMS}</span>
+          </button>
+          
+          <button
+            onClick={() => setTab('upi')}
+            aria-current={tab === 'upi' ? 'page' : undefined}
+            className={`flex flex-col items-center justify-center w-[22%] h-12 rounded-2xl transition-all ${
+              tab === 'upi' ? 'text-blue-600 dark:text-blue-400 bg-blue-50/80 dark:bg-blue-900/30' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50'
+            }`}
+          >
+            <AlertTriangle className={`w-5 h-5 mb-0.5 ${tab === 'upi' ? 'fill-blue-100 dark:fill-blue-900/50' : ''}`} />
+            <span className="text-[10px] font-medium leading-tight">{t.btnCheckUPI}</span>
+          </button>
+
+          <button
+            onClick={() => setTab('menu')}
+            aria-current={tab === 'menu' ? 'page' : undefined}
+            className={`flex flex-col items-center justify-center w-[22%] h-12 rounded-2xl transition-all ${
+              tab === 'menu' || ['library', 'quiz', 'helpline', 'history', 'about'].includes(tab) ? 'text-blue-600 dark:text-blue-400 bg-blue-50/80 dark:bg-blue-900/30' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50'
+            }`}
+          >
+            <MenuIcon className={`w-5 h-5 mb-0.5 ${tab === 'menu' || ['library', 'quiz', 'helpline', 'history', 'about'].includes(tab) ? 'fill-blue-100 dark:fill-blue-900/50' : ''}`} />
+            <span className="text-[10px] font-medium leading-tight">Menu</span>
+          </button>
+        </div>
+      </nav>
 
 
 
       {/* Footer */}
-      <footer className="bg-slate-900 dark:bg-slate-950 text-slate-400 dark:text-slate-500 text-center py-6 border-t border-slate-800 dark:border-slate-900 text-xs mt-12 transition-colors duration-300 animate-fade-in">
+      <footer className="bg-slate-900 dark:bg-slate-950 text-slate-400 dark:text-slate-500 text-center py-6 pb-28 md:pb-6 border-t border-slate-800 dark:border-slate-900 text-xs mt-12 transition-colors duration-300 animate-fade-in">
         <div className="max-w-7xl mx-auto px-4 space-y-2">
           <p className="font-semibold text-slate-300 dark:text-slate-400">
             {t.footerText}
