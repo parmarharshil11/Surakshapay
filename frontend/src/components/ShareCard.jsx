@@ -1,10 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Share2, Download, ExternalLink, ChevronDown, Loader2 } from 'lucide-react';
 
 export default function ShareCard({ classification, type, text, explanation, language, t, score }) {
   // Allow user to choose report language independently of app language
   const [reportLang, setReportLang] = useState(language || 'en');
   const [isTranslating, setIsTranslating] = useState(false);
+  const [translatedExplanation, setTranslatedExplanation] = useState(explanation);
+
+  useEffect(() => {
+    if (reportLang === language || reportLang === 'en') {
+      setTranslatedExplanation(explanation);
+      return;
+    }
+    const fetchTranslation = async () => {
+      setIsTranslating(true);
+      const baseUrl = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000').replace(/\/$/, '');
+      try {
+        const res = await fetch(`${baseUrl}/api/translate`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: explanation, targetLang: reportLang })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setTranslatedExplanation(data.translatedText || explanation);
+        }
+      } catch (err) {
+        console.error('Translation error:', err);
+        setTranslatedExplanation(explanation);
+      } finally {
+        setIsTranslating(false);
+      }
+    };
+    fetchTranslation();
+  }, [reportLang, explanation, language]);
 
   // Descriptive risk label based on score
   const getRiskLabel = (score, lang) => {
@@ -30,29 +59,9 @@ export default function ShareCard({ classification, type, text, explanation, lan
     return en;
   };
 
-  const getTranslatedExplanation = async () => {
-    if (reportLang === language) return explanation;
-    const baseUrl = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000').replace(/\/$/, '');
-    try {
-      const res = await fetch(`${baseUrl}/api/translate`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: explanation, targetLang: reportLang })
-      });
-      if (res.ok) {
-        const data = await res.json();
-        return data.translatedText || explanation;
-      }
-    } catch (err) {
-      console.error('Translation error:', err);
-    }
-    return explanation; // fallback
-  };
+  const handleDownloadImage = () => {
+    if (isTranslating) return; // Wait for translation to finish
 
-  const handleDownloadImage = async () => {
-    setIsTranslating(true);
-    const finalExplanation = await getTranslatedExplanation();
-    setIsTranslating(false);
 
     const canvas = document.createElement('canvas');
     canvas.width = 620;
@@ -163,7 +172,7 @@ export default function ShareCard({ classification, type, text, explanation, lan
 
     ctx.fillStyle = '#e2e8f0';
     ctx.font = '13px sans-serif';
-    wrapText(finalExplanation, 30, 225, 560, 22);
+    wrapText(translatedExplanation, 30, 225, 560, 22);
 
     // Footer divider
     ctx.strokeStyle = '#1e293b';
@@ -202,10 +211,8 @@ export default function ShareCard({ classification, type, text, explanation, lan
     link.click();
   };
 
-  const handleShareWhatsApp = async () => {
-    setIsTranslating(true);
-    const finalExplanation = await getTranslatedExplanation();
-    setIsTranslating(false);
+  const handleShareWhatsApp = () => {
+    if (isTranslating) return;
 
     const alertHeader = classification === 'Scam'
       ? getLocalizedText('🚨 *SCAM ALERT by SuRakshaPay* 🚨', '🚨 *सुरक्षापे स्कैम चेतावनी* 🚨', '🚨 *સુરક્ષાપે કૌભાંડ ચેતવણી* 🚨')
@@ -214,10 +221,10 @@ export default function ShareCard({ classification, type, text, explanation, lan
     const riskInfo = score !== undefined ? `\n*${getLocalizedText('Risk Level', 'जोखिम स्तर', 'જોખમ સ્તર')}:* ${getRiskLabel(score, reportLang)}` : '';
 
     const body = reportLang === 'hi'
-      ? `सावधान! SuRakshaPay ने इस संदेश में खतरा पाया है:${riskInfo}\n\n*विवरण:* "${text.slice(0, 100)}..." \n\n*विश्लेषण:* ${finalExplanation}\n\n📞 धोखाधड़ी हुई हो तो तुरंत *1930* पर कॉल करें।`
+      ? `सावधान! SuRakshaPay ने इस संदेश में खतरा पाया है:${riskInfo}\n\n*विवरण:* "${text.slice(0, 100)}..." \n\n*विश्लेषण:* ${translatedExplanation}\n\n📞 धोखाधड़ी हुई हो तो तुरंत *1930* पर कॉल करें।`
       : reportLang === 'gu'
-      ? `સાવધ! SuRakshaPay એ આ સંદેશમાં જોખમ શોધ્યું:${riskInfo}\n\n*વિગત:* "${text.slice(0, 100)}..." \n\n*વિશ્લેષણ:* ${finalExplanation}\n\n📞 છેતરપિંડી થઈ હોય તો *1930* પર તરત કોલ કરો.`
-      : `Warning! SuRakshaPay detected a financial scam threat:${riskInfo}\n\n*Details:* "${text.slice(0, 100)}..." \n\n*Analysis:* ${finalExplanation}\n\n📞 Call *1930* immediately if you fell for a digital payment scam.`;
+      ? `સાવધ! SuRakshaPay એ આ સંદેશમાં જોખમ શોધ્યું:${riskInfo}\n\n*વિગત:* "${text.slice(0, 100)}..." \n\n*વિશ્લેષણ:* ${translatedExplanation}\n\n📞 છેતરપિંડી થઈ હોય તો *1930* પર તરત કોલ કરો.`
+      : `Warning! SuRakshaPay detected a financial scam threat:${riskInfo}\n\n*Details:* "${text.slice(0, 100)}..." \n\n*Analysis:* ${translatedExplanation}\n\n📞 Call *1930* immediately if you fell for a digital payment scam.`;
 
     const encodedText = encodeURIComponent(`${alertHeader}\n\n${body}`);
     window.open(`https://api.whatsapp.com/send?text=${encodedText}`, '_blank');
