@@ -1,8 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Trash2, AlertTriangle, ShieldCheck, ShieldAlert, FileSpreadsheet, Eye, EyeOff, Calendar } from 'lucide-react';
 
 export default function History({ t, history, onClear, setTab, language }) {
   const [selectedItem, setSelectedItem] = useState(null);
+  const detailRef = useRef(null);
+
+  useEffect(() => {
+    if (selectedItem && detailRef.current) {
+      // Small delay to ensure render is complete before scrolling
+      setTimeout(() => {
+        detailRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 50);
+    }
+  }, [selectedItem]);
 
   const formatDate = (isoStr) => {
     try {
@@ -112,7 +122,7 @@ export default function History({ t, history, onClear, setTab, language }) {
           </div>
 
           {/* History Detail Drawer/Panel */}
-          <div className="md:col-span-5">
+          <div className="md:col-span-5" ref={detailRef}>
             {selectedItem ? (
               <div className={`bg-white dark:bg-slate-900 border p-6 rounded-2xl shadow-sm space-y-5 animate-fade-in transition-colors duration-300 ${
                 selectedItem.classification === 'Scam' || selectedItem.classification === 'Reported' 
