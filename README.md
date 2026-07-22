@@ -532,7 +532,7 @@ This is a **Hackathon MVP/Demo** built for educational and demonstration purpose
 
 <div align="center">
 
-Made with ❤️ in India by **[Harshil Parmar](https://github.com/parmarharshil11)** & **Kush Thacker**
+Made with ❤️ in India by **[Harshil Parmar](https://github.com/parmarharshil11)** & **[Kush Thacker](https://github.com/thackerkush)**
 
 ⭐ If SuRakshaPay helped you, please give this repo a star!
 
