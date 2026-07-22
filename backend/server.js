@@ -11,8 +11,11 @@ const PORT = process.env.PORT || 5000;
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:4173',
-  'https://detexso-v1.vercel.app',      // Your Vercel domain
-  process.env.FRONTEND_URL,                 // Override via Render env var
+  'https://detexso-v1.vercel.app',
+  'https://detexso.vercel.app',
+  'https://surakshapay-v1.vercel.app',
+  'https://surakshapay.vercel.app',
+  process.env.FRONTEND_URL,
 ].filter(Boolean);
 
 app.use(cors({
