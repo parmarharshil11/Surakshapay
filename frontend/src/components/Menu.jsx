@@ -8,7 +8,7 @@ export default function Menu({ setTab, t, darkMode, setDarkMode, language, onOpe
     { id: 'quiz', icon: Award, label: t.navQuiz, desc: t.btnPlayQuizDesc || 'Test your knowledge', color: 'text-purple-500', bg: 'bg-purple-50 dark:bg-purple-500/10' },
     { id: 'helpline', icon: HelpCircle, label: t.navHelpline, desc: t.helplineCardDesc || 'Emergency contacts', color: 'text-red-500', bg: 'bg-red-50 dark:bg-red-500/10' },
     { id: 'history', icon: History, label: t.navHistory, desc: t.homeViewHistory || 'View past checks', color: 'text-slate-500', bg: 'bg-slate-100 dark:bg-slate-500/10' },
-    { id: 'about', icon: Info, label: t.navAbout, desc: 'About SurakshaPay', color: 'text-blue-500', bg: 'bg-blue-50 dark:bg-blue-500/10' },
+    { id: 'about', icon: Info, label: t.navAbout, desc: 'About DeTexSO', color: 'text-blue-500', bg: 'bg-blue-50 dark:bg-blue-500/10' },
   ];
 
   return (
