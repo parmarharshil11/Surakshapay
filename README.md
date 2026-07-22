@@ -346,13 +346,13 @@ VITE_FIREBASE_APP_ID=your_app_id
 
 | Variable | Description | Value |
 |---|---|---|
-| `VITE_API_BASE_URL` | Production backend URL | `https://detexso-final.onrender.com` |
+| `VITE_API_BASE_URL` | Production backend URL | `https://surakshapay-final.onrender.com` |
 
 ---
 
 ## 📡 API Reference
 
-**Base URL:** `http://localhost:5000` (dev) · `https://detexso-final.onrender.com` (prod)
+**Base URL:** `http://localhost:5000` (dev) · `https://surakshapay-final.onrender.com` (prod)
 
 ### Core Detection
 
