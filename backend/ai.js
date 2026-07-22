@@ -55,7 +55,7 @@ async function analyzeMessage(text, lang = 'en') {
   const langName = lang === 'hi' ? 'Hindi' : lang === 'gu' ? 'Gujarati' : 'English';
 
   const prompt = `
-You are a highly advanced financial fraud detection AI for a rural Indian safety app called SuRakshaPay.
+You are a highly advanced financial fraud detection AI for a rural Indian safety app called DeTexSO.
 Analyze the following SMS message and determine if it is a Scam, Suspicious, or Safe.
 The user's preferred language for the explanation is: ${langName}.
 
@@ -97,7 +97,7 @@ async function analyzeUpiRequest(upiId, amount, message = "", lang = 'en') {
   const langName = lang === 'hi' ? 'Hindi' : lang === 'gu' ? 'Gujarati' : 'English';
   
   const prompt = `
-You are a highly advanced financial fraud detection AI for a rural Indian safety app called SuRakshaPay.
+You are a highly advanced financial fraud detection AI for a rural Indian safety app called DeTexSO.
 Analyze the following UPI Payment Request (Collect Request) and determine if it is a Scam, Suspicious, or Safe.
 The user's preferred language for the explanation is: ${langName}.
 
@@ -139,7 +139,7 @@ async function analyzeReportAuth(scammerDetails, description, lang = 'en') {
   const langName = lang === 'hi' ? 'Hindi' : lang === 'gu' ? 'Gujarati' : 'English';
   
   const prompt = `
-You are an AI moderator for a community scam reporting platform called SuRakshaPay.
+You are an AI moderator for a community scam reporting platform called DeTexSO.
 A user has submitted a report of a scam. You need to determine if this is an authentic, realistic report of a scam, OR if it's just spam/gibberish (like "asdf" or "pizza delivery").
 
 If it IS an authentic scam, generate a very short, punchy 1-sentence warning summary (maximum 15 words) in ${langName} to send as a push notification to other users. 
@@ -253,7 +253,7 @@ Text to translate:
  */
 async function generateQuizQuestions(count = 3) {
   const prompt = `
-You are a highly advanced financial fraud detection educator for a rural Indian safety app called SuRakshaPay.
+You are a highly advanced financial fraud detection educator for a rural Indian safety app called DeTexSO.
 Generate an array of exactly ${count} multiple-choice quiz scenarios to test the user's awareness of digital financial scams (e.g., UPI, phishing, loan apps, KYC).
 For EACH scenario, provide the text in 3 languages simultaneously: English (en), Hindi (hi), and Gujarati (gu).
 Make sure to randomize the order of the options array (sometimes 'safe' is first, sometimes 'scam' is first) so it's not predictable.

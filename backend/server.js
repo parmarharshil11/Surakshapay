@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 5000;
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:4173',
-  'https://surakshapay-v1.vercel.app',      // Your Vercel domain
+  'https://detexso-v1.vercel.app',      // Your Vercel domain
   process.env.FRONTEND_URL,                 // Override via Render env var
 ].filter(Boolean);
 
@@ -545,5 +545,5 @@ app.get('/api/tts', (req, res) => {
 
 // Start express server
 app.listen(PORT, () => {
-  console.log(`SuRakshaPay backend running on port ${PORT}`);
+  console.log(`DeTexSO backend running on port ${PORT}`);
 });

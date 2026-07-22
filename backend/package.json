@@ -1,7 +1,7 @@
 {
-  "name": "surakshapay-backend",
+  "name": "detexso-backend",
   "version": "1.0.0",
-  "description": "SuRakshaPay backend — Express REST API integrating Google Gemini AI for SMS and UPI scam detection",
+  "description": "DeTexSO backend — Express REST API integrating Google Gemini AI for SMS and UPI scam detection",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

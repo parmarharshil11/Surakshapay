@@ -1,13 +1,13 @@
 <div align="center">
 
-<img src="frontend/public/banner.jpg" alt="SuRakshaPay Banner" width="100%" />
+<img src="frontend/public/banner.jpg" alt="DeTexSO Banner" width="100%" />
 
-# 🛡️ SuRakshaPay
+# 🛡️ DeTexSO
 
-### AI-Powered Financial Safety Shield for Rural India
+### Your Vernacular UPI Guard - Detection of Text & Scam Operations
 
 <p align="center">
-  <a href="https://surakshapay.vercel.app"><img src="https://img.shields.io/badge/🚀_Live_Demo-surakshapay.vercel.app-0F172A?style=for-the-badge&labelColor=1E293B" /></a>
+  <a href="https://detexso.vercel.app"><img src="https://img.shields.io/badge/🚀_Live_Demo-detexso.vercel.app-0F172A?style=for-the-badge&labelColor=1E293B" /></a>
 </p>
 
 <p align="center">
@@ -31,7 +31,7 @@
 
 Built by **Harshil Parmar** & **Kush Thacker** — Hackathon 2026
 
-[🚀 Live Demo](https://surakshapay.vercel.app) · [🐛 Report Bug](https://github.com/parmarharshil11/Surakshapay/issues) · [💡 Request Feature](https://github.com/parmarharshil11/Surakshapay/issues)
+[🚀 Live Demo](https://detexso.vercel.app) · [🐛 Report Bug](https://github.com/parmarharshil11/DeTexSO/issues) · [💡 Request Feature](https://github.com/parmarharshil11/DeTexSO/issues)
 
 </div>
 
@@ -67,7 +67,7 @@ India has **700 million+ rural citizens**, many of whom are newly online with UP
 | 📵 **Low-connectivity users** | Need lightweight, offline-ready tools — not heavy apps |
 | 👴 **Senior citizens & pensioners** | Targeted by KYC scams, digital arrest hoaxes, pension fraud |
 
-**SuRakshaPay bridges this gap** — a multilingual, AI-powered safety tool that runs in any browser, requires no app installation, and analyzes suspicious messages in under 2 seconds.
+**DeTexSO bridges this gap** — a multilingual, AI-powered safety tool that runs in any browser, requires no app installation, and analyzes suspicious messages in under 2 seconds.
 
 ---
 
@@ -195,7 +195,7 @@ India has **700 million+ rural citizens**, many of whom are newly online with UP
 ## 📁 Project Structure
 
 ```
-surakshapay/
+detexso/
 ├── .gitignore                        # Git ignore rules
 ├── render.yaml                       # Render.com backend deployment config
 ├── README.md
@@ -267,8 +267,8 @@ surakshapay/
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/parmarharshil11/Surakshapay.git
-cd Surakshapay
+git clone https://github.com/parmarharshil11/DeTexSO.git
+cd DeTexSO
 ```
 
 ### 2. Start the Backend
@@ -287,7 +287,7 @@ GEMINI_API_KEY=your_gemini_api_key_here
 
 ```bash
 node server.js
-# ✅ SuRakshaPay backend running on http://localhost:5000
+# ✅ DeTexSO backend running on http://localhost:5000
 ```
 
 ### 3. Start the Frontend
@@ -346,13 +346,13 @@ VITE_FIREBASE_APP_ID=your_app_id
 
 | Variable | Description | Value |
 |---|---|---|
-| `VITE_API_BASE_URL` | Production backend URL | `https://surakshapay-final.onrender.com` |
+| `VITE_API_BASE_URL` | Production backend URL | `https://detexso-final.onrender.com` |
 
 ---
 
 ## 📡 API Reference
 
-**Base URL:** `http://localhost:5000` (dev) · `https://surakshapay-final.onrender.com` (prod)
+**Base URL:** `http://localhost:5000` (dev) · `https://detexso-final.onrender.com` (prod)
 
 ### Core Detection
 
@@ -432,7 +432,7 @@ Evaluates a UPI collect request for fraud patterns.
 
 ## 🚀 Deployment
 
-SuRakshaPay uses a split deployment architecture:
+DeTexSO uses a split deployment architecture:
 
 | Component | Platform | Config File |
 |---|---|---|
@@ -459,10 +459,10 @@ SuRakshaPay uses a split deployment architecture:
 
 ## 📱 Mobile PWA Installation
 
-SuRakshaPay is a fully installable **Progressive Web App**.
+DeTexSO is a fully installable **Progressive Web App**.
 
 **Android (Chrome):**
-1. Visit [surakshapay.vercel.app](https://surakshapay.vercel.app) in Chrome
+1. Visit [detexso.vercel.app](https://detexso.vercel.app) in Chrome
 2. Tap **"Add to Home Screen"** from the banner or `⋮` menu
 3. The app installs with a native icon — push notifications work natively
 
@@ -525,7 +525,7 @@ This project is licensed under the **ISC License** — see the [package.json](ba
 This is a **Hackathon MVP/Demo** built for educational and demonstration purposes.
 
 - AI analysis is powered by Google Gemini and provides **informational guidance only** — it is not a substitute for professional legal or financial advice.
-- SuRakshaPay does **not** store, transmit, or share any personal financial data.
+- DeTexSO does **not** store, transmit, or share any personal financial data.
 - For actual cybercrime incidents, always contact the official helpline at **1930** or file a report at [cybercrime.gov.in](https://cybercrime.gov.in).
 
 ---
@@ -534,6 +534,6 @@ This is a **Hackathon MVP/Demo** built for educational and demonstration purpose
 
 Made with ❤️ in India by **[Harshil Parmar](https://github.com/parmarharshil11)** & **[Kush Thacker](https://github.com/thackerkush)**
 
-⭐ If SuRakshaPay helped you, please give this repo a star!
+⭐ If DeTexSO helped you, please give this repo a star!
 
 </div>

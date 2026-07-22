@@ -1,6 +1,6 @@
-# SuRakshaPay — Frontend
+# DeTexSO — Frontend
 
-React 19 + Vite 8 + Tailwind CSS 4 frontend for the SuRakshaPay AI financial safety app.
+React 19 + Vite 8 + Tailwind CSS 4 frontend for the DeTexSO AI financial safety app.
 
 ## 🚀 Development
 

@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: surakshapay-backend
+    name: detexso-backend
     runtime: node
     region: singapore   # Closest to India
     plan: free

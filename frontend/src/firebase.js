@@ -1,4 +1,4 @@
-// Local mock mode implementation for SuRakshaPay
+// Local mock mode implementation for DeTexSO
 // Firebase SDK has been completely removed to keep the hackathon demo simple and free.
 
 const isMock = true;
@@ -198,13 +198,13 @@ export async function getTrendingScams() {
 }
 
 export async function getUserSafetyScore(uid) {
-  return parseInt(localStorage.getItem(`suraksha_score_${uid}`) || "0", 10);
+  return parseInt(localStorage.getItem(`detexso_score_${uid}`) || "0", 10);
 }
 
 export async function updateUserSafetyScore(uid, incrementAmount) {
-  const current = parseInt(localStorage.getItem(`suraksha_score_${uid}`) || "0", 10);
+  const current = parseInt(localStorage.getItem(`detexso_score_${uid}`) || "0", 10);
   const next = current + incrementAmount;
-  localStorage.setItem(`suraksha_score_${uid}`, next);
+  localStorage.setItem(`detexso_score_${uid}`, next);
   return next;
 }
 

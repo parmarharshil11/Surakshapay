@@ -1,6 +1,6 @@
 const translations = {
   en: {
-    brandName: "SuRakshaPay",
+    brandName: "DeTexSO",
     tagline: "Rural India's Financial Safety Assistant",
     navHome: "Home",
     navMessage: "Check Message",
@@ -112,12 +112,12 @@ const translations = {
     histEmpty: "No checks made yet. Go back to Home to check your first message or UPI request!",
 
     // About Page
-    aboutTitle: "About SuRakshaPay",
+    aboutTitle: "About DeTexSO",
     aboutSubtitle: "The gap in India's digital safety and our hackathon solution.",
     aboutHeading1: "Why did we build this?",
     aboutBody1: "UPI and mobile banking have spread rapidly to rural India. However, millions of first-time digital users have become targets for sophisticated cybercriminals. While apps like Truecaller can block spam calls, they do not read messages, analyze UPI handles, or provide explanations in regional languages.",
-    aboutHeading2: "Our Solution: SuRakshaPay",
-    aboutBody2: "SuRakshaPay uses Google Gemini AI to analyze suspicious messages and UPI payment requests in real-time. It explains the danger in simple regional languages (Hindi, Gujarati, English), helping build digital financial literacy where it is needed most.",
+    aboutHeading2: "Our Solution: DeTexSO",
+    aboutBody2: "DeTexSO uses Google Gemini AI to analyze suspicious messages and UPI payment requests in real-time. It explains the danger in simple regional languages (Hindi, Gujarati, English), helping build digital financial literacy where it is needed most.",
     aboutHackathonStatement: "Built for India's digital empowerment — using Google Gemini AI to protect rural users from UPI and SMS scams in their native language.",
     footerText: "Protecting India's Rural Digital Economy. Government Helpline: Call 1930.",
     homeVerifiedBadge: "Gemini AI Engine Active",
@@ -150,8 +150,8 @@ const translations = {
     qrStopCamera: "Stop Camera"
   },
   hi: {
-    brandName: "सुरक्षापे",
-    tagline: "ग्रामीण भारत का वित्तीय सुरक्षा कवच",
+    brandName: "DeTexSO",
+    tagline: "आपका स्थानीय भाषा का UPI रक्षक - Detection of Text & Scam Operations",
     navHome: "मुख्य पृष्ठ",
     navMessage: "संदेश जांचें",
     navUpi: "UPI पेमेंट जांचें",
@@ -262,12 +262,12 @@ const translations = {
     histEmpty: "अभी तक कोई जांच नहीं की गई है। मुख्य पृष्ठ पर जाकर पहला संदेश या यूपीआई अनुरोध जांचें!",
 
     // About Page
-    aboutTitle: "सुरक्षापे के बारे में",
+    aboutTitle: "DeTexSO के बारे में",
     aboutSubtitle: "भारत में डिजिटल सुरक्षा की कमी और हमारा समाधान।",
     aboutHeading1: "हमने इसे क्यों बनाया?",
     aboutBody1: "यूपीआई और मोबाइल बैंकिंग ग्रामीण भारत में तेजी से बढ़े हैं। लेकिन, पहली बार इंटरनेट बैंकिंग चलाने वाले लोग ठगों के आसान शिकार बन जाते हैं। ट्रूकॉलर जैसे ऐप्स कॉल ब्लॉक करते हैं, पर वे संदेशों का विश्लेषण नहीं करते, न ही क्षेत्रीय भाषाओं में धोखे का कारण समझाते हैं।",
-    aboutHeading2: "हमारा समाधान: सुरक्षापे (SuRakshaPay)",
-    aboutBody2: "सुरक्षापे Google Gemini AI का उपयोग करके संदिग्ध संदेशों और UPI अनुरोधों का वास्तविक समय में विश्लेषण करता है। यह खतरे को हिंदी, गुजराती और अंग्रेजी में सरल भाषा में समझाता है।",
+    aboutHeading2: "हमारा समाधान: DeTexSO",
+    aboutBody2: "DeTexSO Google Gemini AI का उपयोग करके संदिग्ध संदेशों और UPI अनुरोधों का वास्तविक समय में विश्लेषण करता है। यह खतरे को हिंदी, गुजराती और अंग्रेजी में सरल भाषा में समझाता है।",
     aboutHackathonStatement: "भारत के डिजिटल सशक्तिकरण के लिए — Google Gemini AI से ग्रामीण भारत को UPI और SMS ठगी से बचाना।",
     footerText: "ग्रामीण भारत की डिजिटल अर्थव्यवस्था की सुरक्षा। सरकारी हेल्पलाइन: कॉल 1930।",
     homeVerifiedBadge: "जेमिनी AI इंजन सक्रिय",
@@ -300,8 +300,8 @@ const translations = {
     qrStopCamera: "कैमरा बंद करें"
   },
   gu: {
-    brandName: "સુરક્ષાપે",
-    tagline: "ગ્રામીણ ભારતની નાણાકીય સુરક્ષા ઢાલ",
+    brandName: "DeTexSO",
+    tagline: "તમારો સ્થાનિક ભાષાનો UPI રક્ષક - Detection of Text & Scam Operations",
     navHome: "મુખ્ય પૃષ્ઠ",
     navMessage: "સંદેશ તપાસો",
     navUpi: "UPI તપાસો",
@@ -412,12 +412,12 @@ const translations = {
     histEmpty: "હજી સુધી કોઈ તપાસ કરવામાં આવી નથી. મુખ્ય પૃષ્ઠ પર જઈને પહેલો મેસેજ અથવા યુપીઆઈ વિનંતી તપાસો!",
 
     // About Page
-    aboutTitle: "સુરક્ષાપે વિશે",
+    aboutTitle: "DeTexSO વિશે",
     aboutSubtitle: "ભારતમાં ડિજિટલ સુરક્ષાની ખામી અને અમારું સમાધાન.",
     aboutHeading1: "અમે આ શા માટે બનાવ્યું?",
     aboutBody1: "ગ્રામીણ ભારતમાં યુપીઆઈ અને મોબાઈલ બેંકિંગ ખૂબ જ ઝડપથી વધ્યા છે. પરંતુ, પહેલીવાર ડિજિટલ બેંકિંગ વાપરતા લોકો ઠગોના સહેલા શિકાર બને છે. ટ્રુકોલર જેવી એપ્સ કોલ બ્લોક કરે છે, પણ તેઓ મેસેજ તપાસતી નથી, કે સ્થાનિક ભાષામાં જોખમનું કારણ સમજાવતી નથી.",
-    aboutHeading2: "અમારું સમાધાન: સુરક્ષાપે (SuRakshaPay)",
-    aboutBody2: "સુરક્ષાપે Google Gemini AI નો ઉપયોગ કરીને શંકાસ્પદ મેસેજ અને UPI ચૂકવણી વિનંતીઓનું વાસ્તવિક સમયમાં વિશ્લેષણ કરે છે. તે જોખમને હિન્દી, ગુજરાતી અને અંગ્રેજીમાં સરળ ભાષામાં સમજાવે છે.",
+    aboutHeading2: "અમારું સમાધાન: DeTexSO",
+    aboutBody2: "DeTexSO Google Gemini AI નો ઉપયોગ કરીને શંકાસ્પદ મેસેજ અને UPI ચૂકવણી વિનંતીઓનું વાસ્તવિક સમયમાં વિશ્લેષણ કરે છે. તે જોખમને હિન્દી, ગુજરાતી અને અંગ્રેજીમાં સરળ ભાષામાં સમજાવે છે.",
     aboutHackathonStatement: "ભારતના ડિજિટલ સશક્તિકરણ માટે — Google Gemini AI વડે ગ્રામીણ ભારતને UPI અને SMS છેતરપિંડીથી બચાવવા.",
     footerText: "ગ્રામીણ ભારતની ડિજિટલ અર્થવ્યવસ્થાની સુરક્ષા. સરકારી હેલ્પલાઇન: કોલ 1930.",
     homeVerifiedBadge: "જેમિની AI એન્જિન સક્રિય",

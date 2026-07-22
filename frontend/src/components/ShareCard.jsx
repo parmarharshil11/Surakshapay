@@ -30,16 +30,16 @@ export default function ShareCard({ classification, type, text, explanation, lan
 
   const getAlertBodyText = () => {
     const alertHeader = classification === 'Scam'
-      ? getLocalizedText('🚨 *SCAM ALERT by SuRakshaPay* 🚨', '🚨 *सुरक्षापे स्कैम चेतावनी* 🚨', '🚨 *સુરક્ષાપે કૌભાંડ ચેતવણી* 🚨')
+      ? getLocalizedText('🚨 *SCAM ALERT by DeTexSO* 🚨', '🚨 *DeTexSO स्कैम चेतावनी* 🚨', '🚨 *DeTexSO કૌભાંડ ચેતવણી* 🚨')
       : getLocalizedText('⚠️ *SUSPICIOUS MESSAGE ALERT* ⚠️', '⚠️ *संदिग्ध संदेश चेतावनी* ⚠️', '⚠️ *શંકાસ્પદ સંદેશ ચેતવણી* ⚠️');
 
     const riskInfo = score !== undefined ? `\n*${getLocalizedText('Risk Level', 'जोखिम स्तर', 'જોખમ સ્તર')}:* ${getRiskLabel(score, language)}` : '';
 
     const body = language === 'hi'
-      ? `सावधान! SuRakshaPay ने इस संदेश में खतरा पाया है:${riskInfo}\n\n*विवरण:* "${text.slice(0, 100)}..." \n\n*विश्लेषण:* ${explanation}\n\n📞 धोखाधड़ी हुई हो तो तुरंत *1930* पर कॉल करें।`
+      ? `सावधान! DeTexSO ने इस संदेश में खतरा पाया है:${riskInfo}\n\n*विवरण:* "${text.slice(0, 100)}..." \n\n*विश्लेषण:* ${explanation}\n\n📞 धोखाधड़ी हुई हो तो तुरंत *1930* पर कॉल करें।`
       : language === 'gu'
-      ? `સાવધ! SuRakshaPay એ આ સંદેશમાં જોખમ શોધ્યું:${riskInfo}\n\n*વિગત:* "${text.slice(0, 100)}..." \n\n*વિશ્લેષણ:* ${explanation}\n\n📞 છેતરપિંડી થઈ હોય તો *1930* પર તરત કોલ કરો.`
-      : `Warning! SuRakshaPay detected a financial scam threat:${riskInfo}\n\n*Details:* "${text.slice(0, 100)}..." \n\n*Analysis:* ${explanation}\n\n📞 Call *1930* immediately if you fell for a digital payment scam.`;
+      ? `સાવધ! DeTexSO એ આ સંદેશમાં જોખમ શોધ્યું:${riskInfo}\n\n*વિગત:* "${text.slice(0, 100)}..." \n\n*વિશ્લેષણ:* ${explanation}\n\n📞 છેતરપિંડી થઈ હોય તો *1930* પર તરત કોલ કરો.`
+      : `Warning! DeTexSO detected a financial scam threat:${riskInfo}\n\n*Details:* "${text.slice(0, 100)}..." \n\n*Analysis:* ${explanation}\n\n📞 Call *1930* immediately if you fell for a digital payment scam.`;
 
     return `${alertHeader}\n\n${body}`;
   };
@@ -82,7 +82,7 @@ export default function ShareCard({ classification, type, text, explanation, lan
     // Header branding
     ctx.fillStyle = '#10b981';
     ctx.font = 'bold 20px sans-serif';
-    ctx.fillText('\uD83D\uDEE1\uFE0F SuRakshaPay', 30, 38);
+    ctx.fillText('\uD83D\uDEE1\uFE0F DeTexSO', 30, 38);
 
     ctx.fillStyle = '#64748b';
     ctx.font = '11px sans-serif';
@@ -186,9 +186,9 @@ export default function ShareCard({ classification, type, text, explanation, lan
     );
     ctx.fillText(
       getLocalizedText(
-        'Verify suspicious messages & UPI handles at SuRakshaPay.',
-        'संदिग्ध संदेश और UPI की जांच SuRakshaPay पर करें।',
-        'સંદિગ્ધ સંદેશ અને UPI ની ચકાસણી SuRakshaPay પર કરો.'
+        'Verify suspicious messages & UPI handles at DeTexSO.',
+        'संदिग्ध संदेश और UPI की जांच DeTexSO पर करें।',
+        'સંદિગ્ધ સંદેશ અને UPI ની ચકાસણી DeTexSO પર કરો.'
       ), 30, 430
     );
 
@@ -198,7 +198,7 @@ export default function ShareCard({ classification, type, text, explanation, lan
     ctx.fillText(`Report language: ${language === 'hi' ? 'हिंदी' : language === 'gu' ? 'ગુજરાતી' : 'English'}`, 480, 450);
 
     const link = document.createElement('a');
-    link.download = 'suraksha_safety_alert.png';
+    link.download = 'detexso_safety_alert.png';
     link.href = canvas.toDataURL();
     link.click();
   };

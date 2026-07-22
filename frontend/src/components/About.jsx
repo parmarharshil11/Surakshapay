@@ -82,7 +82,7 @@ export default function About({ t, language, onOpenDisclaimer }) {
         </div>
         
         <h2 className="text-3xl md:text-4xl font-black tracking-tight leading-tight">
-          {t.aboutTitle || "About SuRakshaPay"}
+          {t.aboutTitle || "About DeTexSO"}
         </h2>
         <p className="text-blue-200/90 text-sm md:text-base max-w-2xl leading-relaxed">
           {t.aboutSubtitle || "Protecting rural India from digital payment fraud through accessible, multilingual AI."}

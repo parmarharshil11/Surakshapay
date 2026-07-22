@@ -18,7 +18,7 @@ import { auth, getUserSafetyScore, updateUserSafetyScore } from './firebase';
 function App() {
   const [tab, setTab] = useState('home');
   const [language, setLanguage] = useState(() => {
-    return localStorage.getItem('suraksha_language') || 'en';
+    return localStorage.getItem('detexso_language') || 'en';
   });
   const [isDisclaimerOpen, setIsDisclaimerOpen] = useState(() => {
     return localStorage.getItem('disclaimer_accepted') !== 'true';
@@ -26,7 +26,7 @@ function App() {
   const [history, setHistory] = useState([]);
   const [darkMode, setDarkMode] = useState(() => {
     try {
-      const savedTheme = localStorage.getItem('suraksha_theme');
+      const savedTheme = localStorage.getItem('detexso_theme');
       if (savedTheme !== null) {
         return savedTheme === 'dark';
       }
@@ -44,10 +44,10 @@ function App() {
     try {
       if (darkMode) {
         document.documentElement.classList.add('dark');
-        localStorage.setItem('suraksha_theme', 'dark');
+        localStorage.setItem('detexso_theme', 'dark');
       } else {
         document.documentElement.classList.remove('dark');
-        localStorage.setItem('suraksha_theme', 'light');
+        localStorage.setItem('detexso_theme', 'light');
       }
     } catch (e) {
       console.error("Failed to persist theme preference:", e);
@@ -95,7 +95,7 @@ function App() {
   const handleResetXp = async () => {
     try {
       const uid = auth?.currentUser?.uid || 'local_demo_user';
-      localStorage.setItem(`suraksha_score_${uid}`, '0');
+      localStorage.setItem(`detexso_score_${uid}`, '0');
       setScore(0);
     } catch (e) {
       console.error("Failed to reset safety score:", e);
@@ -157,7 +157,7 @@ function App() {
         setLanguage={(newLang) => {
           setLanguage(newLang);
           try {
-            localStorage.setItem('suraksha_language', newLang);
+            localStorage.setItem('detexso_language', newLang);
           } catch (e) {}
         }} 
       />
@@ -175,7 +175,7 @@ function App() {
               <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-green-400 fill-green-400/20" />
             </div>
             <div className="text-left">
-              <span className="text-lg sm:text-xl font-black tracking-tight block">SuRakshaPay</span>
+              <span className="text-lg sm:text-xl font-black tracking-tight block">DeTexSO</span>
               <span className="text-[10px] text-blue-200/90 font-medium -mt-1 block max-sm:hidden">{t.tagline}</span>
             </div>
           </button>
@@ -201,7 +201,7 @@ function App() {
               <button
                 onClick={() => {
                   setLanguage('en');
-                  localStorage.setItem('suraksha_language', 'en');
+                  localStorage.setItem('detexso_language', 'en');
                 }}
                 aria-pressed={language === 'en'}
                 className={`px-1.5 sm:px-2.5 py-1 text-[10px] sm:text-xs font-bold rounded-lg transition-all cursor-pointer ${
@@ -213,7 +213,7 @@ function App() {
               <button
                 onClick={() => {
                   setLanguage('hi');
-                  localStorage.setItem('suraksha_language', 'hi');
+                  localStorage.setItem('detexso_language', 'hi');
                 }}
                 aria-pressed={language === 'hi'}
                 className={`px-1.5 sm:px-2.5 py-1 text-[10px] sm:text-xs font-bold rounded-lg transition-all cursor-pointer ${
@@ -226,7 +226,7 @@ function App() {
               <button
                 onClick={() => {
                   setLanguage('gu');
-                  localStorage.setItem('suraksha_language', 'gu');
+                  localStorage.setItem('detexso_language', 'gu');
                 }}
                 aria-pressed={language === 'gu'}
                 className={`px-1.5 sm:px-2.5 py-1 text-[10px] sm:text-xs font-bold rounded-lg transition-all cursor-pointer ${
@@ -451,7 +451,7 @@ function App() {
             {t.footerText}
           </p>
           <div className="flex justify-center items-center gap-4 text-[11px]">
-            <span>© {new Date().getFullYear()} SuRakshaPay. All Rights Reserved.</span>
+            <span>© {new Date().getFullYear()} DeTexSO. All Rights Reserved.</span>
             <span className="text-slate-600">•</span>
             <button
               onClick={() => setIsDisclaimerOpen(true)}
