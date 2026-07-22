@@ -315,12 +315,16 @@ export default function UpiChecker({ t, language, onScanComplete, onActivityPerf
   const handleSpeakResult = () => {
     if (!result) return;
 
-    if (speaking || ttsLoading) {
+    if (ttsLoading) return; // Prevent double-clicks while loading audio
+
+    if (speaking) {
       stopSpeech();
       setSpeaking(false);
       setTtsLoading(false);
       return;
     }
+
+    setTtsLoading(true);
 
     const SpeechSynthesisUtterance = window.SpeechSynthesisUtterance;
     if (!window.speechSynthesis || !SpeechSynthesisUtterance) {
@@ -633,13 +637,23 @@ export default function UpiChecker({ t, language, onScanComplete, onActivityPerf
                   type="button"
                   onClick={handleSpeakResult}
                   disabled={ttsLoading}
-                  className={`ml-auto p-2 bg-slate-100 dark:bg-slate-800 hover:bg-blue-100 dark:hover:bg-blue-950/40 text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 rounded-xl transition-all cursor-pointer border border-slate-200/50 dark:border-slate-700/50 ${
-                    speaking ? 'ring-2 ring-blue-500 animate-pulse text-blue-600' : ''
+                  className={`ml-auto p-2 rounded-xl transition-all border border-slate-200/50 dark:border-slate-700/50 ${
+                    ttsLoading
+                      ? 'bg-blue-50 dark:bg-blue-950/60 ring-2 ring-blue-500/50 text-blue-600 cursor-wait opacity-90'
+                      : speaking
+                      ? 'bg-blue-50 dark:bg-blue-950/60 ring-2 ring-blue-500 animate-pulse text-blue-600 cursor-pointer'
+                      : 'bg-slate-100 dark:bg-slate-800 hover:bg-blue-100 dark:hover:bg-blue-950/40 text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer'
                   }`}
-                  title="Speak Results Aloud"
+                  title={
+                    ttsLoading
+                      ? (language === 'hi' ? 'ऑडियो लोड हो रहा है...' : language === 'gu' ? 'ઓડિયો લોડ થઈ રહ્યો છે...' : 'Loading audio...')
+                      : speaking
+                      ? (language === 'hi' ? 'रोकने के लिए क्लिक करें' : language === 'gu' ? 'અટકાવવા માટે ક્લિક કરો' : 'Click to stop')
+                      : (language === 'hi' ? 'परिणाम सुनें' : language === 'gu' ? 'પરિણામ સાંભળો' : 'Listen aloud')
+                  }
                 >
                   {ttsLoading ? (
-                    <Loader2 className="w-5 h-5 animate-spin text-blue-500" />
+                    <Loader2 className="w-5 h-5 animate-spin text-blue-600 dark:text-blue-400" />
                   ) : (
                     <Volume2 className="w-5 h-5" />
                   )}

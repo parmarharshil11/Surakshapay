@@ -155,16 +155,27 @@ function playGoogleTTS({ text, lang, onStart, onEnd, onError }) {
     currentAudio = audio;
     audio.src = audioUrl;
 
+    const loadTimeout = setTimeout(() => {
+      if (currentAudio === audio && audio.paused && !audio.ended) {
+        console.warn("Google TTS stream timeout, falling back to Web Speech");
+        currentAudio = null;
+        if (onError) onError();
+      }
+    }, 6000);
+
     audio.onplay = () => {
+      clearTimeout(loadTimeout);
       if (onStart) onStart();
     };
 
     audio.onended = () => {
+      clearTimeout(loadTimeout);
       currentAudio = null;
       if (onEnd) onEnd();
     };
 
     audio.onerror = (e) => {
+      clearTimeout(loadTimeout);
       console.warn("Google TTS stream failed, falling back to Web Speech:", e);
       currentAudio = null;
       if (onError) onError();
@@ -173,6 +184,7 @@ function playGoogleTTS({ text, lang, onStart, onEnd, onError }) {
     const playPromise = audio.play();
     if (playPromise !== undefined) {
       playPromise.catch((err) => {
+        clearTimeout(loadTimeout);
         console.warn("Audio play blocked, falling back to Web Speech:", err);
         currentAudio = null;
         if (onError) onError();
