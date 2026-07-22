@@ -24,17 +24,33 @@ function App() {
     return localStorage.getItem('disclaimer_accepted') !== 'true';
   });
   const [history, setHistory] = useState([]);
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => {
+    try {
+      const savedTheme = localStorage.getItem('suraksha_theme');
+      if (savedTheme !== null) {
+        return savedTheme === 'dark';
+      }
+      return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    } catch (e) {
+      return false;
+    }
+  });
   
   // Safety score state
   const [score, setScore] = useState(0);
 
-  // Sync Dark Mode class
+  // Sync Dark Mode class and persist theme selection
   useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
+    try {
+      if (darkMode) {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('suraksha_theme', 'dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('suraksha_theme', 'light');
+      }
+    } catch (e) {
+      console.error("Failed to persist theme preference:", e);
     }
   }, [darkMode]);
 
