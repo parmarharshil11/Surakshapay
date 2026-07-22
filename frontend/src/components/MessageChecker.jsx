@@ -108,6 +108,15 @@ export default function MessageChecker({ t, language, onScanComplete, onActivity
 
   // Refs for cleanup and DOM access
   const fileInputRef = useRef(null);
+  const resultRef = useRef(null);
+
+  useEffect(() => {
+    if (result && resultRef.current) {
+      setTimeout(() => {
+        resultRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 50);
+    }
+  }, [result]);
 
   useEffect(() => {
     const handleSpeechEnd = () => setSpeaking(false);
@@ -547,7 +556,7 @@ export default function MessageChecker({ t, language, onScanComplete, onActivity
         </div>
 
         {/* Results section */}
-        <div className="md:col-span-5 space-y-4">
+        <div ref={resultRef} className="md:col-span-5 space-y-4">
           {result ? (
             <div className={`bg-white dark:bg-slate-900 border p-6 rounded-2xl shadow-sm space-y-6 animate-fade-in transition-colors duration-300 ${
               result.classification === 'Scam' ? 'border-red-300 dark:border-red-800' :

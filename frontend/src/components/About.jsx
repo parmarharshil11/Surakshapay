@@ -1,7 +1,7 @@
 import React from 'react';
 import { ShieldCheck, Info, Cpu, Users, Zap, Globe, HeartHandshake, PhoneCall, Code, Sparkles, AlertOctagon } from 'lucide-react';
 
-export default function About({ t, language }) {
+export default function About({ t, language, onOpenDisclaimer }) {
   const getLocalizedText = (en, hi, gu) => {
     if (language === 'hi') return hi;
     if (language === 'gu') return gu;
@@ -238,6 +238,18 @@ export default function About({ t, language }) {
           {getLocalizedText("Report Online →", "ऑनलाइन रिपोर्ट करें →", "ઓનલાઈન રિપોર્ટ કરો →")}
         </a>
       </div>
+
+      {onOpenDisclaimer && (
+        <div className="pt-2 flex justify-center">
+          <button
+            onClick={onOpenDisclaimer}
+            className="flex items-center gap-2 px-5 py-2.5 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold rounded-xl text-xs transition-colors cursor-pointer"
+          >
+            <Info className="w-4 h-4 text-blue-500" />
+            <span>{getLocalizedText("Read Official App Disclaimer & Terms", "आधिकारिक ऐप सूचना और शर्तें पढ़ें", "સત્તાવાર એપ સૂચના અને શરતો વાંચો")}</span>
+          </button>
+        </div>
+      )}
 
     </div>
   );

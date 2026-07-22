@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Award, AlertCircle, CheckCircle2, XCircle, Volume2, RotateCcw, ShieldCheck, ArrowRight, Zap, Sparkles, RefreshCw, Loader2 } from 'lucide-react';
 import { speakText, stopSpeech } from '../utils/ttsHelper';
 
@@ -176,6 +176,16 @@ export default function ScamQuiz({ t, language, onActivityPerformed }) {
   const [showExplanation, setShowExplanation] = useState(false);
   const [speaking, setSpeaking] = useState(false);
   const [ttsLoading, setTtsLoading] = useState(false);
+
+  const explanationRef = useRef(null);
+
+  useEffect(() => {
+    if (showExplanation && explanationRef.current) {
+      setTimeout(() => {
+        explanationRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 50);
+    }
+  }, [showExplanation]);
 
   useEffect(() => {
     const handleSpeechEnd = () => setSpeaking(false);
@@ -480,7 +490,7 @@ export default function ScamQuiz({ t, language, onActivityPerformed }) {
 
         {/* Dynamic explanation panel */}
         {showExplanation && (
-          <div className="p-5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 rounded-2xl space-y-3 animate-fade-in relative">
+          <div ref={explanationRef} className="p-5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 rounded-2xl space-y-3 animate-fade-in relative">
             <div className="flex items-center gap-2">
               {selectedAnswer === current.correctAnswer ? (
                 <div className="flex items-center gap-1.5 text-green-600 dark:text-green-400 font-bold text-xs uppercase tracking-wider">

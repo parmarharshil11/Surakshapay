@@ -1,7 +1,7 @@
 /**
  * Transliterates Gujarati script (0x0A81-0x0AE3) to Devanagari (0x0901-0x0963).
  * Allows Hindi (hi-IN) TTS engines to pronounce Gujarati phonetically with 100% clarity
- * when native Gujarati (gu-IN) voices are missing on Windows/Chrome.
+ * when native Gujarati (gu-IN) voices are missing on Windows/Chrome/Mobile.
  */
 export function gujaratiToDevanagari(text) {
   if (!text) return '';
@@ -150,6 +150,8 @@ function playGoogleTTS({ text, lang, onStart, onEnd, onError }) {
     const audioUrl = `${baseUrl}/api/tts?text=${encodeURIComponent(chunk)}&lang=${lang}`;
 
     const audio = new Audio();
+    audio.crossOrigin = 'anonymous';
+    audio.preload = 'auto';
     currentAudio = audio;
     audio.src = audioUrl;
 
@@ -237,7 +239,8 @@ function playWebSpeech({ text, lang, onStart, onEnd, onError, setToast }) {
     const executeSpeech = () => {
       const match = findVoice();
 
-      if (lang === 'gu' && match?.isHindiFallback) {
+      // For Gujarati on mobile: ALWAYS transliterate Gujarati script to Devanagari when using Hindi fallback or non-native voice
+      if (lang === 'gu' && (!match || match.isHindiFallback || !match.isNative)) {
         processedText = gujaratiToDevanagari(processedText);
       }
 
@@ -256,7 +259,7 @@ function playWebSpeech({ text, lang, onStart, onEnd, onError, setToast }) {
         if (onStart) onStart();
       };
 
-      utterance.onend = () => {
+      utterance.onended = () => {
         if (onEnd) onEnd();
       };
 
@@ -265,6 +268,9 @@ function playWebSpeech({ text, lang, onStart, onEnd, onError, setToast }) {
         if (onError) onError();
       };
 
+      if (window.speechSynthesis.paused) {
+        window.speechSynthesis.resume();
+      }
       window.speechSynthesis.speak(utterance);
     };
 
@@ -272,11 +278,16 @@ function playWebSpeech({ text, lang, onStart, onEnd, onError, setToast }) {
     if (voices.length > 0) {
       executeSpeech();
     } else {
+      let fired = false;
       window.speechSynthesis.onvoiceschanged = () => {
+        if (fired) return;
+        fired = true;
         window.speechSynthesis.onvoiceschanged = null;
         executeSpeech();
       };
       setTimeout(() => {
+        if (fired) return;
+        fired = true;
         executeSpeech();
       }, 150);
     }

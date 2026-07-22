@@ -17,7 +17,12 @@ import { auth, getUserSafetyScore, updateUserSafetyScore } from './firebase';
 
 function App() {
   const [tab, setTab] = useState('home');
-  const [language, setLanguage] = useState('en');
+  const [language, setLanguage] = useState(() => {
+    return localStorage.getItem('suraksha_language') || 'en';
+  });
+  const [isDisclaimerOpen, setIsDisclaimerOpen] = useState(() => {
+    return localStorage.getItem('disclaimer_accepted') !== 'true';
+  });
   const [history, setHistory] = useState([]);
   const [darkMode, setDarkMode] = useState(false);
   
@@ -129,7 +134,17 @@ function App() {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 flex flex-col font-sans transition-colors duration-300">
       {/* Global Hackathon Disclaimer Modal */}
-      <DisclaimerModal language={language} />
+      <DisclaimerModal 
+        isOpen={isDisclaimerOpen} 
+        onClose={() => setIsDisclaimerOpen(false)} 
+        language={language} 
+        setLanguage={(newLang) => {
+          setLanguage(newLang);
+          try {
+            localStorage.setItem('suraksha_language', newLang);
+          } catch (e) {}
+        }} 
+      />
 
       {/* Top Navbar */}
       <header className="sticky top-0 z-50 bg-blue-900 text-white shadow-md border-b border-blue-800">
@@ -168,7 +183,10 @@ function App() {
             {/* Language Switcher */}
             <div className="flex bg-blue-950 p-0.5 sm:p-1 rounded-xl border border-blue-800">
               <button
-                onClick={() => setLanguage('en')}
+                onClick={() => {
+                  setLanguage('en');
+                  localStorage.setItem('suraksha_language', 'en');
+                }}
                 aria-pressed={language === 'en'}
                 className={`px-1.5 sm:px-2.5 py-1 text-[10px] sm:text-xs font-bold rounded-lg transition-all cursor-pointer ${
                   language === 'en' ? 'bg-blue-600 text-white shadow-sm' : 'text-blue-300 hover:text-white'
@@ -177,7 +195,10 @@ function App() {
                 EN
               </button>
               <button
-                onClick={() => setLanguage('hi')}
+                onClick={() => {
+                  setLanguage('hi');
+                  localStorage.setItem('suraksha_language', 'hi');
+                }}
                 aria-pressed={language === 'hi'}
                 className={`px-1.5 sm:px-2.5 py-1 text-[10px] sm:text-xs font-bold rounded-lg transition-all cursor-pointer ${
                   language === 'hi' ? 'bg-blue-600 text-white shadow-sm' : 'text-blue-300 hover:text-white'
@@ -187,7 +208,10 @@ function App() {
                 <span className="sm:hidden">HI</span>
               </button>
               <button
-                onClick={() => setLanguage('gu')}
+                onClick={() => {
+                  setLanguage('gu');
+                  localStorage.setItem('suraksha_language', 'gu');
+                }}
                 aria-pressed={language === 'gu'}
                 className={`px-1.5 sm:px-2.5 py-1 text-[10px] sm:text-xs font-bold rounded-lg transition-all cursor-pointer ${
                   language === 'gu' ? 'bg-blue-600 text-white shadow-sm' : 'text-blue-300 hover:text-white'
@@ -349,8 +373,8 @@ function App() {
         )}
         {tab === 'helpline' && <Helpline t={t} language={language} onScanComplete={fetchHistory} />}
         {tab === 'history' && <History t={t} history={history} onClear={handleClearHistory} setTab={setTab} language={language} />}
-        {tab === 'about' && <About t={t} language={language} />}
-        {tab === 'menu' && <Menu setTab={setTab} t={t} darkMode={darkMode} setDarkMode={setDarkMode} language={language} />}
+        {tab === 'about' && <About t={t} language={language} onOpenDisclaimer={() => setIsDisclaimerOpen(true)} />}
+        {tab === 'menu' && <Menu setTab={setTab} t={t} darkMode={darkMode} setDarkMode={setDarkMode} language={language} onOpenDisclaimer={() => setIsDisclaimerOpen(true)} />}
       </main>
 
       {/* Bottom Navigation (Mobile Only) */}
@@ -406,11 +430,20 @@ function App() {
 
       {/* Footer */}
       <footer className="bg-slate-900 dark:bg-slate-950 text-slate-400 dark:text-slate-500 text-center py-6 pb-28 md:pb-6 border-t border-slate-800 dark:border-slate-900 text-xs mt-12 transition-colors duration-300 animate-fade-in">
-        <div className="max-w-7xl mx-auto px-4 space-y-2">
+        <div className="max-w-7xl mx-auto px-4 space-y-2.5">
           <p className="font-semibold text-slate-300 dark:text-slate-400">
             {t.footerText}
           </p>
-          <p>© {new Date().getFullYear()} SuRakshaPay. All Rights Reserved. Hackathon MVP.</p>
+          <div className="flex justify-center items-center gap-4 text-[11px]">
+            <span>© {new Date().getFullYear()} SuRakshaPay. All Rights Reserved.</span>
+            <span className="text-slate-600">•</span>
+            <button
+              onClick={() => setIsDisclaimerOpen(true)}
+              className="text-blue-400 hover:text-blue-300 font-bold hover:underline cursor-pointer"
+            >
+              {language === 'hi' ? 'महत्वपूर्ण सूचना देखें' : language === 'gu' ? 'મહત્વપૂર્ણ સૂચના જુઓ' : 'View Disclaimer'}
+            </button>
+          </div>
         </div>
       </footer>
     </div>

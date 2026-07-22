@@ -520,8 +520,16 @@ app.get('/api/tts', (req, res) => {
   const targetLang = lang || 'en';
   const url = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=${targetLang}&client=tw-ob`;
 
-  https.get(url, (response) => {
+  const options = {
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+      'Referer': 'https://translate.google.com/'
+    }
+  };
+
+  https.get(url, options, (response) => {
     if (response.statusCode !== 200) {
+      console.warn(`TTS Proxy response status: ${response.statusCode}`);
       return res.status(response.statusCode).json({ error: 'TTS request failed' });
     }
     

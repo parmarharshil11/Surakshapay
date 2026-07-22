@@ -58,10 +58,19 @@ export default function UpiChecker({ t, language, onScanComplete, onActivityPerf
   const streamRef = useRef(null);
   const frameRef = useRef(null);
   const fileInputRef = useRef(null);
+  const resultRef = useRef(null);
 
   // Audio speaking state
   const [speaking, setSpeaking] = useState(false);
   const [ttsLoading, setTtsLoading] = useState(false);
+
+  useEffect(() => {
+    if (result && resultRef.current) {
+      setTimeout(() => {
+        resultRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 50);
+    }
+  }, [result]);
 
   useEffect(() => {
     const handleSpeechEnd = () => setSpeaking(false);
@@ -581,7 +590,7 @@ export default function UpiChecker({ t, language, onScanComplete, onActivityPerf
         </div>
 
         {/* Result panel */}
-        <div className="md:col-span-5 space-y-4">
+        <div ref={resultRef} className="md:col-span-5 space-y-4">
           {result ? (
             <div className={`bg-white dark:bg-slate-900 border p-6 rounded-2xl shadow-sm space-y-6 animate-fade-in transition-colors duration-300 ${
               result.classification === 'Scam' ? 'border-red-300 dark:border-red-800' :
