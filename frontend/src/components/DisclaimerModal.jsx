@@ -24,9 +24,9 @@ export default function DisclaimerModal({ isOpen, onClose, language, setLanguage
   };
 
   const languages = [
-    { code: 'en', label: 'English', sub: 'English', flag: '🇬🇧' },
-    { code: 'hi', label: 'हिन्दी', sub: 'Hindi', flag: '🇮🇳' },
-    { code: 'gu', label: 'ગુજરાતી', sub: 'Gujarati', flag: '🇮🇳' }
+    { code: 'en', label: 'English', sub: 'English' },
+    { code: 'hi', label: 'हिन्दी', sub: 'Hindi' },
+    { code: 'gu', label: 'ગુજરાતી', sub: 'Gujarati' }
   ];
 
   return (
@@ -76,7 +76,6 @@ export default function DisclaimerModal({ isOpen, onClose, language, setLanguage
                     }`}
                   >
                     <div className="flex items-center gap-1.5">
-                      <span className="text-base leading-none">{item.flag}</span>
                       <span>{item.label}</span>
                     </div>
                     {isSelected ? (
