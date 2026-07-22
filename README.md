@@ -76,7 +76,7 @@ India has **700 million+ rural citizens**, many of whom are newly online with UP
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                        USER INPUT                               │
-│   Text  ·  Voice  ·  Screenshot (OCR)  ·  QR Code  ·  UPI ID  │
+│   Text  ·  Voice  ·  Screenshot (OCR)  ·  QR Code  ·  UPI ID    │
 └────────────────────────────┬────────────────────────────────────┘
                              │
                              ▼
