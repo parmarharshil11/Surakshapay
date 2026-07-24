@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldCheck, Check, X, Globe, PhoneCall, AlertOctagon, Sparkles } from 'lucide-react';
+import { ShieldCheck, Check, Globe, PhoneCall, AlertOctagon, Sparkles } from 'lucide-react';
 
 export default function DisclaimerModal({ isOpen, onClose, language, setLanguage }) {
   if (!isOpen) return null;
@@ -38,38 +38,27 @@ export default function DisclaimerModal({ isOpen, onClose, language, setLanguage
 
         <div className="p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-5">
           
-          {/* Top Modal Header with Clean Integrated Close Button */}
-          <div className="flex items-start justify-between gap-3">
-            <div className="flex items-start gap-3">
-              <div className="p-2.5 sm:p-3 bg-amber-500/10 dark:bg-amber-500/20 border border-amber-500/20 dark:border-amber-500/40 rounded-2xl text-amber-600 dark:text-amber-400 shrink-0 mt-0.5">
-                <AlertOctagon className="w-6 h-6 sm:w-7 sm:h-7" />
-              </div>
-              <div>
-                <h2 className="text-lg sm:text-2xl font-black text-slate-900 dark:text-slate-100 tracking-tight leading-snug">
-                  {language === 'hi'
-                    ? 'महत्वपूर्ण सूचना और शर्तें'
-                    : language === 'gu'
-                    ? 'મહત્વપૂર્ણ સૂચના અને શરતો'
-                    : 'Important Disclaimer & Terms'}
-                </h2>
-                <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 font-medium mt-0.5">
-                  {language === 'hi'
-                    ? 'DeTexSO प्लेटफॉर्म सुरक्षा दिशानिर्देश'
-                    : language === 'gu'
-                    ? 'DeTexSO પ્લેટફોર્મ સુરક્ષા માર્ગદર્શિકા'
-                    : 'Official platform safety & usage guidelines'}
-                </p>
-              </div>
+          {/* Top Modal Header — No close button, must accept to proceed */}
+          <div className="flex items-start gap-3">
+            <div className="p-2.5 sm:p-3 bg-amber-500/10 dark:bg-amber-500/20 border border-amber-500/20 dark:border-amber-500/40 rounded-2xl text-amber-600 dark:text-amber-400 shrink-0 mt-0.5">
+              <AlertOctagon className="w-6 h-6 sm:w-7 sm:h-7" />
             </div>
-
-            {/* Close Button cleanly placed in header flex container */}
-            <button
-              onClick={onClose}
-              className="p-2 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-all cursor-pointer shrink-0 -mr-1 -mt-1"
-              aria-label="Close Disclaimer Modal"
-            >
-              <X className="w-5 h-5 sm:w-6 sm:h-6" />
-            </button>
+            <div>
+              <h2 className="text-lg sm:text-2xl font-black text-slate-900 dark:text-slate-100 tracking-tight leading-snug">
+                {language === 'hi'
+                  ? 'महत्वपूर्ण सूचना और शर्तें'
+                  : language === 'gu'
+                  ? 'મહત્વપૂર્ણ સૂચના અને શરતો'
+                  : 'Important Disclaimer & Terms'}
+              </h2>
+              <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 font-medium mt-0.5">
+                {language === 'hi'
+                  ? 'DeTexSO प्लेटफॉर्म सुरक्षा दिशानिर्देश'
+                  : language === 'gu'
+                  ? 'DeTexSO પ્લેટફોર્મ સુરક્ષા માર્ગદર્શિકા'
+                  : 'Official platform safety & usage guidelines'}
+              </p>
+            </div>
           </div>
 
           {/* Village-Friendly Language Selection Bar */}
