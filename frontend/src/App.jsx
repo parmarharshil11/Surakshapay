@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Shield, Home as HomeIcon, MessageSquare, AlertTriangle, BookOpen, HelpCircle, History as HistoryIcon, Info, Sun, Moon, Award, QrCode, Menu as MenuIcon } from 'lucide-react';
+import { Shield, Home as HomeIcon, MessageSquare, AlertTriangle, BookOpen, HelpCircle, History as HistoryIcon, Info, Sun, Moon, Award, QrCode, Menu as MenuIcon, Mail } from 'lucide-react';
 import translations from './translations';
 import Home from './components/Home';
 import MessageChecker from './components/MessageChecker';
@@ -450,8 +450,16 @@ function App() {
           <p className="font-semibold text-slate-300 dark:text-slate-400">
             {t.footerText}
           </p>
-          <div className="flex justify-center items-center gap-4 text-[11px]">
+          <div className="flex flex-wrap justify-center items-center gap-3 sm:gap-4 text-[11px]">
             <span>© {new Date().getFullYear()} DeTexSO. All Rights Reserved.</span>
+            <span className="text-slate-600">•</span>
+            <a
+              href="mailto:detexso.hk@gmail.com"
+              className="inline-flex items-center gap-1 text-blue-400 hover:text-blue-300 font-bold hover:underline cursor-pointer"
+            >
+              <Mail className="w-3.5 h-3.5" />
+              <span>{language === 'hi' ? 'संपर्क करें:' : language === 'gu' ? 'સંપર્ક કરો:' : 'Contact Us:'} detexso.hk@gmail.com</span>
+            </a>
             <span className="text-slate-600">•</span>
             <button
               onClick={() => setIsDisclaimerOpen(true)}
